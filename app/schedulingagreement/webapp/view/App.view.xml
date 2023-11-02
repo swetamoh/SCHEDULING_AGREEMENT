@@ -1,0 +1,6 @@
+<mvc:View controllerName="sp.fiori.schedulingagreement.controller.App"
+    xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+    <Shell id="shell">
+		<App id="app"/>	
+	</Shell>
+</mvc:View>

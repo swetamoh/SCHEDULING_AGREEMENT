@@ -1,0 +1,183 @@
+{
+  "_version": "1.58.0",
+  "sap.app": {
+    "id": "sp.fiori.schedulingagreement",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.11.3",
+      "toolsId": "e2a3b2aa-2e00-4c38-aee0-9653ec4121b9"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/v2/odata/v4/catalog/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "schedulingagreement-Manage": {
+          "semanticObject": "schedulingagreement",
+          "action": "Manage",
+          "title": "{{flpTitle}}",
+          "icon": "sap-icon://documents",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.119.2",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "sp.fiori.schedulingagreement.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "useBatch": false,
+          "defaultCountMode": "None",
+          "refreshAfterChange": false
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "sp.fiori.schedulingagreement.view",
+        "controlAggregation": "pages"
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "view": "SASplit",
+          "name": "SASplit",
+          "targetAggregation": "pages",
+          "controlId": "app",
+          "subroutes": [
+              {
+                  "pattern": "",
+                  "name": "SAMaster",
+                  "view": "SAMaster",
+                  "targetControl": "splitApp",
+                  "targetAggregation": "masterPages",
+                  "subroutes": [
+                      {
+                          "pattern": "NoData",
+                          "name": "NoData",
+                          "view": "NoData",
+                          "targetAggregation": "detailPages"
+                      },
+                      {
+                          "pattern": "Detail/{Schedule_No}",
+                          "name": "SADetail",
+                          "view": "SADetail",
+                          "targetAggregation": "detailPages"
+                      }
+                  ]
+              }
+          ]
+      },
+      {
+          "pattern": "AsnCreate/{Schedule_No}",
+          "name": "SAAsnCreate",
+          "view": "SAAsnCreate",
+          "targetAggregation": "pages",
+          "controlId": "app"
+      },
+      {
+          "pattern": "AsnEdit/{Schedule_No}/{Asn_No}/:Amount:",
+          "name": "SAAsnEdit",
+          "view": "SAAsnEdit",
+          "targetAggregation": "pages",
+          "controlId": "app"
+      },
+      {
+          "pattern": "SAConfirm/{Schedule_No}",
+          "name": "SAConfirm",
+          "view": "SAConfirm",
+          "targetAggregation": "pages",
+          "controlId": "app"
+      },
+      {
+          "pattern": "ItemDisplay/{Schedule_No}/{Item_No}/{Material_No}/{Uom}",
+          "name": "ItemDisplay",
+          "view": "ItemDisplay",
+          "targetAggregation": "pages",
+          "controlId": "app"
+      }
+      ]
+    },
+    "rootView": {
+      "viewName": "sp.fiori.schedulingagreement.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "schedulingagreement"
+  }
+}
