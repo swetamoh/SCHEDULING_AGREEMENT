@@ -22,7 +22,7 @@ sap.ui.define([
 			// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 			// }
 			this.byId("masterListId").bindAggregation("items", {
-				path: "/S_HEADERSet",
+				path: "/SchedulingAgreements",
 				// filters: filter,
 				template: this.listTemp
 			});
