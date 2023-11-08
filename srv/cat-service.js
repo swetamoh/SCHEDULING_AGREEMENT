@@ -6,7 +6,8 @@ module.exports = (srv) => {
     const {SchedulingAgreements} = srv.entities;
     
     srv.on('READ', SchedulingAgreements, async (req) => {
-        const results = await getSchedulingAgreements();
+        const {unitCode} = req._queryOptions
+        const results = await getSchedulingAgreements(unitCode);
         if (!results) throw new Error('Unable to fetch Scheduling Agreements.');
 
         const expandDocumentRows = req.query.SELECT.columns && req.query.SELECT.columns.some(({ expand, ref }) => expand && ref[0] === "DocumentRows");
@@ -32,11 +33,11 @@ module.exports = (srv) => {
 
 };
 
-async function getSchedulingAgreements() {
+async function getSchedulingAgreements(unitCode) {
     try {
         const response = await axios({
             method: 'get',
-            url: "https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialList?UnitCode='P01'&RequestBy='Manikandan'",
+            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialList?UnitCode='${unitCode}'&RequestBy='Manikandan'`,
             headers: {
                 'Authorization': 'Bearer IncMpsaotdlKHYyyfGiVDg==',
                 'Content-Type': 'application/json'

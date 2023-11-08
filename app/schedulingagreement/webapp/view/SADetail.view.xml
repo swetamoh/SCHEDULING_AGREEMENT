@@ -1,22 +1,23 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="sp.fiori.schedulingagreement.controller.SADetail">
-	<Page id="_IDGenPage1" title="Schedule Agreement : {detailModel>/Schedule_No}" class="sapUiSizeCompact" titleAlignment="Center">
+	<Page id="_IDGenPage1" title="Schedule Agreement : {detailHeaderModel>/SchNum}" class="sapUiSizeCompact" titleAlignment="Center">
 		<content>
 			<!-- <ObjectHeader id="ObjectId"
 				title="Upcoming Delivery : {path:'detailModel>/Upcoming_Del_Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"
 				number="{detailModel>/Amount}" numberUnit="{detailModel>/Currency}" numberState="Success" backgroundDesign="Translucent"> -->
 				<ObjectHeader id="ObjectId">
 				<attributes>
-					<ObjectAttribute id="_IDGenObjectAttribute2" text="Vendor: {detailModel>/Vendor_Name}"/>
-					<ObjectAttribute id="_IDGenObjectAttribute1" text="Plant: {detailModel>/Plant_Desc} ({detailModel>/Plant})"/>
+					<ObjectAttribute id="_IDGenObjectAttribute2" text="Vendor: {detailHeaderModel>/VendorName}"/>
+					<ObjectAttribute id="_IDGenObjectAttribute1" text="Plant: {detailHeaderModel>/PlantName} ({detailHeaderModel>/PlantCode})"/>
 				</attributes>
 				<statuses>
-					<ObjectStatus id="_IDGenObjectStatus1" text="{path:'detailModel>/Schedule_Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
+					<ObjectStatus id="_IDGenObjectStatus1" text="{detailHeaderModel>/SchDate}"/>
+					<!-- text="{path:'detailHeaderModel>/Schedule_Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/> -->
 				</statuses>
 			</ObjectHeader>
 			<IconTabBar id="_IDGenIconTabBar1">
 				<items>
 					<IconTabFilter id="_IDGenIconTabFilter1" icon="sap-icon://approvals" text="Items">
-						<Table id="DeliveryTableId" items="{detailModel>/Sitemnav}" itemPress="onItempress">
+						<Table id="DeliveryTableId" items="{detailModel>/}" itemPress="onItempress">
 							<headerToolbar>
 								<Toolbar id="_IDGenToolbar1">
 									<Title id="_IDGenTitle1" text="Items"/>
@@ -59,13 +60,13 @@
 									<cells>
 										<!--<CheckBox selected="{detailModel>Item_indicator}" select="onChkBoxSelect"-->
 										<!--	enabled="{path:'detailModel>Confirm_Status',formatter:'sp.fiori.schedulingagreement.controller.formatter.selectEnabled'}"></CheckBox>-->
-										<Text id="_IDGenText9" text="{detailModel>Item_No}"/>
+										<Text id="_IDGenText9" text="{detailModel>LineNum}"/>
 										<!--<Text text="{detailModel>Etenr}"/>-->
 										<FlexBox id="_IDGenFlexBox1" direction="Column" class="sapUiNoMarginTop">
 											<items>
-												<Text id="_IDGenText10" text="{detailModel>Material_Desc}"/>
+												<Text id="_IDGenText10" text="{detailModel>ItemDesc}"/>
 												<!--<Link text="{detailModel>Material_No}" press="onMaterialPress" emphasized="true" enabled="{path:'detailModel>Matkl',formatter:'sp.fiori.schedulingagreement.controller.formatter.LinkEnabled'}"/>-->
-												<Link id="_IDGenLink1" text="{detailModel>Material_No}" press="onMaterialPress" emphasized="true" enabled="true"/>
+												<Link id="_IDGenLink1" text="{detailModel>ItemCode}" press="onMaterialPress" emphasized="true" enabled="true"/>
 												<!--<ObjectIdentifier title="{detailModel>Material_No}"/>-->
 											</items>
 										</FlexBox>
@@ -75,12 +76,14 @@
 										<!--		<ObjectIdentifier title="{detailModel>Wgbez}"/>-->
 										<!--	</items>-->
 										<!--</FlexBox>-->
-										<Text id="_IDGenText11" text="{detailModel>Hsn_Code}"></Text>
-										<ObjectNumber id="_IDGenObjectNumber1" number="{detailModel>Quantity}" numberUnit="{detailModel>Uom}"/>
-										<ObjectNumber id="_IDGenObjectNumber2" number="{detailModel>Delivered_Qty}" numberUnit="{detailModel>Uom}"/>
-										<ObjectNumber id="_IDGenObjectNumber3" number="{detailModel>Netpr}"/>
-										<ObjectStatus id="_IDGenObjectStatus2" text="{detailModel>Confirm_Status}"
-											state="{path:'detailModel>Confirm_Status',formatter:'sp.fiori.schedulingagreement.controller.formatter.statusCheck'}"/>
+										<Text id="_IDGenText11" text="{detailModel>HSNCode}"></Text>
+										<ObjectNumber id="_IDGenObjectNumber1" number="{detailModel>PoQty}" />
+										<!-- numberUnit="{detailModel>Uom}"/> -->
+										<ObjectNumber id="_IDGenObjectNumber2" number="{detailModel>DeliveredQty}" />
+										<!-- numberUnit="{detailModel>Uom}"/> -->
+										<ObjectNumber id="_IDGenObjectNumber3" number="{detailModel>UnitPrice}"/>
+										<ObjectStatus id="_IDGenObjectStatus2" text=""/>
+											<!-- state="{path:'detailModel>Confirm_Status',formatter:'sp.fiori.schedulingagreement.controller.formatter.statusCheck'}"/> -->
 										<!-- <core:Icon id="_IDGenIcon1" src="sap-icon://feeder-arrow" color="Blue"/> -->
 									</cells>
 								</ColumnListItem>

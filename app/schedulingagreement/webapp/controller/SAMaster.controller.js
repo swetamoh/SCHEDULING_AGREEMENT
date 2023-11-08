@@ -17,12 +17,19 @@ sap.ui.define([
 			if (oEvent.getParameter("name") !== "SAMaster") {
 				return;
 			}
+			var unitCode = sessionStorage.getItem("unitCode");
 			// var filter = [new sap.ui.model.Filter("Bukrs", "EQ", sessionStorage.getItem("compCode") || "1000")];
 			// if (sap.ui.getCore().getModel("filterModel").getData().Vendor_No) {
 			// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 			// }
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
+				parameters: {
+					custom: {
+						unitCode: unitCode
+					},
+					countMode: 'None'
+				},
 				// filters: filter,
 				template: this.listTemp
 			});
@@ -33,9 +40,10 @@ sap.ui.define([
 			this.byId("masterListId").getBinding("items").attachDataReceived(() => {
 				var selectedItem = this.byId("masterListId").getItems()[0];
 				this.byId("masterListId").setSelectedItem(selectedItem, true);
+				var SchNum = selectedItem.getProperty("title").replace(/\//g,'-');
 				if (selectedItem) {
 					this.router.navTo("SADetail", {
-						"Schedule_No": selectedItem.getProperty("title").split("/")[0]
+						"Schedule_No": SchNum
 					});
 				} else {
 					this.router.navTo('NoData');
