@@ -19,9 +19,15 @@ sap.ui.define([
 			this.router = sap.ui.core.UIComponent.getRouterFor(this);
 			this.router.attachRouteMatched(this.handleRouteMatched, this);
 
+			this.detailHeaderModel = new sap.ui.model.json.JSONModel();
+			this.detailHeaderModel.setSizeLimit(1000);
+			this.getView().setModel(this.detailHeaderModel, "detailHeaderModel");
 			this.detailModel = new sap.ui.model.json.JSONModel();
 			this.detailModel.setSizeLimit(1000);
 			this.getView().setModel(this.detailModel, "detailModel");
+			this.materialDescModel = new sap.ui.model.json.JSONModel();
+			this.materialDescModel.setSizeLimit(1000);
+			this.getView().setModel(this.materialDescModel, "materialDescModel");
 
 			this.ConfirmFragModel = new sap.ui.model.json.JSONModel();
 
@@ -45,36 +51,43 @@ sap.ui.define([
 				// 	"loginId": that.loginData.loginName,
 				// 	"LoginType": that.loginData.userType
 				// });
-
-				this.Schedule_No = event.getParameter("arguments").Schedule_No;
+				var unitCode = sessionStorage.getItem("unitCode");
+				var Schedule_No = event.getParameter("arguments").Schedule_No;
+				this.Schedule_No = Schedule_No.replace(/-/g, '/');
 				// this.Vendor_No = event.getParameter("arguments").Vendor_No;
 
 				// var request = "/PO_HEADERSet(Po_No='" + this.Po_Num + "',Vendor_No='" + this.Vendor_No + "')?$expand=headertoitemNav";
 
-				var request = "/S_HEADERSet(Schedule_No='" + this.Schedule_No + "')?$expand=Sitemnav";
-				this.oDataModel.read(request, null, null, false, function (oData) {
-						that.odata = oData;
-						oData.Sitemnav = oData.Sitemnav.results;
-						that.detailModel.setData(oData);
-						that.detailModel.refresh(true);
+				var request = "/SchedulingAgreements?$expand=DocumentRowItems&unitCode=" + unitCode;
+				oModel.read(request, {
+					success: function (oData) {
+						var filteredPurchaseOrder = oData.results.find(po => po.PoNum === that.Po_Num);
+						if (filteredPurchaseOrder) {
+							that.detailHeaderModel.setData(filteredPurchaseOrder);
+							that.detailHeaderModel.refresh(true);
+						
+							that.detailModel.setData(filteredPurchaseOrder.DocumentRows.results);
+							that.detailModel.refresh(true);
+						} else {
+							MessageBox.error("Schedule Number  not found");
+						}
 					},
-					function (oError) {
+					error: function (oError) {
 						var value = JSON.parse(oError.response.body);
 						MessageBox.error(value.error.message.value);
 					}
-				);
-
-				var data = this.detailModel.getData().Sitemnav;
-				this.checkCount = 0;
-				this.enabledCount = 0;
+				});
+				// var data = this.detailModel.getData().Sitemnav;
+				// this.checkCount = 0;
+				// this.enabledCount = 0;
 				// this.getView().byId("chkBoxSelectAll").setSelected(false);
 				// this.getView().byId("chkBoxSelectAll").setEnabled(true);
 
-				for (var i = 0; i < data.length; i++) {
-					if (data[i].Confirm_Status == "Not Confirmed") {
-						this.enabledCount++;
-					}
-				}
+				// for (var i = 0; i < data.length; i++) {
+				// 	if (data[i].Confirm_Status == "Not Confirmed") {
+				// 		this.enabledCount++;
+				// 	}
+				// }
 				// if (this.enabledCount == 0) {
 				// 	this.getView().byId("chkBoxSelectAll").setEnabled(false);
 				// }

@@ -5,16 +5,18 @@
 			<List id="masterListId" mode="SingleSelectMaster" growing="true" growingThreshold="20" growingScrollToLoad="true"
 				selectionChange="onListItemPress">
 				<items>
-					<ObjectListItem class="schAg" title="{Schedule_No}" number="{Status}" numberState="Warning" press="onListItemPress" type="Active" id="idlistitem">
+					<ObjectListItem class="schAg" title="{SchNum}" number="{DocStatus}" numberState="Warning" press="onListItemPress" type="Active" id="idlistitem">
+					
 						<firstStatus>
-							<ObjectStatus id="_IDGenObjectStatus1" text="{path:'Schedule_Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
+							<ObjectStatus id="_IDGenObjectStatus1" text="{SchDate}"/>
+							<!-- text="{path:'SchDate', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/> -->
 						</firstStatus>
-						<secondStatus>
+						<!-- <secondStatus>
 						   <ObjectStatus id="_IDGenObjectStatus2" text="{UpdatedBy}"/>
-						</secondStatus>
+						</secondStatus> -->
 						<attributes>
-							<ObjectAttribute id="_IDGenObjectAttribute1" title="Plant" text="{Plant}"/>
-							<ObjectAttribute id="_IDGenObjectAttribute2" text="{Plant_Desc}"/>
+							<ObjectAttribute id="_IDGenObjectAttribute1" title="Plant" text="{PlantCode}"/>
+							<ObjectAttribute id="_IDGenObjectAttribute2" text="{PlantName}"/>
 						</attributes>
 					</ObjectListItem>
 				</items>
@@ -23,8 +25,8 @@
 		<footer>
 			<Bar id="_IDGenBar1">
 				<contentLeft>
-					<Button id="FilterId" visible="true" icon="sap-icon://filter" press="onFilter" type="Emphasized"/>
-					<Button id="clearFilterId" visible="false" icon="sap-icon://clear-filter" press="onFilterClear" type="Emphasized"/>
+					<!-- <Button id="FilterId" visible="true" icon="sap-icon://filter" press="onFilter" type="Emphasized"/>
+					<Button id="clearFilterId" visible="false" icon="sap-icon://clear-filter" press="onFilterClear" type="Emphasized"/> -->
 				</contentLeft>
 			</Bar>
 		</footer>
