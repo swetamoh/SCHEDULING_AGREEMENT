@@ -11,13 +11,13 @@ sap.ui.define([
 			this.router.attachRoutePatternMatched(this.onRouteMatched, this);
 
 			this.listTemp = this.byId("idlistitem").clone();
+			this.unitCode = sessionStorage.getItem("unitCode");
 		},
 
 		onRouteMatched: function (oEvent) {
 			if (oEvent.getParameter("name") !== "SAMaster") {
 				return;
 			}
-			var unitCode = sessionStorage.getItem("unitCode");
 			// var filter = [new sap.ui.model.Filter("Bukrs", "EQ", sessionStorage.getItem("compCode") || "1000")];
 			// if (sap.ui.getCore().getModel("filterModel").getData().Vendor_No) {
 			// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
@@ -26,7 +26,7 @@ sap.ui.define([
 				path: "/SchedulingAgreements",
 				parameters: {
 					custom: {
-						unitCode: unitCode
+						unitCode: this.unitCode
 					},
 					countMode: 'None'
 				},
@@ -107,8 +107,12 @@ sap.ui.define([
 				// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 				// }
 				this.byId("masterListId").bindAggregation("items", {
-					path: "/S_HEADERSet",
-					parameters: sp,
+					path: "/SchedulingAgreements?search=" + sValue,
+					parameters: {
+						custom: {
+							unitCode: this.unitCode
+						}
+					},
 					// filters: filter,
 					template: this.listTemp
 				});
