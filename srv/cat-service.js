@@ -18,15 +18,13 @@ module.exports = (srv) => {
         }
 
         // Checking for search parameter
-        /*
         const searchVal = req._queryOptions && req._queryOptions.$search;
         if (searchVal) {
             const cleanedSearchVal = searchVal.trim().replace(/"/g, '');
-            results.schedulingAgreements = results.schedulingAgreements.filter(po =>
-                po.SchNum.includes(cleanedSearchVal)
+            results.schedulingAgreements = results.schedulingAgreements.filter(sa =>
+                sa.SchNum.includes(cleanedSearchVal)
             );
         }
-        */
     
        return results.schedulingAgreements;
     });
