@@ -11,7 +11,7 @@ sap.ui.define([
 			this.router.attachRoutePatternMatched(this.onRouteMatched, this);
 
 			this.listTemp = this.byId("idlistitem").clone();
-			this.unitCode = sessionStorage.getItem("unitCode");
+			this.unitCode = sessionStorage.getItem("unitCode") || "P01";
 		},
 
 		onRouteMatched: function (oEvent) {
