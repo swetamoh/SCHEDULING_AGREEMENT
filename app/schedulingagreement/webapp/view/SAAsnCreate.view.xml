@@ -1,7 +1,7 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
-	controllerName="sp.fiori.schedulingagreement.controller.SAAsnCreate" xmlns:l="sap.ui.layout"
+	controllerName="sap.fiori.schedulingagreement.controller.SAAsnCreate" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form" class="sapUiSizeCompact" xmlns:fb="sap.ui.comp.filterbar">
-	<Page id="_IDGenPage1" title="Create ASN" titleAlignment="Center" showNavButton="true" navButtonPress="sp.fiori.schedulingagreement.controller.formatter.onNavBack" class="sapUiSizeCompact">
+	<Page id="_IDGenPage1" title="Create ASN" titleAlignment="Center" showNavButton="true" navButtonPress="sap.fiori.schedulingagreement.controller.formatter.onNavBack" class="sapUiSizeCompact">
 		<headerContent>
 			<!-- {=${asnModel>/InvoiceNum} === ''} -->
 			<Button visible="false" id="DraftButton" text="Save as Draft" icon="sap-icon://bookmark" type="Reject"
@@ -127,9 +127,9 @@
 									<Text id="_IDGenText11" text="{asnModel>Ebelp}"></Text>
 									<ObjectIdentifier id="_IDGenObjectIdentifier1" title="{asnModel>Etenr}"></ObjectIdentifier>
 									<ObjectIdentifier id="_IDGenObjectIdentifier2" title="{asnModel>Matnr}" text="{asnModel>Maktx}"/>
-									<Text id="_IDGenText12" text="{path:'asnModel>ShipDate', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
+									<Text id="_IDGenText12" text="{path:'asnModel>ShipDate', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
 									<DatePicker id="_IDGenDatePicker1" value="{asnModel>MatExpDate}" valueFormat="yyyyMMdd" minDate="{dateModel>/minDate}" enabled="{asnModel>MatExp}" />
-									<!--<Text text="{path:'asnModel>Eindt', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/>-->
+									<!--<Text text="{path:'asnModel>Eindt', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"/>-->
 									<!--<Text text="{asnModel>Eindt}"/>-->
 									<Link id="_IDGenLink1" text="{asnModel>Total_Qty} {asnModel>Meins}" press="onQuanPress"/>
 									<Text id="_IDGenText13" text="{asnModel>Con_Qty} {asnModel>Meins}"/>

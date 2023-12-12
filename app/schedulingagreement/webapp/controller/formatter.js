@@ -1,6 +1,6 @@
-jQuery.sap.declare("sp.fiori.schedulingagreement.controller.formatter");
+jQuery.sap.declare("sap.fiori.schedulingagreement.controller.formatter");
 
-sp.fiori.schedulingagreement.controller.formatter = {
+sap.fiori.schedulingagreement.controller.formatter = {
 
 	onNavBack: function () {
 		var oHistory = sap.ui.core.routing.History.getInstance();

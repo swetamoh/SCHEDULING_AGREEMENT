@@ -1,7 +1,7 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
-	controllerName="sp.fiori.schedulingagreement.controller.ItemDisplay">
+	controllerName="sap.fiori.schedulingagreement.controller.ItemDisplay">
 	<Page id="_IDGenPage1" title="Material Number : {itemModel>/results/0/Material_No}" showNavButton="true" titleAlignment="Center"
-		navButtonPress="sp.fiori.schedulingagreement.controller.formatter.onNavBack">
+		navButtonPress="sap.fiori.schedulingagreement.controller.formatter.onNavBack">
 		<Table id="_IDGenTable1" items="{itemModel>/results}">
 			<columns>
 				<Column id="_IDGenColumn1" minScreenWidth="Tablet" demandPopin="true">
@@ -30,7 +30,7 @@
 				<ColumnListItem id="_IDGenColumnListItem1">
 					<cells>
 						<Text id="_IDGenText7" text="{itemModel>Schedule_Line}"/>
-						<ObjectIdentifier id="_IDGenObjectIdentifier1" title="{path:'itemModel>Delivery_Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
+						<ObjectIdentifier id="_IDGenObjectIdentifier1" title="{path:'itemModel>Delivery_Date', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
 						<ObjectNumber id="_IDGenObjectNumber1" number="{itemModel>Required_Qty}" numberUnit="{itemModel>Uom}" textAlign="End"/>
 						<ObjectNumber id="_IDGenObjectNumber2" number="{itemModel>Confirmed_Qty}" numberUnit="{itemModel>Uom}" textAlign="End"/>
 						<!--<ObjectNumber number="{itemModel>Delivered_Qty}" numberUnit="{itemModel>Uom}" textAlign="Center"/>-->

@@ -1,7 +1,7 @@
 {
   "_version": "1.58.0",
   "sap.app": {
-    "id": "sp.fiori.schedulingagreement",
+    "id": "sap.fiori.schedulingagreement",
     "type": "application",
     "i18n": "i18n/i18n.properties",
     "applicationVersion": {
@@ -80,7 +80,7 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "sp.fiori.schedulingagreement.i18n.i18n"
+          "bundleName": "sap.fiori.schedulingagreement.i18n.i18n"
         }
       },
       "": {
@@ -105,7 +105,7 @@
         "routerClass": "sap.m.routing.Router",
         "viewType": "XML",
         "async": true,
-        "viewPath": "sp.fiori.schedulingagreement.view",
+        "viewPath": "sap.fiori.schedulingagreement.view",
         "controlAggregation": "pages"
       },
       "routes": [
@@ -170,7 +170,7 @@
       ]
     },
     "rootView": {
-      "viewName": "sp.fiori.schedulingagreement.view.App",
+      "viewName": "sap.fiori.schedulingagreement.view.App",
       "type": "XML",
       "async": true,
       "id": "App"

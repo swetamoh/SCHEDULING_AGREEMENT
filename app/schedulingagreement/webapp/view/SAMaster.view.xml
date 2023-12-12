@@ -1,4 +1,4 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="sp.fiori.schedulingagreement.controller.SAMaster">
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="sap.fiori.schedulingagreement.controller.SAMaster">
 	<Page id="_IDGenPage1" title="Schedule Agreements" titleAlignment="Center">
 		<SearchField id="_IDGenSearchField1" width="100%" search="onSearch" placeholder="Search" showRefreshButton="true"/>
 		<content>
@@ -9,7 +9,7 @@
 					
 						<firstStatus>
 							<ObjectStatus id="_IDGenObjectStatus1" text="{SchDate}"/>
-							<!-- text="{path:'SchDate', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/> -->
+							<!-- text="{path:'SchDate', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"/> -->
 						</firstStatus>
 						<!-- <secondStatus>
 						   <ObjectStatus id="_IDGenObjectStatus2" text="{UpdatedBy}"/>

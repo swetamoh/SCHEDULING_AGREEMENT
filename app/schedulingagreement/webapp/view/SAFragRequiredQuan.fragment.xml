@@ -25,7 +25,7 @@
 				<ColumnListItem>
 					<cells>
 						<Text text="{itemModel>Schedule_Line}"/>
-						<ObjectIdentifier title="{path:'itemModel>Delivery_Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
+						<ObjectIdentifier title="{path:'itemModel>Delivery_Date', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
 						<ObjectNumber number="{itemModel>Required_Qty}" textAlign="End"/>
 						<ObjectNumber number="{itemModel>Status}" textAlign="Center"/>
 						<ObjectNumber number="{itemModel>FirmFix}" textAlign="Center"/>

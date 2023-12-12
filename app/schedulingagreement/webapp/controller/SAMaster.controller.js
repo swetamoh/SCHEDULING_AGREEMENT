@@ -4,7 +4,7 @@ sap.ui.define([
 ], function (Controller, JSONModel) {
 	"use strict";
 
-	return Controller.extend("sp.fiori.schedulingagreement.controller.SAMaster", {
+	return Controller.extend("sap.fiori.schedulingagreement.controller.SAMaster", {
 
 		onInit: function () {
 			this.router = sap.ui.core.UIComponent.getRouterFor(this);
@@ -52,7 +52,7 @@ sap.ui.define([
 		},
 
 		onSupplierValueHelp: function () {
-			var spDialog = sap.ui.xmlfragment("sp.fiori.schedulingagreement.fragment.SuppF4", this);
+			var spDialog = sap.ui.xmlfragment("sap.fiori.schedulingagreement.fragment.SuppF4", this);
 			this.getView().addDependent(spDialog);
 			this.oTemplate = sap.ui.getCore().byId("suppF4Temp").clone();
 			// var bukrs = sessionStorage.getItem("compCode") || "";
@@ -122,7 +122,7 @@ sap.ui.define([
 
 		onFilter: function () {
 			if (!this.filterFragment) {
-				this.filterFragment = sap.ui.xmlfragment("sp.fiori.schedulingagreement.fragment.filterFragment", this);
+				this.filterFragment = sap.ui.xmlfragment("sap.fiori.schedulingagreement.fragment.filterFragment", this);
 				this.filterFragment.setModel(sap.ui.getCore().getModel("filterModel"), "filterModel");
 			}
 			// if (this.getView().getModel().getHeaders().LoginType === "E") {
@@ -144,7 +144,7 @@ sap.ui.define([
 
 		onPlantValueHelp: function () {
 			if (!this.PlantF4Frag) {
-				this.PlantF4Frag = sap.ui.xmlfragment("sp.fiori.schedulingagreement.fragment.PlantFrag", this);
+				this.PlantF4Frag = sap.ui.xmlfragment("sap.fiori.schedulingagreement.fragment.PlantFrag", this);
 				this.PlantF4Temp = sap.ui.getCore().byId("plantTempId").clone();
 			}
 			this.getView().addDependent(this.PlantF4Frag);
@@ -180,7 +180,7 @@ sap.ui.define([
 
 		onMaterialValueHelp: function () {
 			if (!this.MaterialF4Frag) {
-				this.MaterialF4Frag = sap.ui.xmlfragment("sp.fiori.schedulingagreement.fragment.MaterialFrag", this);
+				this.MaterialF4Frag = sap.ui.xmlfragment("sap.fiori.schedulingagreement.fragment.MaterialFrag", this);
 				this.MaterialF4Temp = sap.ui.getCore().byId("materialTempId").clone();
 			}
 			this.getView().addDependent(this.MaterialF4Frag);
