@@ -6,7 +6,7 @@ sap.ui.define(
   function (Controller, HashChanger) {
     "use strict";
 
-    return Controller.extend("sp.fiori.schedulingagreement.controller.App", {
+    return Controller.extend("sap.fiori.schedulingagreement.controller.App", {
 
       doRoute: function () {
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel({}), "filterModel");
@@ -30,7 +30,7 @@ sap.ui.define(
         // var site = window.location.href.includes("site");
         // if (site) {
         //   var slash = site ? "/" : "";
-        //   var modulePath = jQuery.sap.getModulePath("sp/fiori/schedulingagreement");
+        //   var modulePath = jQuery.sap.getModulePath("sap/fiori/schedulingagreement");
         //   modulePath = modulePath === "." ? "" : modulePath;
         //   $.ajax({
         //     url: modulePath + slash + "user-api/attributes",

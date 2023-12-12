@@ -1,8 +1,8 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="sp.fiori.schedulingagreement.controller.SADetail">
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="sap.fiori.schedulingagreement.controller.SADetail">
 	<Page id="_IDGenPage1" title="Schedule Agreement : {detailHeaderModel>/SchNum}" class="sapUiSizeCompact" titleAlignment="Center">
 		<content>
 			<!-- <ObjectHeader id="ObjectId"
-				title="Upcoming Delivery : {path:'detailModel>/Upcoming_Del_Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"
+				title="Upcoming Delivery : {path:'detailModel>/Upcoming_Del_Date', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"
 				number="{detailModel>/Amount}" numberUnit="{detailModel>/Currency}" numberState="Success" backgroundDesign="Translucent"> -->
 				<ObjectHeader id="ObjectId">
 				<attributes>
@@ -11,7 +11,7 @@
 				</attributes>
 				<statuses>
 					<ObjectStatus id="_IDGenObjectStatus1" text="{detailHeaderModel>/SchDate}"/>
-					<!-- text="{path:'detailHeaderModel>/Schedule_Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/> -->
+					<!-- text="{path:'detailHeaderModel>/Schedule_Date', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"/> -->
 				</statuses>
 			</ObjectHeader>
 			<IconTabBar id="_IDGenIconTabBar1">
@@ -59,13 +59,13 @@
 								<ColumnListItem id="_IDGenColumnListItem1" type="Navigation">
 									<cells>
 										<!--<CheckBox selected="{detailModel>Item_indicator}" select="onChkBoxSelect"-->
-										<!--	enabled="{path:'detailModel>Confirm_Status',formatter:'sp.fiori.schedulingagreement.controller.formatter.selectEnabled'}"></CheckBox>-->
+										<!--	enabled="{path:'detailModel>Confirm_Status',formatter:'sap.fiori.schedulingagreement.controller.formatter.selectEnabled'}"></CheckBox>-->
 										<Text id="_IDGenText9" text="{detailModel>LineNum}"/>
 										<!--<Text text="{detailModel>Etenr}"/>-->
 										<FlexBox id="_IDGenFlexBox1" direction="Column" class="sapUiNoMarginTop">
 											<items>
 												<Text id="_IDGenText10" text="{detailModel>ItemDesc}"/>
-												<!--<Link text="{detailModel>Material_No}" press="onMaterialPress" emphasized="true" enabled="{path:'detailModel>Matkl',formatter:'sp.fiori.schedulingagreement.controller.formatter.LinkEnabled'}"/>-->
+												<!--<Link text="{detailModel>Material_No}" press="onMaterialPress" emphasized="true" enabled="{path:'detailModel>Matkl',formatter:'sap.fiori.schedulingagreement.controller.formatter.LinkEnabled'}"/>-->
 												<Link id="_IDGenLink1" text="{detailModel>ItemCode}" press="onMaterialPress" emphasized="true" enabled="true"/>
 												<!--<ObjectIdentifier title="{detailModel>Material_No}"/>-->
 											</items>
@@ -83,7 +83,7 @@
 										<!-- numberUnit="{detailModel>Uom}"/> -->
 										<ObjectNumber id="_IDGenObjectNumber3" number="{detailModel>UnitPrice}"/>
 										<ObjectStatus id="_IDGenObjectStatus2" text=""/>
-											<!-- state="{path:'detailModel>Confirm_Status',formatter:'sp.fiori.schedulingagreement.controller.formatter.statusCheck'}"/> -->
+											<!-- state="{path:'detailModel>Confirm_Status',formatter:'sap.fiori.schedulingagreement.controller.formatter.statusCheck'}"/> -->
 										<!-- <core:Icon id="_IDGenIcon1" src="sap-icon://feeder-arrow" color="Blue"/> -->
 									</cells>
 								</ColumnListItem>
@@ -98,12 +98,12 @@
 				<!--<Button text="Create ASN" press="onCreateAsn" class="sapUiTinyMarginEnd" icon="sap-icon://add" type="Emphasized"-->
 				<!--	visible="{= ${detailModel>Status} === 'New'? false : true}"/>-->
 				<Button id="_IDGenButton1" text="Create ASN" press="onCreateAsn" class="sapUiTinyMarginEnd" icon="sap-icon://add" type="Emphasized"
-					visible="{parts:[{path:'detailModel>/Status'},{path:'detailModel>/Validity'}],formatter:'sp.fiori.schedulingagreement.controller.formatter.asnCreateVisible'}"
-					enabled="{path:'detailModel>/Asn_Flag',formatter:'sp.fiori.schedulingagreement.controller.formatter.createASNBtn'}"/>
+					visible="{parts:[{path:'detailModel>/Status'},{path:'detailModel>/Validity'}],formatter:'sap.fiori.schedulingagreement.controller.formatter.asnCreateVisible'}"
+					enabled="{path:'detailModel>/Asn_Flag',formatter:'sap.fiori.schedulingagreement.controller.formatter.createASNBtn'}"/>
 				<ToolbarSpacer id="_IDGenToolbarSpacer1"/>
 				<Button id="_IDGenButton2" text="Confirm" press="onCofirmAsn" class="sapUiTinyMarginEnd" icon="sap-icon://complete" type="Emphasized"
-					visible="{path:'detailModel>/Validity',formatter:'sp.fiori.schedulingagreement.controller.formatter.confirmBtnVisible'}"
-					enabled="{path:'detailModel>/Sa_Flag',formatter:'sp.fiori.schedulingagreement.controller.formatter.createASNBtn'}"/>
+					visible="{path:'detailModel>/Validity',formatter:'sap.fiori.schedulingagreement.controller.formatter.confirmBtnVisible'}"
+					enabled="{path:'detailModel>/Sa_Flag',formatter:'sap.fiori.schedulingagreement.controller.formatter.createASNBtn'}"/>
 			</Toolbar>
 		</footer>
 	</Page>

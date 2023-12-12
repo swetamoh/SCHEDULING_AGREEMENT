@@ -4,7 +4,7 @@ sap.ui.define([
 ], function (Controller, MessageBox) {
 	"use strict";
 
-	return Controller.extend("sp.fiori.schedulingagreement.controller.SADetail", {
+	return Controller.extend("sap.fiori.schedulingagreement.controller.SADetail", {
 
 		onInit: function () {
 
@@ -226,7 +226,7 @@ sap.ui.define([
 			// 								var error = jQuery.parseJSON(oError.response.body);
 			// 								if (error.error.innererror.errordetails.length > 0) {
 			// 									if (!that.FragConfirmResponse) {
-			// 										that.FragConfirmResponse = sap.ui.xmlfragment("sp.fiori.schedulingagreement.view.SAConfirmResponse", this);
+			// 										that.FragConfirmResponse = sap.ui.xmlfragment("sap.fiori.schedulingagreement.view.SAConfirmResponse", this);
 			// 										// that.getView().addDependent(that.FragConfirmResponse);
 			// 										that.FragConfirmResponse.setModel(that.ConfirmFragModel);
 			// 									}
@@ -254,7 +254,7 @@ sap.ui.define([
 		onMaterialPress: function (oEvent) {
 			var LineItemData = oEvent.getSource().getParent().getBindingContext("detailModel").getObject();
 			if (!this._oPopoverFragment) {
-				this._oPopoverFragment = sap.ui.xmlfragment("sp.fiori.schedulingagreement.fragment.DetailPopoverFragment", this);
+				this._oPopoverFragment = sap.ui.xmlfragment("sap.fiori.schedulingagreement.fragment.DetailPopoverFragment", this);
 				this.TableTempId = sap.ui.getCore().byId("TableTempId").clone();
 				this.getView().addDependent(this._oPopoverFragment);
 			}
@@ -267,7 +267,7 @@ sap.ui.define([
 
 		/*	onQuantityPress: function(oQuantity) {
 				if (!this.QuantFrag) {
-					this.QuantFrag = sap.ui.xmlfragment("sp.fiori.schedulingagreement.view.SAFragRequiredQuan", this);
+					this.QuantFrag = sap.ui.xmlfragment("sap.fiori.schedulingagreement.view.SAFragRequiredQuan", this);
 					this.getView().addDependent(this.QuantFrag);
 				}
 

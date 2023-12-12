@@ -22,9 +22,9 @@
 				<ColumnListItem>
 					<cells>
 						<Text text="{/Hsn_Code}"/>
-						<Text text="{parts:[{path: '/Igst'},{path: '/Igst_per'}], formatter:'sp.fiori.schedulingagreement.controller.formatter.getPercentSign'}"/>
-						<Text text="{parts:[{path: '/Cgst'},{path: '/Cgst_per'}], formatter:'sp.fiori.schedulingagreement.controller.formatter.getPercentSign'}"/>
-						<Text text="{parts:[{path: '/Sgst'},{path: '/Sgst_per'}], formatter:'sp.fiori.schedulingagreement.controller.formatter.getPercentSign'}"/>
+						<Text text="{parts:[{path: '/Igst'},{path: '/Igst_per'}], formatter:'sap.fiori.schedulingagreement.controller.formatter.getPercentSign'}"/>
+						<Text text="{parts:[{path: '/Cgst'},{path: '/Cgst_per'}], formatter:'sap.fiori.schedulingagreement.controller.formatter.getPercentSign'}"/>
+						<Text text="{parts:[{path: '/Sgst'},{path: '/Sgst_per'}], formatter:'sap.fiori.schedulingagreement.controller.formatter.getPercentSign'}"/>
 					</cells>
 				</ColumnListItem>
 			</items>

@@ -5,7 +5,7 @@ sap.ui.define([
 ], function (Controller, MessageBox) {
 	"use strict";
 
-	return Controller.extend("sp.fiori.schedulingagreement.controller.SAAsnCreate", {
+	return Controller.extend("sap.fiori.schedulingagreement.controller.SAAsnCreate", {
 		onInit: function () {
 
 			// this.loginModel = sap.ui.getCore().getModel("loginModel");
@@ -155,7 +155,7 @@ sap.ui.define([
 						var value = JSON.parse(oError.response.body);
 						MessageBox.error(value.error.message.value, {
 							onClose: function () {
-								sp.fiori.schedulingagreement.controller.formatter.onNavBack();
+								sap.fiori.schedulingagreement.controller.formatter.onNavBack();
 							}
 						});
 					}
@@ -185,7 +185,7 @@ sap.ui.define([
 				}
 				sap.ui.core.BusyIndicator.hide();
 				var slash = window.location.href.includes("site") ? "/" : "";
-				var modulePath = jQuery.sap.getModulePath("sp/fiori/schedulingagreement");
+				var modulePath = jQuery.sap.getModulePath("sap/fiori/schedulingagreement");
 				modulePath = modulePath === "." ? "" : modulePath;
 				var serviceUrl = modulePath + slash + "sap/opu/odata/shiv/NW_SUPP_PORTAL_SA_SRV/AsnAttachementSet";
 				var site = window.location.href.includes("site");
@@ -622,7 +622,7 @@ sap.ui.define([
 		},
 		handleLinkPress: function (oEvent) {
 			if (!this._oPopover) {
-				this._oPopover = sap.ui.xmlfragment("sp.fiori.schedulingagreement.view.PricePopoverFragment", this);
+				this._oPopover = sap.ui.xmlfragment("sap.fiori.schedulingagreement.view.PricePopoverFragment", this);
 				this.getView().addDependent(this._oPopover);
 			}
 
@@ -643,7 +643,7 @@ sap.ui.define([
 			var that = this;
 
 			if (!this.QuantFrag) {
-				this.QuantFrag = sap.ui.xmlfragment("sp.fiori.schedulingagreement.view.SAFragRequiredQuan", this);
+				this.QuantFrag = sap.ui.xmlfragment("sap.fiori.schedulingagreement.view.SAFragRequiredQuan", this);
 				this.getView().addDependent(this.QuantFrag);
 			}
 
@@ -739,7 +739,7 @@ sap.ui.define([
 			this.inputId = oEvent.getSource().getId();
 			var that = this;
 			if (!this.matFrag) {
-				this.matFrag = sap.ui.xmlfragment("sp.fiori.schedulingagreement.view.materialFrag", this);
+				this.matFrag = sap.ui.xmlfragment("sap.fiori.schedulingagreement.view.materialFrag", this);
 				this.matTemp = sap.ui.getCore().byId("materialTempId").clone();
 			}
 
@@ -868,7 +868,7 @@ sap.ui.define([
 			var that = this;
 			var LineItemData = oEvent.getSource().getParent().getBindingContext("asnModel").getObject();
 			if (!this._oPopoverFragment) {
-				this._oPopoverFragment = sap.ui.xmlfragment("sp.fiori.schedulingagreement.fragment.DatePopoverFragment", this);
+				this._oPopoverFragment = sap.ui.xmlfragment("sap.fiori.schedulingagreement.fragment.DatePopoverFragment", this);
 				this._oPopoverFragment.setModel(this.dateConfirmationModel);
 				this.getView().addDependent(this._oPopoverFragment);
 			}

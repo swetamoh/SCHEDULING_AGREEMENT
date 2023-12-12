@@ -5,7 +5,7 @@ sap.ui.define([
 ], function (Controller, MessageBox,Spreadsheet) {
 	"use strict";
 
-	return Controller.extend("sp.fiori.schedulingagreement.controller.SAConfirm", {
+	return Controller.extend("sap.fiori.schedulingagreement.controller.SAConfirm", {
 		// formatter: formatter,
 		onInit: function () {
 
@@ -296,7 +296,7 @@ sap.ui.define([
 			var that = this;
 
 			if (!this.QuantFrag) {
-				this.QuantFrag = sap.ui.xmlfragment("sp.fiori.schedulingagreement.view.SAFragRequiredQuan", this);
+				this.QuantFrag = sap.ui.xmlfragment("sap.fiori.schedulingagreement.view.SAFragRequiredQuan", this);
 				this.getView().addDependent(this.QuantFrag);
 			}
 

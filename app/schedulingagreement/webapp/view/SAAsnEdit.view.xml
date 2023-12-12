@@ -2,7 +2,7 @@
     xmlns:core="sap.ui.core"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    controllerName="sp.fiori.schedulingagreement.controller.SAAsnEdit"
+    controllerName="sap.fiori.schedulingagreement.controller.SAAsnEdit"
     xmlns:l="sap.ui.layout"
     xmlns:f="sap.ui.layout.form"
     class="sapUiSizeCompact"
@@ -347,7 +347,7 @@
                                         />
                                         <Text
                                             id="_IDGenText14"
-                                            text="{path:'asnModel>Eindt', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"
+                                            text="{path:'asnModel>Eindt', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"
                                         />
                                         <!--<Text text="{asnModel>Eindt}"/>-->
                                         <Link

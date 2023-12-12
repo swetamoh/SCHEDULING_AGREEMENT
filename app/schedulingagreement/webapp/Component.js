@@ -6,14 +6,14 @@ sap.ui.define([
         "sap/ui/core/UIComponent",
         "sap/m/MessageBox",
         "sap/ui/model/odata/ODataModel",
-        "sp/fiori/schedulingagreement/controller/formatter",
+        "sap/fiori/schedulingagreement/controller/formatter",
         "sap/ui/Device",
-        "sp/fiori/schedulingagreement/model/models"
+        "sap/fiori/schedulingagreement/model/models"
     ],
     function (UIComponent,  MessageBox, ODataModel, formatter, Device, models) {
         "use strict";
 
-        return UIComponent.extend("sp.fiori.schedulingagreement.Component", {
+        return UIComponent.extend("sap.fiori.schedulingagreement.Component", {
             metadata: {
                 manifest: "json"
             },
@@ -27,7 +27,7 @@ sap.ui.define([
                 // call the base component's init function
                 UIComponent.prototype.init.apply(this, arguments);
                 var slash = window.location.href.includes("site") ? "/" : "";
-                var modulePath = jQuery.sap.getModulePath("sp/fiori/schedulingagreement");
+                var modulePath = jQuery.sap.getModulePath("sap/fiori/schedulingagreement");
                 modulePath = modulePath === "." ? "" : modulePath;
                 var serviceUrl = modulePath + slash + this.getMetadata().getManifestEntry("sap.app").dataSources.mainService.uri;
                 var oDataModel = new ODataModel(serviceUrl, true);

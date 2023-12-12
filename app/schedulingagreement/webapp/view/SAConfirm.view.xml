@@ -1,13 +1,13 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="sp.fiori.schedulingagreement.controller.SAConfirm"
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="sap.fiori.schedulingagreement.controller.SAConfirm"
 	class="sapUiSizeCompact">
 	<Page id="_IDGenPage1" title="Schedule Agreement - {headerModel>/Schedule_No}" showNavButton="true"
-		navButtonPress="sp.fiori.schedulingagreement.controller.formatter.onNavBack" class="sapUiSizeCompact" titleAlignment="Center">
+		navButtonPress="sap.fiori.schedulingagreement.controller.formatter.onNavBack" class="sapUiSizeCompact" titleAlignment="Center">
 		<headerContent>
 			<Button id="submitBtnId" text="Submit" press="onCofirmAsn" type="Emphasized"/>
 		</headerContent>
 		<content>
 			<ObjectHeader id="ObjectId" title="Schedule Agreement - {headerModel>/Schedule_No}"
-				number="{path:'headerModel>/Schedule_Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"
+				number="{path:'headerModel>/Schedule_Date', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"
 				backgroundDesign="Translucent" condensed="true" fullScreenOptimized="true">
 				<attributes>
 					<ObjectAttribute id="_IDGenObjectAttribute1" title="Plant" text="{headerModel>/Plant_Desc} ({headerModel>/Plant})"/>
@@ -101,7 +101,7 @@
 										<ObjectNumber id="_IDGenObjectNumber2" number="{detailModel>Asn_Qty}"/>
 										<Input id="_IDGenInput1" value="{detailModel>Quantity}" liveChange="onQtyLiveChange" editable="false"/>
 										<DatePicker id="_IDGenDatePicker1" value="{detailModel>ReqDate}" valueFormat="yyyyMMdd" editable="false"/>
-										<Text id="_IDGenText11" text="{path:'detailModel>Date', formatter:'sp.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
+										<Text id="_IDGenText11" text="{path:'detailModel>Date', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
 										<DatePicker id="_IDGenDatePicker2" value="{detailModel>DispDate}" valueFormat="yyyyMMdd" class="disablekb" editable="false"/>
 										<!-- <DatePicker id="ShipDateId" value="{detailModel>ShipDate}" valueFormat="yyyyMMdd" class="disablekb" change="onDateChanged"/> -->
 									</cells>
