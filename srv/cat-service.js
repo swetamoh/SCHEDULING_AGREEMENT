@@ -6,8 +6,9 @@ module.exports = (srv) => {
     const {SchedulingAgreements} = srv.entities;
     
     srv.on('READ', SchedulingAgreements, async (req) => {
-        const {unitCode} = req._queryOptions
-        const results = await getSchedulingAgreements(unitCode);
+        //const {unitCode} = req._queryOptions
+        const AddressCode = 'DIE-01-02'
+        const results = await getSchedulingAgreements(AddressCode);
         if (!results) throw new Error('Unable to fetch Scheduling Agreements.');
 
         const expandDocumentRows = req.query.SELECT.columns && req.query.SELECT.columns.some(({ expand, ref }) => expand && ref[0] === "DocumentRows");
@@ -29,13 +30,33 @@ module.exports = (srv) => {
        return results.schedulingAgreements;
     });
 
+    srv.on('getSchedulingAgreementMaterialQuantityList', async (req) => {
+        const { UnitCode, PoNum, MaterialCode } = req.data;
+        // Replace '-' with '/' for PoNum
+        const formattedPoNum = PoNum.replace(/-/g, '/');
+        return getSchedulingAgreementMaterialQuantityList(UnitCode, formattedPoNum, MaterialCode)
+    });
+
+    srv.on('PostASN', async (req) => {
+        const asnDataString = req.data.asnData;
+        const asnDataParsed = JSON.parse(asnDataString);
+        const asnDataFormatted = JSON.stringify(asnDataParsed, null, 2);
+        try {
+            const response = await postASN(asnDataFormatted);
+            return response;
+        } catch (error) {
+            console.error('Error in PostASN API call:', error);
+            throw new Error(`Error posting ASN: ${error.message}`);
+        }
+    });
+
 };
 
-async function getSchedulingAgreements(unitCode) {
+async function getSchedulingAgreements(AddressCode) {
     try {
         const response = await axios({
             method: 'get',
-            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialList?UnitCode='${unitCode}'&RequestBy='Manikandan'`,
+            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialList?AddressCode='${AddressCode}'&RequestBy='Manikandan'`,
             headers: {
                 'Authorization': 'Bearer IncMpsaotdlKHYyyfGiVDg==',
                 'Content-Type': 'application/json'
@@ -48,13 +69,16 @@ async function getSchedulingAgreements(unitCode) {
 
             const schedulingAgreements = dataArray.map(data => {
                 return {
-                    SchNum: data.SchNum,
+                    ScheduleNum: data.SchNum,
+                    SchLineNum: data.SchLineNum,
+                    PoNum: data.PoNum,
                     SchDate: data.SchDate,
+                    ValidFrom: data.ValidFrom,
+                    ValidTo: data.ValidTo,
                     VendorCode: data.VendorCode,
                     VendorName: data.VendorName,
                     PlantCode: data.PlantCode,
-                    PlantName: data.PlantName,
-                    DocStatus: data.DocStatus
+                    PlantName: data.PlantName
                 };
             });
 
@@ -62,12 +86,12 @@ async function getSchedulingAgreements(unitCode) {
             const documentRows = dataArray.flatMap(data =>
                 data.DocumentRows.map(row => {
                     return {
-                        LineNum: parseInt(row.LineNum),
-                        PoDate: data.PoDate,
+                        SchDate: data.SchDate,
                         VendorName: data.VendorName,
                         VendorCode: data.VendorCode,
                         PlantCode: data.PlantCode,
                         PlantName: data.PlantName,
+                        LineNum: parseInt(row.LineNum),
                         ItemCode: row.ItemCode,
                         ItemDesc: row.ItemDesc,
                         HSNCode: row.HSNCode,
@@ -75,7 +99,12 @@ async function getSchedulingAgreements(unitCode) {
                         DeliveredQty: parseFloat(row.DeliveredQty),
                         BalanceQty: parseFloat(row.BalanceQty),
                         UnitPrice: parseFloat(row.UnitPrice),
-                        PNum_SchNum: data.SchNum  // associating with the current Scheduling Agreement
+                        UOM: row.UOM,
+                        Currency: row.Currency,
+                        Status: row.Status,
+                        ConfirmStatus: "",
+                        ASSValue: "",
+                        SchNum_ScheduleNum: data.SchNum  // associating with the current Scheduling Agreement
                     };
                 })
             );
@@ -87,6 +116,53 @@ async function getSchedulingAgreements(unitCode) {
         }
     } catch (error) {
         console.error('Error in API call:', error);
+        throw error;
+    }
+}
+
+async function getSchedulingAgreementMaterialQuantityList(UnitCode, PoNum, MaterialCode) {
+    try {
+        const response = await axios({
+            method: 'get',
+            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialQuantityList?UnitCode='${UnitCode}'&PoNum='${PoNum}'&MaterialCode='${MaterialCode}'&RequestBy='Manikandan'`,
+            headers: {
+                'Authorization': 'Bearer IncMpsaotdlKHYyyfGiVDg==',
+                'Content-Type': 'application/json'
+            },
+            data: {}
+        });
+
+        if (response.data && response.data.d) {
+            return JSON.parse(response.data.d);
+        } else {
+            console.error('Error parsing response:', response.data);
+            throw new Error('Error parsing the response from the API.');
+        }
+    } catch (error) {
+        console.error('Error in getPurchaseMaterialQuantityList API call:', error);
+        throw new Error('Unable to fetch Purchase Material Quantity List.');
+    }
+}
+
+async function postASN(asnData) {
+    try {
+        const response = await axios({
+            method: 'post',
+            url: 'https://imperialauto.co:84/IAIAPI.asmx/PostASN',
+            headers: {
+                'Authorization': 'Bearer IncMpsaotdlKHYyyfGiVDg==',
+                'Content-Type': 'application/json'
+            },
+            data: asnData
+        });
+
+        if (response.data && response.data.SuccessCode) {
+            return "ASN Posted Successfully: " + response.data.Result;
+        } else {
+            throw new Error(response.data.ErrorDescription || 'Unknown error occurred');
+        }
+    } catch (error) {
+        console.error('Error in postASN:', error);
         throw error;
     }
 }
