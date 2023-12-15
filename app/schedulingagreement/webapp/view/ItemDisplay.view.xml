@@ -1,8 +1,8 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
 	controllerName="sap.fiori.schedulingagreement.controller.ItemDisplay">
-	<Page id="_IDGenPage1" title="Material Number : {itemModel>/results/0/Material_No}" showNavButton="true" titleAlignment="Center"
+	<Page id="_IDGenPage1" title="Material Number : {itemModel>/0/ItemCode}" showNavButton="true" titleAlignment="Center"
 		navButtonPress="sap.fiori.schedulingagreement.controller.formatter.onNavBack">
-		<Table id="_IDGenTable1" items="{itemModel>/results}">
+		<Table id="_IDGenTable1" items="{itemModel>/}">
 			<columns>
 				<Column id="_IDGenColumn1" minScreenWidth="Tablet" demandPopin="true">
 					<Text id="_IDGenText1" text="Sch.Line No"/>
@@ -29,10 +29,10 @@
 			<items>
 				<ColumnListItem id="_IDGenColumnListItem1">
 					<cells>
-						<Text id="_IDGenText7" text="{itemModel>Schedule_Line}"/>
-						<ObjectIdentifier id="_IDGenObjectIdentifier1" title="{path:'itemModel>Delivery_Date', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"/>
-						<ObjectNumber id="_IDGenObjectNumber1" number="{itemModel>Required_Qty}" numberUnit="{itemModel>Uom}" textAlign="End"/>
-						<ObjectNumber id="_IDGenObjectNumber2" number="{itemModel>Confirmed_Qty}" numberUnit="{itemModel>Uom}" textAlign="End"/>
+						<Text id="_IDGenText7" text="{itemModel>RowNum}"/>
+						<ObjectIdentifier id="_IDGenObjectIdentifier1" title="{itemModel>DeliveryDate}"/>
+						<ObjectNumber id="_IDGenObjectNumber1" number="{itemModel>DeliveryQty}" textAlign="End"/>
+						<ObjectNumber id="_IDGenObjectNumber2" number="{itemModel>DeliveryQty}" textAlign="End"/>
 						<!--<ObjectNumber number="{itemModel>Delivered_Qty}" numberUnit="{itemModel>Uom}" textAlign="Center"/>-->
 						<ObjectNumber id="_IDGenObjectNumber3" number="{itemModel>Status}" textAlign="Center"/>
 						<!-- <ObjectNumber id="_IDGenObjectNumber4" number="{itemModel>FirmFix}" textAlign="Center"/> -->

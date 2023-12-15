@@ -5,7 +5,7 @@
 			<List id="masterListId" mode="SingleSelectMaster" growing="true" growingThreshold="20" growingScrollToLoad="true"
 				selectionChange="onListItemPress">
 				<items>
-					<ObjectListItem class="schAg" title="{SchNum}" number="{DocStatus}" numberState="Warning" press="onListItemPress" type="Active" id="idlistitem">
+					<ObjectListItem class="schAg" title="{ScheduleNum}" press="onListItemPress" type="Active" id="idlistitem">
 					
 						<firstStatus>
 							<ObjectStatus id="_IDGenObjectStatus1" text="{SchDate}"/>
@@ -15,8 +15,9 @@
 						   <ObjectStatus id="_IDGenObjectStatus2" text="{UpdatedBy}"/>
 						</secondStatus> -->
 						<attributes>
-							<ObjectAttribute id="_IDGenObjectAttribute1" title="Plant" text="{PlantCode}"/>
-							<ObjectAttribute id="_IDGenObjectAttribute2" text="{PlantName}"/>
+							<ObjectAttribute id="_IDGenObjectAttribute3" text="{PoNum}"/>
+							<ObjectAttribute id="_IDGenObjectAttribute1" title="Plant" text="{PlantCode}" visible="{= ${PlantCode} !== ''}"/>
+							<ObjectAttribute id="_IDGenObjectAttribute2" text="{PlantName}" visible="{= ${PlantName} !== ''}"/>
 						</attributes>
 					</ObjectListItem>
 				</items>
