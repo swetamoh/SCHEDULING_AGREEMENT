@@ -23,7 +23,7 @@ module.exports = (srv) => {
         if (searchVal) {
             const cleanedSearchVal = searchVal.trim().replace(/"/g, '');
             results.schedulingAgreements = results.schedulingAgreements.filter(sa =>
-                sa.SchNum.includes(cleanedSearchVal)
+                sa.ScheduleNum.includes(cleanedSearchVal)
             );
         }
     
