@@ -14,7 +14,7 @@ module.exports = (srv) => {
         const expandDocumentRows = req.query.SELECT.columns && req.query.SELECT.columns.some(({ expand, ref }) => expand && ref[0] === "DocumentRows");
         if (expandDocumentRows) {
             results.schedulingAgreements.forEach(po => {
-                po.DocumentRows = results.documentRows.filter(dr => dr.PNum_SchNum === po.SchNum);
+                po.DocumentRows = results.documentRows.filter(dr => dr.SchNum_ScheduleNum === po.ScheduleNum);
             });
         }
 
