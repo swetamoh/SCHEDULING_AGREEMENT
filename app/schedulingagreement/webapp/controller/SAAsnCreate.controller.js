@@ -657,14 +657,14 @@ sap.ui.define([
 							if(this.data.ManufacturingMonth === undefined){
 								this.ManufacturingMonth = "";
 							}
-							if(this.data.PFA === undefined){
-								this.data.PFA = "0";
+							if(items[i].PFA === undefined){
+								items[i].PFA = "0";
 							}
-							if(this.data.FFC === undefined){
-								this.data.FFC = "0";
+							if(items[i].FFC === undefined){
+								items[i].FFC = "0";
 							}
-							if(this.data.OT1 === undefined){
-								this.data.OT1 = "0";
+							if(items[i].OT1 === undefined){
+								items[i].OT1 = "0";
 							}
 
 						var row = {
