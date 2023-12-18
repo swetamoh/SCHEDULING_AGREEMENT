@@ -572,13 +572,109 @@ sap.ui.define([
 
 						return;
 					} else {
+						if (this.data.BillDate) {
+						var date = this.data.BillDate.substring(4, 6) + "/" + this.data.BillDate.substring(6, 8) + "/" + this.data.BillDate.substring(0, 4);
+						var DateInstance = new Date(date);
+						var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+						pattern: "dd/MM/yyyy"
+						});
+						this.BillDate = dateFormat.format(DateInstance);
+						}
+						if (this.data.ManufacturingMonth) {
+							var date = this.data.ManufacturingMonth.substring(4, 6) + "/" + this.data.ManufacturingMonth.substring(6, 8) + "/" + this.data.ManufacturingMonth.substring(0, 4);
+							var DateInstance = new Date(date);
+							var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+							pattern: "dd/MM/yyyy"
+							});
+							this.ManufacturingMonth = dateFormat.format(DateInstance);
+							}
+							if(items[i].IGP === undefined){
+								items[i].IGP = "";
+							}
+							if(items[i].IGA === undefined){
+								items[i].IGA = "";
+							}
+							if(items[i].CGP === undefined){
+								items[i].CGP = "";
+							}
+							if(items[i].CGA === undefined){
+								items[i].CGA = "";
+							}
+							if(items[i].SGP === undefined){
+								items[i].SGP = "";
+							}
+							if(items[i].SGA === undefined){
+								items[i].SGA = "";
+							}
+							if(items[i].TCS === undefined){
+								items[i].TCS = "";
+							}
+							if(items[i].TCA === undefined){
+								items[i].TCA = "";
+							}
+							if(items[i].LineValue === undefined){
+								items[i].LineValue = "";
+							}
+							if(items[i].Packaging === undefined){
+								items[i].Packaging = "";
+							}
+							if(items[i].WeightPerKG === undefined){
+								items[i].WeightPerKG = "";
+							}
+							if(this.data.TransportName === undefined){
+								this.data.TransportName = "";
+							}
+							if(this.data.TransportMode === undefined){
+								this.data.TransportMode = "";
+							}
+							if(this.data.DocketNumber === undefined){
+								this.data.DocketNumber = "";
+							}
+							if(this.data.GRDate === undefined){
+								this.data.GRDate = "";
+							}
+							if(this.data.EwayBillNumber === undefined){
+								this.data.EwayBillNumber = "";
+							}
+							if(this.data.EwayBillDate === undefined){
+								this.data.EwayBillDate = "";
+							}
+							if(this.data.MillNumber === undefined){
+								this.data.MillNumber = "";
+							}
+							if(this.data.MillName === undefined){
+								this.data.MillName = "";
+							}
+							if(this.data.PDIRNumber === undefined){
+								this.data.PDIRNumber = "";
+							}
+							if(this.data.HeatNumber === undefined){
+								this.data.HeatNumber = "";
+							}
+							if(this.data.BatchNumber === undefined){
+								this.data.BatchNumber = "";
+							}
+							if(this.data.ManufacturingMonth === undefined){
+								this.ManufacturingMonth = "";
+							}
+							if(this.data.PFA === undefined){
+								this.data.PFA = "0";
+							}
+							if(this.data.FFC === undefined){
+								this.data.FFC = "0";
+							}
+							if(this.data.OT1 === undefined){
+								this.data.OT1 = "0";
+							}
+
 						var row = {
 							"BillLineNumber": items[i].LineNum,
 							"BillNumber": this.data.BillNumber,
-							"BillDate": this.data.BillDate,
+							"BillDate": this.BillDate,
 							"ScheduleNumber": items[i].SchNum_ScheduleNum,
 							"ScheduleLineNumber": items[i].SchLineNum,
 							"PONumber": items[i].PoNum,
+							"IAIVendorCode": this.data.VendorCode, 
 							"IAIItemCode": items[i].ItemCode,
 							"UOM": items[i].UOM,
 							"HSNCode": items[i].HSNCode,
@@ -587,7 +683,7 @@ sap.ui.define([
 							"PackingAmount": items[i].PFA,
 							"Freight": items[i].FFC,
 							"OtherCharges": items[i].OT1,
-							"AssetValue": items[i].ASSValue,
+							"AssValue": items[i].ASSValue.toString(),
 							"IGST": items[i].IGP,
 							"IGA": items[i].IGA,
 							"CGST": items[i].CGP,
@@ -610,7 +706,7 @@ sap.ui.define([
 							"PDIRNumber": this.data.PDIRNumber,
 							"HeatNumber": this.data.HeatNumber,
 							"BatchNumber": this.data.BatchNumber,
-							"ManufacturingMonth": this.data.ManufacturingMonth
+							"ManufacturingMonth": this.ManufacturingMonth
 						};
 						form.RowDetails.push(row);
 					}
@@ -650,10 +746,10 @@ sap.ui.define([
 			
 			this.data = this.asnModel.getData();
 			var ASNHeaderData = {
-				"SchNum_ScheduleNum": this.data.SchNum_ScheduleNum,
+				"SchNum_ScheduleNum": this.data.ScheduleNum,
 				"AsnNum": this.data.AsnNum,
-				"InvoiceDate": this.data.BillDate,
-				"InvoiceNum": this.data.BillNumber,
+				"BillDate": this.data.BillDate,
+				"BillNumber": this.data.BillNumber,
 				"DocketNumber": this.data.DocketNumber,
 				"GRDate": this.data.GRDate,
 				"TransportName": this.data.TransportName,
@@ -675,8 +771,8 @@ sap.ui.define([
 			var oTable = this.getView().byId("AsnCreateTable");
 			var contexts = oTable.getSelectedContexts();
 			
-			if (ASNHeaderData.InvoiceNum) {
-				if (!ASNHeaderData.InvoiceDate) {
+			if (ASNHeaderData.BillNumber) {
+				if (!ASNHeaderData.BillDate) {
 					MessageBox.error("Please fill the Invoice Date");
 					return;
 				}
@@ -701,6 +797,7 @@ sap.ui.define([
 
 						return;
 					} else {
+						items[i].ASSValue = items[i].ASSValue.toString();
 						ASNItemData.push(items[i]);
 						
 					}
