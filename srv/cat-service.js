@@ -7,8 +7,8 @@ module.exports = (srv) => {
 
     srv.on('READ', SchedulingAgreements, async (req) => {
         //const {unitCode} = req._queryOptions
-        //const AddressCode = 'DIE-01-02'
-        const AddressCode = 'GIN-01-02'
+        const AddressCode = 'DIE-01-02'
+        //const AddressCode = 'GIN-01-02'
         const results = await getSchedulingAgreements(AddressCode);
         if (!results) throw new Error('Unable to fetch Scheduling Agreements.');
 
@@ -172,7 +172,7 @@ async function postASN(asnData) {
         });
 
         if (response.data && response.data.SuccessCode) {
-            return "ASN Posted Successfully: " + response.data.Result;
+            return response.data.SuccessCode.replace(/,/g, '');
         } else {
             throw new Error(response.data.ErrorDescription || 'Unknown error occurred');
         }

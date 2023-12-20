@@ -733,7 +733,17 @@ sap.ui.define([
 					}),
 					context: this,
 					success: function (data, textStatus, jqXHR) {
-						MessageBox.success("ASN created succesfully");
+						this.AsnNum = data.d.PostASN;
+						MessageBox.success(this.AsnNum + " ASN created succesfully", {
+							actions: [sap.m.MessageBox.Action.OK],
+							icon: sap.m.MessageBox.Icon.SUCCESS,
+							title: "Success",
+							onClose: function (oAction) {
+								if (oAction === "OK") {
+									sap.fiori.schedulingagreement.controller.formatter.onNavBack();
+								}
+							}
+						});
 						this.onAsnSaveDB();
 					}.bind(this),
 					error: function (error) {
@@ -751,7 +761,7 @@ sap.ui.define([
 			this.data = this.asnModel.getData();
 			var ASNHeaderData = {
 				"SchNum_ScheduleNum": this.data.ScheduleNum,
-				"AsnNum": this.data.AsnNum,
+				"AsnNum": this.AsnNum,
 				"BillDate": this.data.BillDate,
 				"BillNumber": this.data.BillNumber,
 				"DocketNumber": this.data.DocketNumber,
@@ -808,7 +818,7 @@ sap.ui.define([
 
 				}
 				oModel.create("/ASNListHeader", ASNHeaderData, null, function (oData, response) {
-					MessageBox.success("ASN created succesfully");
+					//MessageBox.success("ASN created succesfully");
 					
 
 				}, function (oError) {
@@ -823,17 +833,6 @@ sap.ui.define([
 				for (var i = 0; i < ASNItemData.length; i++) {
 					oModel.create("/ASNList", ASNItemData[i], null, function (oData, response) {
 						
-						MessageBox.success("ASN created succesfully  ", {
-							actions: [sap.m.MessageBox.Action.OK],
-							icon: sap.m.MessageBox.Icon.SUCCESS,
-							title: "Success",
-							onClose: function (oAction) {
-								if (oAction === "OK") {
-									sap.fiori.schedulingagreement.controller.formatter.onNavBack();
-								}
-							}
-						});
-
 					}, function (oError) {
 						try {
 							var error = JSON.parse(oError.response.body);
