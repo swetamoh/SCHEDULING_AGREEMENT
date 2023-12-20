@@ -3,11 +3,12 @@ const axios = require('axios');
 
 module.exports = (srv) => {
 
-    const {SchedulingAgreements} = srv.entities;
-    
+    const { SchedulingAgreements } = srv.entities;
+
     srv.on('READ', SchedulingAgreements, async (req) => {
         //const {unitCode} = req._queryOptions
-        const AddressCode = 'DIE-01-02'
+        //const AddressCode = 'DIE-01-02'
+        const AddressCode = 'GIN-01-02'
         const results = await getSchedulingAgreements(AddressCode);
         if (!results) throw new Error('Unable to fetch Scheduling Agreements.');
 
@@ -26,8 +27,8 @@ module.exports = (srv) => {
                 sa.ScheduleNum.includes(cleanedSearchVal)
             );
         }
-    
-       return results.schedulingAgreements;
+
+        return results.schedulingAgreements;
     });
 
     srv.on('getSchedulingAgreementMaterialQuantityList', async (req) => {
@@ -105,7 +106,19 @@ async function getSchedulingAgreements(AddressCode) {
                         Currency: row.Currency,
                         Status: row.Status,
                         ConfirmStatus: "",
-                        ASSValue: "",
+                        ASSValue: row.ASSValue,
+                        Packing: row.Packing,
+                        OtherValues: row.OtherValues,
+                        IGST: row.IGST,
+                        IGA: row.IGA,
+                        CGST: row.CGST,
+                        CGA: row.CGA,
+                        SGST: row.SGST,
+                        SGA: row.SGA,
+                        TCA: row.TCA,
+                        LineValue: row.LineValue,
+                        Packages: row.Packages,
+                        WeightInKG: row.WeightInKG,
                         SchNum_ScheduleNum: data.SchNum  // associating with the current Scheduling Agreement
                     };
                 })

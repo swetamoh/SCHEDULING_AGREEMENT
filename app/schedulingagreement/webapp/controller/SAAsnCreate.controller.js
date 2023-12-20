@@ -106,19 +106,19 @@ sap.ui.define([
 
 							that.asnModel.setData(filteredPurchaseOrder);
 							that.asnModel.refresh(true);
-							var asnModelData = that.getView().getModel("asnModel").getData();
-							for (var i = 0; i < asnModelData.DocumentRows.results.length; i++) {
-								asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].BalanceQty) * parseFloat(asnModelData.DocumentRows.results[i].UnitPrice);
-								if (asnModelData.DocumentRows.results[i].PFA) {
-									asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].PFA);
-								}
-								if (asnModelData.DocumentRows.results[i].FFC) {
-									asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].FFC);
-								}
-								if (asnModelData.DocumentRows.results[i].OT1) {
-									asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].OT1);
-								}
-							}
+							// var asnModelData = that.getView().getModel("asnModel").getData();
+							// for (var i = 0; i < asnModelData.DocumentRows.results.length; i++) {
+							// 	asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].BalanceQty) * parseFloat(asnModelData.DocumentRows.results[i].UnitPrice);
+							// 	if (asnModelData.DocumentRows.results[i].Packing) {
+							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].Packing);
+							// 	}
+							// 	if (asnModelData.DocumentRows.results[i].FFC) {
+							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].FFC);
+							// 	}
+							// 	if (asnModelData.DocumentRows.results[i].OtherValues) {
+							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].OtherValues);
+							// 	}
+							// }
 							that.asnModel.refresh(true);
 							//that.initializeScheduleNumber();
 						} else {
@@ -557,6 +557,10 @@ sap.ui.define([
 				MessageBox.error("Please fill the Invoice Number");
 				return;
 			}
+			if (this.getView().byId("UploadCollection").getItems().length <= 0) {
+				MessageBox.error("Atleast One attachment is required.");
+				return;
+			}
 			if (!contexts.length) {
 				MessageBox.error("No Item Selected");
 				return;
@@ -588,39 +592,39 @@ sap.ui.define([
 							});
 							this.ManufacturingMonth = dateFormat.format(DateInstance);
 							}
-							if(items[i].IGP === undefined){
-								items[i].IGP = "";
-							}
-							if(items[i].IGA === undefined){
-								items[i].IGA = "";
-							}
-							if(items[i].CGP === undefined){
-								items[i].CGP = "";
-							}
-							if(items[i].CGA === undefined){
-								items[i].CGA = "";
-							}
-							if(items[i].SGP === undefined){
-								items[i].SGP = "";
-							}
-							if(items[i].SGA === undefined){
-								items[i].SGA = "";
-							}
+							// if(items[i].IGST === undefined){
+							// 	items[i].IGST = "";
+							// }
+							// if(items[i].IGA === undefined){
+							// 	items[i].IGA = "";
+							// }
+							// if(items[i].CGST === undefined){
+							// 	items[i].CGST = "";
+							// }
+							// if(items[i].CGA === undefined){
+							// 	items[i].CGA = "";
+							// }
+							// if(items[i].SGST === undefined){
+							// 	items[i].SGST = "";
+							// }
+							// if(items[i].SGA === undefined){
+							// 	items[i].SGA = "";
+							// }
 							if(items[i].TCS === undefined){
 								items[i].TCS = "";
 							}
-							if(items[i].TCA === undefined){
-								items[i].TCA = "";
-							}
-							if(items[i].LineValue === undefined){
-								items[i].LineValue = "";
-							}
-							if(items[i].Packaging === undefined){
-								items[i].Packaging = "";
-							}
-							if(items[i].WeightPerKG === undefined){
-								items[i].WeightPerKG = "";
-							}
+							// if(items[i].TCA === undefined){
+							// 	items[i].TCA = "";
+							// }
+							// if(items[i].LineValue === undefined){
+							// 	items[i].LineValue = "";
+							// }
+							// if(items[i].Packages === undefined){
+							// 	items[i].Packages = "";
+							// }
+							// if(items[i].WeightInKG === undefined){
+							// 	items[i].WeightInKG = "";
+							// }
 							if(this.data.TransportName === undefined){
 								this.data.TransportName = "";
 							}
@@ -657,15 +661,15 @@ sap.ui.define([
 							if(this.data.ManufacturingMonth === undefined){
 								this.ManufacturingMonth = "";
 							}
-							if(items[i].PFA === undefined){
-								items[i].PFA = "0";
-							}
+							// if(items[i].Packing === undefined){
+							// 	items[i].Packing = "0";
+							// }
 							if(items[i].FFC === undefined){
 								items[i].FFC = "0";
 							}
-							if(items[i].OT1 === undefined){
-								items[i].OT1 = "0";
-							}
+							// if(items[i].OtherValues === undefined){
+							// 	items[i].OtherValues = "0";
+							// }
 
 						var row = {
 							"BillLineNumber": items[i].LineNum,
@@ -680,15 +684,15 @@ sap.ui.define([
 							"HSNCode": items[i].HSNCode,
 							"Rate": items[i].UnitPrice,
 							"Quantity": items[i].BalanceQty,
-							"PackingAmount": items[i].PFA,
+							"PackingAmount": items[i].Packing,
 							"Freight": items[i].FFC,
-							"OtherCharges": items[i].OT1,
+							"OtherCharges": items[i].OtherValues,
 							"AssValue": items[i].ASSValue.toString(),
-							"IGST": items[i].IGP,
+							"IGST": items[i].IGST,
 							"IGA": items[i].IGA,
-							"CGST": items[i].CGP,
+							"CGST": items[i].CGST,
 							"CGA": items[i].CGA,
-							"SGST": items[i].SGP,
+							"SGST": items[i].SGST,
 							"SGA": items[i].SGA,
 							"TCS": items[i].TCS,
 							"TCA": items[i].TCA,
@@ -697,8 +701,8 @@ sap.ui.define([
 							"TransportMode": this.data.TransportMode,
 							"DocketNumber": this.data.DocketNumber,
 							"GRDate": this.data.GRDate,
-							"Packaging": items[i].Packaging,
-							"WeightPerKG": items[i].WeightPerKG,
+							"Packaging": items[i].Packages,
+							"WeightPerKG": items[i].WeightInKG,
 							"EwayBillNumber": this.data.EwayBillNumber,
 							"EwayBillDate": this.data.EwayBillDate,
 							"MillNumber": this.data.MillNumber,
@@ -1160,14 +1164,14 @@ sap.ui.define([
 			var data = this.asnModel.getData().DocumentRows.results;
 			data[path].BalanceQty = val;
 			data[path].ASSValue = parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice);
-			if (data[path].PFA) {
-				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].PFA);
+			if (data[path].Packing) {
+				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].Packing);
 			}
 			if (data[path].FFC) {
 				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].FFC);
 			}
-			if (data[path].OT1) {
-				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].OT1);
+			if (data[path].OtherValues) {
+				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].OtherValues);
 			}
 			this.asnModel.refresh(true);
 		},
@@ -1175,10 +1179,10 @@ sap.ui.define([
 			const val = e.getParameter("value") || 0;
 			var path = e.getSource().getParent().getBindingContextPath().split("/")[3];
 			var data = this.asnModel.getData().DocumentRows.results;
-			data[path].PFA = val;
+			data[path].Packing = val;
 			if (data[path].FFC === undefined){data[path].FFC = "0"}
-			if (data[path].OT1 === undefined){data[path].OT1 = "0"}
-			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].PFA) + parseFloat(data[path].FFC) + parseFloat(data[path].OT1);
+			if (data[path].OtherValues === undefined){data[path].OtherValues = "0"}
+			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].FFC) + parseFloat(data[path].OtherValues);
 			this.asnModel.refresh(true);
 		},
 		onFreightChange: function (e) {
@@ -1186,19 +1190,19 @@ sap.ui.define([
 			var path = e.getSource().getParent().getBindingContextPath().split("/")[3];
 			var data = this.asnModel.getData().DocumentRows.results;
 			data[path].FFC = val;
-			if (data[path].PFA === undefined){data[path].PFA = "0"}
-			if (data[path].OT1 === undefined){data[path].OT1 = "0"}
-			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].PFA) + parseFloat(data[path].FFC) + parseFloat(data[path].OT1);
+			if (data[path].Packing === undefined){data[path].Packing = "0"}
+			if (data[path].OtherValues === undefined){data[path].OtherValues = "0"}
+			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].FFC) + parseFloat(data[path].OtherValues);
 			this.asnModel.refresh(true);
 		},
 		onOtherChange: function (e) {
 			const val = e.getParameter("value") || 0;
 			var path = e.getSource().getParent().getBindingContextPath().split("/")[3];
 			var data = this.asnModel.getData().DocumentRows.results;
-			data[path].OT1 = val;
+			data[path].OtherValues = val;
 			if (data[path].FFC === undefined){data[path].FFC = "0"}
-			if (data[path].PFA === undefined){data[path].PFA = "0"}
-			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].PFA) + parseFloat(data[path].FFC) + parseFloat(data[path].OT1);
+			if (data[path].Packing === undefined){data[path].Packing = "0"}
+			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].FFC) + parseFloat(data[path].OtherValues);
 			this.asnModel.refresh(true);
 		}
 
