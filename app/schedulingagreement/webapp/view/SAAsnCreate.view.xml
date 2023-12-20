@@ -849,7 +849,7 @@
                                         />
                                         <Input
                                             id="pkgamtId"
-                                            value="{asnModel>PFA}"
+                                            value="{asnModel>Packing}"
                                             change="onPackChange"
                                         />
                                         <Input
@@ -859,7 +859,7 @@
                                         />
                                         <Input
                                             id="othchargeId"
-                                            value="{asnModel>OT1}"
+                                            value="{asnModel>OtherValues}"
                                             change="onOtherChange"
                                         />
                                         <Text
@@ -868,7 +868,7 @@
                                         />
                                         <Text
                                             id="_IDGenText15"
-                                            text="{asnModel>IGP}"
+                                            text="{asnModel>IGST}"
                                         />
                                         <Text
                                             id="_IDGenText16"
@@ -876,7 +876,7 @@
                                         />
                                         <Text
                                             id="_IDGenText17"
-                                            text="{asnModel>CGP}"
+                                            text="{asnModel>CGST}"
                                         />
                                         <Text
                                             id="_IDGenText18"
@@ -884,7 +884,7 @@
                                         />
                                         <Text
                                             id="_IDGenText19"
-                                            text="{asnModel>SGP}"
+                                            text="{asnModel>SGST}"
                                         />
                                         <Text
                                             id="_IDGenText20"
@@ -904,11 +904,11 @@
                                         />
                                         <Input
                                             id="pkgId"
-                                            value="{asnModel>Packaging}"
+                                            value="{asnModel>Packages}"
                                         />
                                         <Input
                                             id="wgtId"
-                                            value="{asnModel>WeightPerKG}"
+                                            value="{asnModel>WeightInKG}"
                                         />
                                         <!-- <Text
                                             id="_IDGenText11"
@@ -1004,7 +1004,7 @@
                     </ScrollContainer>
                 </IconTabFilter>
                 <!-- uploadUrl="/sap/opu/odata/shiv/NW_SUPP_PORTAL_SA_SRV/AsnAttachementSet"  -->
-                <!-- <IconTabFilter
+                <IconTabFilter
                     id="_IDGenIconTabFilter2"
                     icon="sap-icon://attachment"
                 >
@@ -1023,7 +1023,7 @@
                         typeMissmatch="onTypeMissmatch"
                         uploadComplete="onUploadComplete"
                         beforeUploadStarts="onBeforeUploadStarts"
-                    /> -->
+                    />
                     <!-- <items>
                             <UploadCollectionItem
                                 id="UploadCollItemId"
@@ -1036,7 +1036,7 @@
                             />
                         </items>
                     </UploadCollection> -->
-                <!-- </IconTabFilter> -->
+                 </IconTabFilter> 
             </items>
         </IconTabBar>
     </Page>

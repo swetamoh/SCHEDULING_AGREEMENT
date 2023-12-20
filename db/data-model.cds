@@ -41,6 +41,18 @@ entity DocumentRowItems {
       Status        : String;
       ConfirmStatus : String;
       ASSValue      : String;
+      Packing       : String;
+      OtherValues   : String;
+      IGST          : String;
+      IGA           : String;
+      CGST          : String;
+      CGA           : String;
+      SGST          : String;
+      SGA           : String;
+      TCA           : String;
+      LineValue     : String;
+      Packages      : String;
+      WeightInKG    : String;
       SchNum        : Association to SchedulingAgreements;
 }
 
@@ -60,19 +72,19 @@ entity ASNList {
       BalanceQty     : String;
       DeliveredQty   : Decimal;
       ASSValue       : String;
-      PFA            : String;
+      Packing        : String;
       FFC            : String;
-      OT1            : String;
-      IGP            : String;
+      OtherValues    : String;
+      IGST           : String;
       IGA            : String;
-      CGP            : String;
+      CGST           : String;
       CGA            : String;
-      SGP            : String;
+      SGST           : String;
       SGA            : String;
       UGP            : String;
       UGA            : String;
-      Packaging      : String;
-      WeightPerKG    : String;
+      Packages       : String;
+      WeightInKG     : String;
       LineValue      : String;
       TCS            : String;
       TCA            : String;
