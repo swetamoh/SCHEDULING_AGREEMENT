@@ -6,8 +6,9 @@ module.exports = (srv) => {
     const { SchedulingAgreements } = srv.entities;
 
     srv.on('READ', SchedulingAgreements, async (req) => {
+        const {AddressCode} = req._queryOptions
         //const {unitCode} = req._queryOptions
-        const AddressCode = 'DIE-01-02'
+        //const AddressCode = 'DIE-01-02'
         //const AddressCode = 'GIN-01-02'
         const results = await getSchedulingAgreements(AddressCode);
         if (!results) throw new Error('Unable to fetch Scheduling Agreements.');

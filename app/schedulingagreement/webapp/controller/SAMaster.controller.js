@@ -13,6 +13,7 @@ sap.ui.define([
 			this.filterModel = new sap.ui.model.json.JSONModel();
 			this.listTemp = this.byId("idlistitem").clone();
 			this.unitCode = sessionStorage.getItem("unitCode") || "P01";
+			this.AddressCode = sessionStorage.getItem("AddressCode") || 'GIN-01-02';
 		},
 
 		onRouteMatched: function (oEvent) {
@@ -26,9 +27,9 @@ sap.ui.define([
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
 				parameters: {
-					// custom: {
-					// 	unitCode: this.unitCode
-					// },
+					custom: {
+						AddressCode: this.AddressCode
+					},
 					countMode: 'None'
 				},
 				// filters: filter,
