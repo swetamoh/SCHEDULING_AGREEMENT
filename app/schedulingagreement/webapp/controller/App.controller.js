@@ -27,28 +27,20 @@ sap.ui.define(
         }
       },
       onInit: function () {
-        // var site = window.location.href.includes("site");
-        // if (site) {
-        //   var slash = site ? "/" : "";
-        //   var modulePath = jQuery.sap.getModulePath("sap/fiori/schedulingagreement");
-        //   modulePath = modulePath === "." ? "" : modulePath;
-        //   $.ajax({
-        //     url: modulePath + slash + "user-api/attributes",
-        //     type: "GET",
-        //     success: res => {
-        //       const attributes = res,
-        //         loginId = attributes.login_name[0],
-        //         loginType = attributes.type[0].substring(0, 1).toUpperCase();
-        //       $.sap.logData = {
-        //         "unitcode": sessionStorage.getItem("unitCode"),
-        //         "loginId": loginId,
-        //         "LoginType": loginType
-        //       };
-        //       this.getView().getModel().setHeaders($.sap.logData);
-        //       this.doRoute();
-        //     }
-        //   });
-        // } 
+        var site = window.location.href.includes("site");
+        if (site) {
+          var slash = site ? "/" : "";
+          var modulePath = jQuery.sap.getModulePath("sap/fiori/schedulingagreement");
+          modulePath = modulePath === "." ? "" : modulePath;
+          $.ajax({
+            url: modulePath + slash + "user-api/attributes",
+            type: "GET",
+            success: res => {
+              sessionStorage.setItem('AddressCode', res.login_name[0]);
+              this.doRoute();
+            }
+          });
+        } 
         // else {
         //   $.sap.logData = {
         //     "companycode": "1000",

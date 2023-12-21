@@ -55,13 +55,14 @@ sap.ui.define([
 				// 	"LoginType": that.loginData.userType
 				// });
 				var unitCode = sessionStorage.getItem("unitCode");
+				this.AddressCode = sessionStorage.getItem("AddressCode") || 'GIN-01-02';
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
 				// this.Vendor_No = event.getParameter("arguments").Vendor_No;
 
 				// var request = "/PO_HEADERSet(Po_No='" + this.Po_Num + "',Vendor_No='" + this.Vendor_No + "')?$expand=headertoitemNav";
 
-				var request = "/SchedulingAgreements?$expand=DocumentRows";
+				var request = "/SchedulingAgreements?$expand=DocumentRows&AddressCode=" + this.AddressCode;
 				oModel.read(request, {
 					success: function (oData) {
 						var filteredPurchaseOrder = oData.results.find(po => po.ScheduleNum === that.Schedule_No);
