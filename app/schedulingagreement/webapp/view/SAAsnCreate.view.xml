@@ -210,7 +210,7 @@
                             selectionChange="onRowSelect"
                             rememberSelections="true"
                         >
-                            <infoToolbar>
+                            <!-- <infoToolbar>
                                 <OverflowToolbar
                                     id="_IDGenOverflowToolbar1"
                                     height="70px"
@@ -282,7 +282,7 @@
                                         </VBox>
                                     </HBox>
                                 </OverflowToolbar>
-                            </infoToolbar>
+                            </infoToolbar> -->
                             <columns>
                                 <Column
                                     id="_IDGenColumn1"
@@ -374,7 +374,7 @@
                                 >
                                     <Label
                                         design="Bold"
-                                        text="Rate"
+                                        text="Rate ({asnModel>/DocumentRows/results/0/Currency})"
                                         wrapping="true"
                                     />
                                 </Column>
@@ -400,7 +400,7 @@
                                     <Label
                                         id="_IDGenLabel20"
                                         design="Bold"
-                                        text="Packing Amt"
+                                        text="Packing Amt ({asnModel>/DocumentRows/results/0/Currency})"
                                         wrapping="true"
                                     />
                                 </Column>
@@ -414,7 +414,7 @@
                                     <Label
                                         id="_IDGenLabel21"
                                         design="Bold"
-                                        text="Freight"
+                                        text="Freight ({asnModel>/DocumentRows/results/0/Currency})"
                                         wrapping="true"
                                     />
                                 </Column>
@@ -428,7 +428,7 @@
                                     <Label
                                         id="_IDGenLabel22"
                                         design="Bold"
-                                        text="Other Charges"
+                                        text="Other Charges ({asnModel>/DocumentRows/results/0/Currency})"
                                         wrapping="true"
                                     />
                                 </Column>
@@ -442,7 +442,7 @@
                                     <Label
                                         id="_IDGenLabel23"
                                         design="Bold"
-                                        text="Ass Value"
+                                        text="Ass Value ({asnModel>/DocumentRows/results/0/Currency})"
                                         wrapping="true"
                                     />
                                 </Column>
@@ -840,7 +840,7 @@
                                         />
                                         <Text
                                             id="_IDGenText14"
-                                            text="{asnModel>UnitPrice}"
+                                            text="{asnModel>UnitPrice} ({asnModel>Currency})"
                                         />
                                         <Input
                                             id="quantityId"
@@ -849,17 +849,17 @@
                                         />
                                         <Input
                                             id="pkgamtId"
-                                            value="{asnModel>Packing}"
+                                            value="{asnModel>Packing} ({asnModel>Currency})"
                                             change="onPackChange"
                                         />
                                         <Input
                                             id="freightId"
-                                            value="{asnModel>FFC}"
+                                            value="{asnModel>FFC} ({asnModel>Currency})"
                                             change="onFreightChange"
                                         />
                                         <Input
                                             id="othchargeId"
-                                            value="{asnModel>OtherValues}"
+                                            value="{asnModel>OtherValues} ({asnModel>Currency})"
                                             change="onOtherChange"
                                         />
                                         <Text
