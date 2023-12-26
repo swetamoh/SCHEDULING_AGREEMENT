@@ -840,7 +840,7 @@
                                         />
                                         <Text
                                             id="_IDGenText14"
-                                            text="{asnModel>UnitPrice} ({asnModel>Currency})"
+                                            text="{asnModel>UnitPrice}"
                                         />
                                         <Input
                                             id="quantityId"
@@ -849,17 +849,17 @@
                                         />
                                         <Input
                                             id="pkgamtId"
-                                            value="{asnModel>Packing} ({asnModel>Currency})"
+                                            value="{asnModel>Packing}"
                                             change="onPackChange"
                                         />
                                         <Input
                                             id="freightId"
-                                            value="{asnModel>FFC} ({asnModel>Currency})"
+                                            value="{asnModel>FFC}"
                                             change="onFreightChange"
                                         />
                                         <Input
                                             id="othchargeId"
-                                            value="{asnModel>OtherValues} ({asnModel>Currency})"
+                                            value="{asnModel>OtherValues}"
                                             change="onOtherChange"
                                         />
                                         <Text
