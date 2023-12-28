@@ -55,7 +55,7 @@ sap.ui.define([
 				// 	"LoginType": that.loginData.userType
 				// });
 				var unitCode = sessionStorage.getItem("unitCode");
-				this.AddressCode = sessionStorage.getItem("AddressCode") || 'GIN-01-02';
+				this.AddressCode = sessionStorage.getItem("AddressCode") || 'HAI-01-02';
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
 				// this.Vendor_No = event.getParameter("arguments").Vendor_No;

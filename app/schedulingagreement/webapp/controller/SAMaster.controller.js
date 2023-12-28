@@ -13,7 +13,7 @@ sap.ui.define([
 			this.filterModel = new sap.ui.model.json.JSONModel();
 			this.listTemp = this.byId("idlistitem").clone();
 			this.unitCode = sessionStorage.getItem("unitCode") || "P01";
-			this.AddressCode = sessionStorage.getItem("AddressCode") || 'GIN-01-02';
+			
 		},
 
 		onRouteMatched: function (oEvent) {
@@ -24,6 +24,7 @@ sap.ui.define([
 			// if (sap.ui.getCore().getModel("filterModel").getData().Vendor_No) {
 			// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 			// }
+			this.AddressCode = sessionStorage.getItem("AddressCode") || 'HAI-01-02';
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
 				parameters: {
