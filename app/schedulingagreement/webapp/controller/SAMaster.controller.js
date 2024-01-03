@@ -24,12 +24,12 @@ sap.ui.define([
 			// if (sap.ui.getCore().getModel("filterModel").getData().Vendor_No) {
 			// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 			// }
-			this.AddressCode = sessionStorage.getItem("AddressCode") || 'HAI-01-02';
+			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'HAI-01-02';
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
 				parameters: {
 					custom: {
-						AddressCode: this.AddressCode
+						AddressCode: this.AddressCodeSA
 					},
 					countMode: 'None'
 				},
