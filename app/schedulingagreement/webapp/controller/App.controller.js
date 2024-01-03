@@ -37,9 +37,9 @@ sap.ui.define(
             type: "GET",
             success: res => {
               if( res.login_name[0] !==  res.email){
-              sessionStorage.setItem('AddressCode', res.login_name[0]);
+              sessionStorage.setItem('AddressCodeSA', res.login_name[0]);
               }else{
-                sessionStorage.setItem('AddressCode', 'HAI-01-02');
+                sessionStorage.setItem('AddressCodeSA', 'HAI-01-02');
               }
               this.doRoute();
             }
