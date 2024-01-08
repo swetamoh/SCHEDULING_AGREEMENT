@@ -572,7 +572,7 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                                <Column
+                                <!-- <Column
                                     id="_IDGenColumn27"
                                     minScreenWidth="Tablet"
                                     demandPopin="true"
@@ -585,7 +585,7 @@
                                         text="Packaging"
                                         wrapping="true"
                                     />
-                                </Column>
+                                </Column> -->
                                 <Column
                                     id="_IDGenColumn28"
                                     minScreenWidth="Tablet"
@@ -854,12 +854,12 @@
                                         />
                                         <Input
                                             id="freightId"
-                                            value="{asnModel>FFC}"
+                                            value="{asnModel>Frieght}"
                                             change="onFreightChange"
                                         />
                                         <Input
                                             id="othchargeId"
-                                            value="{asnModel>OtherValues}"
+                                            value="{asnModel>OtherCharges}"
                                             change="onOtherChange"
                                         />
                                         <Text
@@ -902,10 +902,10 @@
                                             id="linevalId"
                                             text="{asnModel>LineValue}"
                                         />
-                                        <Input
+                                        <!-- <Input
                                             id="pkgId"
                                             value="{asnModel>Packages}"
-                                        />
+                                        /> -->
                                         <Input
                                             id="wgtId"
                                             value="{asnModel>WeightInKG}"

@@ -32,7 +32,7 @@
 						<Text id="_IDGenText7" text="{itemModel>RowNum}"/>
 						<ObjectIdentifier id="_IDGenObjectIdentifier1" title="{itemModel>DeliveryDate}"/>
 						<ObjectNumber id="_IDGenObjectNumber1" number="{itemModel>DeliveryQty}" textAlign="End"/>
-						<ObjectNumber id="_IDGenObjectNumber2" number="{itemModel>DeliveryQty}" textAlign="End"/>
+						<ObjectNumber id="_IDGenObjectNumber2" number="{itemModel>PoQty}" textAlign="End"/>
 						<!--<ObjectNumber number="{itemModel>Delivered_Qty}" numberUnit="{itemModel>Uom}" textAlign="Center"/>-->
 						<ObjectNumber id="_IDGenObjectNumber3" number="{itemModel>Status}" textAlign="Center"/>
 						<!-- <ObjectNumber id="_IDGenObjectNumber4" number="{itemModel>FirmFix}" textAlign="Center"/> -->

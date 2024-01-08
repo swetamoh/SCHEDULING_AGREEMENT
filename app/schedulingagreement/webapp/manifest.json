@@ -161,7 +161,7 @@
           "controlId": "app"
       },
       {
-          "pattern": "ItemDisplay/{Schedule_No}/{Material_No}",
+          "pattern": "ItemDisplay/{Schedule_No}/{Material_No}/{Line_No}",
           "name": "ItemDisplay",
           "view": "ItemDisplay",
           "targetAggregation": "pages",

@@ -12,7 +12,7 @@ sap.ui.define([
 			this.router.attachRoutePatternMatched(this.onRouteMatched, this);
 			this.filterModel = new sap.ui.model.json.JSONModel();
 			this.listTemp = this.byId("idlistitem").clone();
-			this.unitCode = sessionStorage.getItem("unitCode") || "P01";
+			
 			
 		},
 
@@ -24,12 +24,14 @@ sap.ui.define([
 			// if (sap.ui.getCore().getModel("filterModel").getData().Vendor_No) {
 			// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 			// }
-			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'HAI-01-02';
+			this.unitCode = sessionStorage.getItem("unitCode") || "P01";
+			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'GIN-01-02';
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
 				parameters: {
 					custom: {
-						AddressCode: this.AddressCodeSA
+						AddressCode: this.AddressCodeSA,
+						UnitCode: this.unitCode
 					},
 					countMode: 'None'
 				},
