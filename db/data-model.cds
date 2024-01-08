@@ -39,6 +39,7 @@ entity DocumentRowItems {
       Status       : String;
       ConfirmStatus  : String;
       ASSValue       : String;
+      OtherCharges   : String;
       Packing        : String;
       Frieght        : String;
       TCS            : String;
