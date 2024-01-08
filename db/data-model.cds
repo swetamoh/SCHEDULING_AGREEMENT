@@ -20,40 +20,39 @@ entity SchedulingAgreements {
 }
 
 entity DocumentRowItems {
-  key UUID          : UUID;
-      SchLineNum    : String;
-      PoNum         : String;
-      SchDate       : Date;
-      VendorName    : String;
-      VendorCode    : String;
-      PlantCode     : String;
-      PlantName     : String;
-      LineNum       : String;
-      ItemCode      : String;
-      ItemDesc      : String;
-      HSNCode       : String;
-      PoQty         : Integer;
-      DeliveredQty  : Decimal;
-      BalanceQty    : Decimal;
-      UnitPrice     : Decimal;
-      UOM           : String;
-      Currency      : String;
-      Status        : String;
-      ConfirmStatus : String;
-      ASSValue      : String;
-      Packing       : String;
-      OtherValues   : String;
-      IGST          : String;
-      IGA           : String;
-      CGST          : String;
-      CGA           : String;
-      SGST          : String;
-      SGA           : String;
-      TCA           : String;
-      LineValue     : String;
-      Packages      : String;
-      WeightInKG    : String;
-      SchNum        : Association to SchedulingAgreements;
+  key UUID         : UUID;
+      SchDate      : Date;
+      VendorName   : String;
+      VendorCode   : String;
+      PlantCode    : String;
+      PlantName    : String;
+      LineNum      : String;
+      ItemCode     : String;
+      ItemDesc     : String;
+      HSNCode      : String;
+      PoQty        : Integer;
+      DeliveredQty : Decimal;
+      BalanceQty   : Decimal;
+      UnitPrice    : Decimal;
+      UOM          : String;
+      Currency     : String;
+      Status       : String;
+      ConfirmStatus  : String;
+      ASSValue       : String;
+      Packing        : String;
+      Frieght        : String;
+      TCS            : String;
+      SGST           : String;
+      SGA            : String;
+      CGST           : String;
+      CGA            : String;
+      IGST           : String;
+      IGA            : String;
+      TOTAL          : String;
+      TCA            : String;
+      LineValue      : String;
+      WeightInKG     : String;
+      SchNum         : Association to SchedulingAgreements;
 }
 
 entity ASNList {
