@@ -94,11 +94,16 @@ sap.ui.define([
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
 				var unitCode = sessionStorage.getItem("unitCode") || "P01";
-				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'HAI-01-02';
+				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'GIN-01-02';
 				var oModel = this.getOwnerComponent().getModel();
 				this.getView().setModel(new sap.ui.model.json.JSONModel({ minDate: new Date() }), "dateModel");
-				var request = "/SchedulingAgreements?$expand=DocumentRows&AddressCode=" + this.AddressCodeSA;
+				var request = "/SchedulingAgreements";
 				oModel.read(request, {
+					urlParameters: {
+						"$expand": "DocumentRows",
+                        AddressCode: this.AddressCodeSA,
+                        UnitCode: unitCode
+                    },
 					success: function (oData) {
 						var filteredPurchaseOrder = oData.results.find(po => po.ScheduleNum === that.Schedule_No);
 						if (filteredPurchaseOrder) {
@@ -113,11 +118,11 @@ sap.ui.define([
 							// 	if (asnModelData.DocumentRows.results[i].Packing) {
 							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].Packing);
 							// 	}
-							// 	if (asnModelData.DocumentRows.results[i].FFC) {
-							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].FFC);
+							// 	if (asnModelData.DocumentRows.results[i].Frieght) {
+							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].Frieght);
 							// 	}
-							// 	if (asnModelData.DocumentRows.results[i].OtherValues) {
-							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].OtherValues);
+							// 	if (asnModelData.DocumentRows.results[i].OtherCharges) {
+							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].OtherCharges);
 							// 	}
 							// }
 							that.asnModel.refresh(true);
@@ -662,15 +667,15 @@ sap.ui.define([
 							if(this.data.ManufacturingMonth === undefined){
 								this.ManufacturingMonth = "";
 							}
-							// if(items[i].Packing === undefined){
-							// 	items[i].Packing = "0";
-							// }
-							if(items[i].FFC === undefined){
-								items[i].FFC = "0";
+							if(items[i].Packing === undefined){
+								items[i].Packing = "0";
 							}
-							// if(items[i].OtherValues === undefined){
-							// 	items[i].OtherValues = "0";
-							// }
+							if(items[i].Frieght === undefined){
+								items[i].Frieght = "0";
+							}
+							if(items[i].OtherCharges === undefined){
+								items[i].OtherCharges = "0";
+							}
 
 						var row = {
 							"BillLineNumber": items[i].LineNum,
@@ -686,8 +691,8 @@ sap.ui.define([
 							"Rate": items[i].UnitPrice,
 							"Quantity": items[i].BalanceQty,
 							"PackingAmount": items[i].Packing,
-							"Freight": items[i].FFC,
-							"OtherCharges": items[i].OtherValues,
+							"Freight": items[i].Frieght,
+							"OtherCharges": items[i].OtherCharges,
 							"AssValue": items[i].ASSValue.toString(),
 							"IGST": items[i].IGST,
 							"IGA": items[i].IGA,
@@ -702,7 +707,7 @@ sap.ui.define([
 							"TransportMode": this.data.TransportMode,
 							"DocketNumber": this.data.DocketNumber,
 							"GRDate": this.data.GRDate,
-							"Packaging": items[i].Packages,
+							"Packaging": "0",
 							"WeightPerKG": items[i].WeightInKG,
 							"EwayBillNumber": this.data.EwayBillNumber,
 							"EwayBillDate": this.data.EwayBillDate,
@@ -1167,11 +1172,11 @@ sap.ui.define([
 			if (data[path].Packing) {
 				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].Packing);
 			}
-			if (data[path].FFC) {
-				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].FFC);
+			if (data[path].Frieght) {
+				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].Frieght);
 			}
-			if (data[path].OtherValues) {
-				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].OtherValues);
+			if (data[path].OtherCharges) {
+				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].OtherCharges);
 			}
 			this.asnModel.refresh(true);
 		},
@@ -1180,29 +1185,29 @@ sap.ui.define([
 			var path = e.getSource().getParent().getBindingContextPath().split("/")[3];
 			var data = this.asnModel.getData().DocumentRows.results;
 			data[path].Packing = val;
-			if (data[path].FFC === undefined){data[path].FFC = "0"}
-			if (data[path].OtherValues === undefined){data[path].OtherValues = "0"}
-			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].FFC) + parseFloat(data[path].OtherValues);
+			if (data[path].Frieght === undefined){data[path].Frieght = "0"}
+			if (data[path].OtherCharges === undefined){data[path].OtherCharges = "0"}
+			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].Frieght) + parseFloat(data[path].OtherCharges);
 			this.asnModel.refresh(true);
 		},
 		onFreightChange: function (e) {
 			const val = e.getParameter("value") || 0;
 			var path = e.getSource().getParent().getBindingContextPath().split("/")[3];
 			var data = this.asnModel.getData().DocumentRows.results;
-			data[path].FFC = val;
+			data[path].Frieght = val;
 			if (data[path].Packing === undefined){data[path].Packing = "0"}
-			if (data[path].OtherValues === undefined){data[path].OtherValues = "0"}
-			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].FFC) + parseFloat(data[path].OtherValues);
+			if (data[path].OtherCharges === undefined){data[path].OtherCharges = "0"}
+			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].Frieght) + parseFloat(data[path].OtherCharges);
 			this.asnModel.refresh(true);
 		},
 		onOtherChange: function (e) {
 			const val = e.getParameter("value") || 0;
 			var path = e.getSource().getParent().getBindingContextPath().split("/")[3];
 			var data = this.asnModel.getData().DocumentRows.results;
-			data[path].OtherValues = val;
-			if (data[path].FFC === undefined){data[path].FFC = "0"}
+			data[path].OtherCharges = val;
+			if (data[path].Frieght === undefined){data[path].Frieght = "0"}
 			if (data[path].Packing === undefined){data[path].Packing = "0"}
-			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].FFC) + parseFloat(data[path].OtherValues);
+			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].Frieght) + parseFloat(data[path].OtherCharges);
 			this.asnModel.refresh(true);
 		}
 

@@ -37,6 +37,8 @@ sap.ui.define([
 			var Schedule_No = evt.getParameter("arguments").Schedule_No;
 			this.Schedule_No = Schedule_No.replace(/-/g,'/');
 			this.Material_No = evt.getParameter("arguments").Material_No;
+			this.Line_No = evt.getParameter("arguments").Line_No;
+
 			var oModel = this.getOwnerComponent().getModel();
                 return new Promise(function(resolve, reject) {
                     oModel.callFunction("/getSchedulingAgreementMaterialQuantityList", {
@@ -44,7 +46,8 @@ sap.ui.define([
                         urlParameters: {
                             UnitCode: unitCode,
 							PoNum: this.Schedule_No,
-							MaterialCode: this.Material_No
+							MaterialCode: this.Material_No,
+							PoLineNum: this.Line_No
                         },
                         success: function (oData, response) {
 							that.itemModel.setData(oData.results);
