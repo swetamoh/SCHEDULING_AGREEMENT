@@ -106,6 +106,7 @@ async function getSchedulingAgreements(AddressCode, UnitCode) {
                         ConfirmStatus: "",
                         ASSValue: row.ASSValue,
                         Packing: row.Packing,
+                        OtherCharges: row.OtherCharges,
                         Frieght: row.Frieght,
                         TCS: row.TCS,
                         SGST: row.SGST,
