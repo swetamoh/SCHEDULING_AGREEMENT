@@ -19,7 +19,7 @@ service CatalogService {
     entity ASNList as projection on my.ASNList;
     entity ASNListHeader as projection on my.ASNListHeader;
 
-    function getSchedulingAgreementMaterialQuantityList(UnitCode:String, PoNum: String, MaterialCode: String) returns array of AgreementMaterialQuantityInfo;
+    function getSchedulingAgreementMaterialQuantityList(UnitCode:String, PoNum: String, MaterialCode: String, PoLineNum: String) returns array of AgreementMaterialQuantityInfo;
     
     action PostASN(asnData: String) returns String;
 }

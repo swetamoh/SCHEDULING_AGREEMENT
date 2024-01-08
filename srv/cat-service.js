@@ -6,9 +6,8 @@ module.exports = (srv) => {
     const {SchedulingAgreements} = srv.entities;
     
     srv.on('READ', SchedulingAgreements, async (req) => {
-        //const {unitCode} = req._queryOptions
-        const AddressCode = 'DIE-01-02'
-        const results = await getSchedulingAgreements(AddressCode);
+        const {AddressCode, UnitCode} = req._queryOptions
+        const results = await getSchedulingAgreements(AddressCode, UnitCode);
         if (!results) throw new Error('Unable to fetch Scheduling Agreements.');
 
         const expandDocumentRows = req.query.SELECT.columns && req.query.SELECT.columns.some(({ expand, ref }) => expand && ref[0] === "DocumentRows");
@@ -31,10 +30,10 @@ module.exports = (srv) => {
     });
 
     srv.on('getSchedulingAgreementMaterialQuantityList', async (req) => {
-        const { UnitCode, PoNum, MaterialCode } = req.data;
+        const { UnitCode, PoNum, MaterialCode, PoLineNum } = req.data;
         // Replace '-' with '/' for PoNum
         const formattedPoNum = PoNum.replace(/-/g, '/');
-        return getSchedulingAgreementMaterialQuantityList(UnitCode, formattedPoNum, MaterialCode)
+        return getSchedulingAgreementMaterialQuantityList(UnitCode, formattedPoNum, MaterialCode, PoLineNum)
     });
 
     srv.on('PostASN', async (req) => {
@@ -52,11 +51,11 @@ module.exports = (srv) => {
 
 };
 
-async function getSchedulingAgreements(AddressCode) {
+async function getSchedulingAgreements(AddressCode, UnitCode) {
     try {
         const response = await axios({
             method: 'get',
-            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialList?AddressCode='${AddressCode}'&RequestBy='Manikandan'`,
+            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialList?AddressCode='${AddressCode}'&UnitCode='${UnitCode}'&RequestBy='Manikandan'`,
             headers: {
                 'Authorization': 'Bearer IncMpsaotdlKHYyyfGiVDg==',
                 'Content-Type': 'application/json'
@@ -103,7 +102,20 @@ async function getSchedulingAgreements(AddressCode) {
                         Currency: row.Currency,
                         Status: row.Status,
                         ConfirmStatus: "",
-                        ASSValue: "",
+                        ASSValue: row.ASSValue,
+                        Packing: row.Packing,
+                        Frieght: row.Frieght,
+                        TCS: row.TCS,
+                        SGST: row.SGST,
+                        SGA: row.SGA,
+                        CGST: row.CGST,
+                        CGA: row.CGA,
+                        IGST: row.IGST,
+                        IGA: row.IGA,
+                        TOTAL: row.TOTAL,
+                        TCA: row.TCA,
+                        LineValue: row.LineValue,
+                        WeightInKG: row.WeightInKG,
                         SchNum_ScheduleNum: data.SchNum  // associating with the current Scheduling Agreement
                     };
                 })
@@ -120,11 +132,11 @@ async function getSchedulingAgreements(AddressCode) {
     }
 }
 
-async function getSchedulingAgreementMaterialQuantityList(UnitCode, PoNum, MaterialCode) {
+async function getSchedulingAgreementMaterialQuantityList(UnitCode, PoNum, MaterialCode, PoLineNum) {
     try {
         const response = await axios({
             method: 'get',
-            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialQuantityList?UnitCode='${UnitCode}'&PoNum='${PoNum}'&MaterialCode='${MaterialCode}'&RequestBy='Manikandan'`,
+            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialQuantityList?UnitCode='${UnitCode}'&PoNum='${PoNum}'&MaterialCode='${MaterialCode}'&PoLineNum='${PoLineNum}'&RequestBy='Manikandan'`,
             headers: {
                 'Authorization': 'Bearer IncMpsaotdlKHYyyfGiVDg==',
                 'Content-Type': 'application/json'

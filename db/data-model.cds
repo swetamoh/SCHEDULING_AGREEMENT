@@ -39,6 +39,19 @@ entity DocumentRowItems {
       Status       : String;
       ConfirmStatus  : String;
       ASSValue       : String;
+      Packing        : String;
+      Frieght        : String;
+      TCS            : String;
+      SGST           : String;
+      SGA            : String;
+      CGST           : String;
+      CGA            : String;
+      IGST           : String;
+      IGA            : String;
+      TOTAL          : String;
+      TCA            : String;
+      LineValue      : String;
+      WeightInKG     : String;
       SchNum         : Association to SchedulingAgreements;
 }
 
