@@ -33,20 +33,29 @@ sap.ui.define([
 			if ("ItemDisplay" !== evt.getParameter("name")) {
 				return;
 			}
-			this.Schedule_No = evt.getParameter("arguments").Schedule_No;
-			this.Item_No = evt.getParameter("arguments").Item_No;
+			var unitCode = sessionStorage.getItem("unitCode") || "P01";
+			var Schedule_No = evt.getParameter("arguments").Schedule_No;
+			this.Schedule_No = Schedule_No.replace(/-/g,'/');
 			this.Material_No = evt.getParameter("arguments").Material_No;
-			this.Uom = evt.getParameter("arguments").Uom;
-			this.oDataModel.read("/S_LINEITEMSSet?$filter=Schedule_No eq '"+ this.Schedule_No +"' and Schedule_Item eq '"+ this.Item_No +"' and Material_No eq '"+ this.Material_No +"' and Uom eq '"+ this.Uom +"'",
-				null,
-				null,
-				false,
-				function(oData, oResponse) {
-					that.itemModel.setData(oData);
-					that.itemModel.refresh(true);
-
-				});
-
+			var oModel = this.getOwnerComponent().getModel();
+                return new Promise(function(resolve, reject) {
+                    oModel.callFunction("/getSchedulingAgreementMaterialQuantityList", {
+                        method: "GET",
+                        urlParameters: {
+                            UnitCode: unitCode,
+							PoNum: this.Schedule_No,
+							MaterialCode: this.Material_No
+                        },
+                        success: function (oData, response) {
+							that.itemModel.setData(oData.results);
+					        that.itemModel.refresh(true.results);
+                            resolve();
+                        }.bind(this),
+                        error: function (oError) {
+                            reject(new Error("Failed to fetch material data."));
+                        }
+                    });
+                }.bind(this));
 		},
 		onNavBack : function() {  
 		jQuery.sap.require("sap.ui.core.routing.History");

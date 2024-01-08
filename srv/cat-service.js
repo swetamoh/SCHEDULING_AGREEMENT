@@ -3,8 +3,8 @@ const axios = require('axios');
 
 module.exports = (srv) => {
 
-    const {SchedulingAgreements} = srv.entities;
-    
+    const { SchedulingAgreements } = srv.entities;
+
     srv.on('READ', SchedulingAgreements, async (req) => {
         const {AddressCode, UnitCode} = req._queryOptions
         const results = await getSchedulingAgreements(AddressCode, UnitCode);
@@ -25,8 +25,8 @@ module.exports = (srv) => {
                 sa.ScheduleNum.includes(cleanedSearchVal)
             );
         }
-    
-       return results.schedulingAgreements;
+
+        return results.schedulingAgreements;
     });
 
     srv.on('getSchedulingAgreementMaterialQuantityList', async (req) => {
@@ -85,12 +85,14 @@ async function getSchedulingAgreements(AddressCode, UnitCode) {
             const documentRows = dataArray.flatMap(data =>
                 data.DocumentRows.map(row => {
                     return {
+                        SchLineNum: data.SchLineNum,
+                        PoNum: data.PoNum,
                         SchDate: data.SchDate,
                         VendorName: data.VendorName,
                         VendorCode: data.VendorCode,
                         PlantCode: data.PlantCode,
                         PlantName: data.PlantName,
-                        LineNum: parseInt(row.LineNum),
+                        LineNum: row.LineNum,
                         ItemCode: row.ItemCode,
                         ItemDesc: row.ItemDesc,
                         HSNCode: row.HSNCode,
@@ -169,7 +171,7 @@ async function postASN(asnData) {
         });
 
         if (response.data && response.data.SuccessCode) {
-            return "ASN Posted Successfully: " + response.data.Result;
+            return response.data.SuccessCode.replace(/,/g, '');
         } else {
             throw new Error(response.data.ErrorDescription || 'Unknown error occurred');
         }

@@ -18,9 +18,9 @@ sap.fiori.schedulingagreement.controller.formatter = {
 	formatDate: function (oDate) {
 		if (oDate !== "" && oDate !== null && oDate !== undefined) {
 
-			var date = oDate.substring(4, 6) + "/" + oDate.substring(6, 8) + "/" + oDate.substring(0, 4);
+			// var date = oDate.substring(4, 6) + "/" + oDate.substring(6, 8) + "/" + oDate.substring(0, 4);
 
-			var DateInstance = new Date(date);
+			// var DateInstance = new Date(date);
 			var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
 				pattern: "MMM dd, yyyy"
 			});
@@ -41,7 +41,7 @@ sap.fiori.schedulingagreement.controller.formatter = {
 		}
 		return false;
 	},
-	statusCheck: function (oStatus) {
+	statusCheckConf: function (oStatus) {
 		if (oStatus === "Confirmed") {
 			return "Success";
 		} else if (oStatus === "Partially Confirmed") {
@@ -49,6 +49,18 @@ sap.fiori.schedulingagreement.controller.formatter = {
 		} else if (oStatus === "Confirmation Required") {
 			return "Error";
 		} else {
+			return "None";
+		}
+	},
+	statusCheck: function (oStatus) {
+		if (oStatus === "Closed") {
+			return "Success";
+		} else if (oStatus === "Partially") {
+			return "Warning";
+		} else if (oStatus === "Open") {
+			return "Error";
+		} 
+		else {
 			return "None";
 		}
 	},

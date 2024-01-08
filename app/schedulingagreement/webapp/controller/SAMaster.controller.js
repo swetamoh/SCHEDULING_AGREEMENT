@@ -1,7 +1,8 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/ui/model/json/JSONModel"
-], function (Controller, JSONModel) {
+	"sap/ui/model/json/JSONModel",
+	"sap/ui/model/Filter"
+], function (Controller, JSONModel, Filter) {
 	"use strict";
 
 	return Controller.extend("sap.fiori.schedulingagreement.controller.SAMaster", {
@@ -9,9 +10,10 @@ sap.ui.define([
 		onInit: function () {
 			this.router = sap.ui.core.UIComponent.getRouterFor(this);
 			this.router.attachRoutePatternMatched(this.onRouteMatched, this);
-
+			this.filterModel = new sap.ui.model.json.JSONModel();
 			this.listTemp = this.byId("idlistitem").clone();
 			this.unitCode = sessionStorage.getItem("unitCode") || "P01";
+			
 		},
 
 		onRouteMatched: function (oEvent) {
@@ -22,11 +24,12 @@ sap.ui.define([
 			// if (sap.ui.getCore().getModel("filterModel").getData().Vendor_No) {
 			// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 			// }
+			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'HAI-01-02';
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
 				parameters: {
 					custom: {
-						unitCode: this.unitCode
+						AddressCode: this.AddressCodeSA
 					},
 					countMode: 'None'
 				},
@@ -91,8 +94,10 @@ sap.ui.define([
 		},
 
 		onListItemPress: function (oEvent) {
+			var SchNo = oEvent.getParameter("listItem").getProperty("title");
+			var SchNum = SchNo.replace(/\//g, '-');
 			this.router.navTo("SADetail", {
-				"Schedule_No": oEvent.getParameter("listItem").getProperty("title").split("/")[0]
+				"Schedule_No": SchNum
 			});
 		},
 

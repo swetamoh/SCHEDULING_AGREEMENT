@@ -1,7 +1,10 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/m/MessageBox"
-], function (Controller, MessageBox) {
+	"sap/m/MessageBox",
+	"sap/ui/model/json/JSONModel",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator"
+], function (Controller, MessageBox, JSONModel, Filter, FilterOperator) {
 	"use strict";
 
 	return Controller.extend("sap.fiori.schedulingagreement.controller.SADetail", {
@@ -46,27 +49,39 @@ sap.ui.define([
 
 				this.odata = {};
 				var that = this;
-
+				var oModel = this.getOwnerComponent().getModel();
 				// this.oDataModel.setHeaders({
 				// 	"loginId": that.loginData.loginName,
 				// 	"LoginType": that.loginData.userType
 				// });
 				var unitCode = sessionStorage.getItem("unitCode");
+				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'HAI-01-02';
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
 				// this.Vendor_No = event.getParameter("arguments").Vendor_No;
 
 				// var request = "/PO_HEADERSet(Po_No='" + this.Po_Num + "',Vendor_No='" + this.Vendor_No + "')?$expand=headertoitemNav";
 
-				var request = "/SchedulingAgreements?$expand=DocumentRowItems&unitCode=" + unitCode;
+				var request = "/SchedulingAgreements?$expand=DocumentRows&AddressCode=" + this.AddressCodeSA;
 				oModel.read(request, {
 					success: function (oData) {
-						var filteredPurchaseOrder = oData.results.find(po => po.PoNum === that.Po_Num);
+						var filteredPurchaseOrder = oData.results.find(po => po.ScheduleNum === that.Schedule_No);
 						if (filteredPurchaseOrder) {
 							that.detailHeaderModel.setData(filteredPurchaseOrder);
 							that.detailHeaderModel.refresh(true);
 						
 							that.detailModel.setData(filteredPurchaseOrder.DocumentRows.results);
+							that.detailModel.refresh(true);
+							var detailModelData = that.getView().getModel("detailModel").getData();
+							for(var i = 0; i < detailModelData.length; i++){
+								if(detailModelData[i].DeliveredQty === "0"){
+									detailModelData[i].ConfirmStatus = "Open";
+								}else if(detailModelData[i].DeliveredQty === detailModelData[i].PoQty){
+									detailModelData[i].ConfirmStatus = "Closed";
+								}else if((detailModelData[i].DeliveredQty > "0") && (detailModelData[i].DeliveredQty < detailModelData[i].PoQty)){
+									detailModelData[i].ConfirmStatus = "Partially";
+								}
+							}
 							that.detailModel.refresh(true);
 						} else {
 							MessageBox.error("Schedule Number  not found");
@@ -103,8 +118,9 @@ sap.ui.define([
 		},
 		onCreateAsn: function () {
 			var that = this;
+			var Schedule_No = that.Schedule_No.replace(/\//g, '-');
 			that.router.navTo("SAAsnCreate", {
-				"Schedule_No": that.Schedule_No
+				"Schedule_No": Schedule_No
 			});
 			// ,App='SA'
 			// this.oDataModel.read("/ASN_HEADERSet(Schedule_No='" + this.Schedule_No + "')?$expand=ASNItemnav",
@@ -121,15 +137,12 @@ sap.ui.define([
 
 		},
 		onItempress: function (oEvent) {
-			this.pItemModel = sap.ui.getCore().getModel("pItemModel");
-			var sToPageId = oEvent.getParameter("listItem").getBindingContextPath().split("/")[2];
-			this.pItemModel.setData(this.detailModel.getData().Sitemnav[sToPageId]);
-			this.pItemModel.refresh(true);
+			var Data = oEvent.getParameter("listItem").getBindingContext("detailModel").getObject();
+			var ScheduleNo = Data.SchNum_ScheduleNum;
+			var Schedule_No = ScheduleNo.replace(/\//g, '-');
 			this.router.navTo("ItemDisplay", {
-				"Schedule_No": this.Schedule_No,
-				"Item_No": this.pItemModel.oData.Item_No,
-				"Material_No": this.pItemModel.oData.Material_No,
-				"Uom": this.pItemModel.oData.Uom
+				"Schedule_No": Schedule_No,
+				"Material_No": Data.ItemCode
 			});
 		},
 		onChkBoxSelect: function (oEvent) {
@@ -253,16 +266,19 @@ sap.ui.define([
 		},
 		onMaterialPress: function (oEvent) {
 			var LineItemData = oEvent.getSource().getParent().getBindingContext("detailModel").getObject();
+			var materialData = [];
+			materialData.push(LineItemData);
 			if (!this._oPopoverFragment) {
 				this._oPopoverFragment = sap.ui.xmlfragment("sap.fiori.schedulingagreement.fragment.DetailPopoverFragment", this);
 				this.TableTempId = sap.ui.getCore().byId("TableTempId").clone();
 				this.getView().addDependent(this._oPopoverFragment);
 			}
+			this._oPopoverFragment.setModel(new JSONModel(materialData), "materialDescModel");
 			this._oPopoverFragment.openBy(oEvent.getSource());
-			sap.ui.getCore().byId("DeliveryTableId").bindAggregation("items", {
-				path: "/SubcontractMaterialSet?$filter=Ebeln eq '" + this.Schedule_No + "'and Ebelp  eq '" + LineItemData.Item_No + "'",
-				template: this.TableTempId
-			});
+			// sap.ui.getCore().byId("DeliveryTableId").bindAggregation("items", {
+			// 	path: "/SubcontractMaterialSet?$filter=Ebeln eq '" + this.Schedule_No + "'and Ebelp  eq '" + LineItemData.Item_No + "'",
+			// 	template: this.TableTempId
+			// });
 		}
 
 		/*	onQuantityPress: function(oQuantity) {
