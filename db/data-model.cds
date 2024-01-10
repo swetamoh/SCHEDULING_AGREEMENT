@@ -76,8 +76,8 @@ entity ASNList {
       DeliveredQty   : Decimal;
       ASSValue       : String;
       Packing        : String;
-      FFC            : String;
-      OtherValues    : String;
+      Frieght        : String;
+      OtherCharges   : String;
       IGST           : String;
       IGA            : String;
       CGST           : String;
@@ -100,6 +100,7 @@ entity ASNList {
       ASNQty         : Integer;
       VendorCode     : String;
       VendorName     : String;
+      TOTAL          : String;
 }
 
 entity ASNListHeader {
