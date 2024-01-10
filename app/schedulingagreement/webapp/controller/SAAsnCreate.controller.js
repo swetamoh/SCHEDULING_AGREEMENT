@@ -541,6 +541,15 @@ sap.ui.define([
 				this.router.navTo("SAMaster", {}, bReplace);
 			}
 		},
+		formatASNdates: function (input) {
+			var parts = input.split('/');
+			var year = parseInt(parts[2], 10);
+			var month = parseInt(parts[1], 10) - 1;
+			var day = parseInt(parts[0], 10);
+			var date = new Date(year, month, day);
+			var isoString = date.toISOString().split('T')[0] + 'T00:00:00';
+			return isoString + '+05:30';
+		},
 
 		onAsnSave: function (event) {
 			var that = this;
@@ -589,6 +598,7 @@ sap.ui.define([
 						pattern: "dd/MM/yyyy"
 						});
 						this.BillDate = dateFormat.format(DateInstance);
+						this.BillDate = this.formatASNdates(this.BillDate);
 						}
 						if (this.data.ManufacturingMonth) {
 							var date = this.data.ManufacturingMonth.substring(4, 6) + "/" + this.data.ManufacturingMonth.substring(6, 8) + "/" + this.data.ManufacturingMonth.substring(0, 4);
@@ -597,6 +607,7 @@ sap.ui.define([
 							pattern: "dd/MM/yyyy"
 							});
 							this.ManufacturingMonth = dateFormat.format(DateInstance);
+							this.ManufacturingMonth = this.formatASNdates(this.ManufacturingMonth);
 							}
 							// if(items[i].IGST === undefined){
 							// 	items[i].IGST = "";
@@ -642,12 +653,28 @@ sap.ui.define([
 							}
 							if(this.data.GRDate === undefined){
 								this.data.GRDate = "";
+							}else if(this.data.GRDate){
+								var date = this.data.GRDate.substring(4, 6) + "/" + this.data.GRDate.substring(6, 8) + "/" + this.data.GRDate.substring(0, 4);
+								var DateInstance = new Date(date);
+								var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+									pattern: "dd/MM/yyyy"
+									});
+								this.GRDate = dateFormat.format(DateInstance);
+								this.GRDate = this.formatASNdates(this.GRDate);
 							}
 							if(this.data.EwayBillNumber === undefined){
 								this.data.EwayBillNumber = "";
 							}
 							if(this.data.EwayBillDate === undefined){
 								this.data.EwayBillDate = "";
+							}else if(this.data.EwayBillDate){
+								var date = this.data.EwayBillDate.substring(4, 6) + "/" + this.data.EwayBillDate.substring(6, 8) + "/" + this.data.EwayBillDate.substring(0, 4);
+								var DateInstance = new Date(date);
+								var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+									pattern: "dd/MM/yyyy"
+									});
+								this.EwayBillDate = dateFormat.format(DateInstance);
+								this.EwayBillDate = this.formatASNdates(this.EwayBillDate);
 							}
 							if(this.data.MillNumber === undefined){
 								this.data.MillNumber = "";
@@ -706,11 +733,11 @@ sap.ui.define([
 							"TransportName": this.data.TransportName,
 							"TransportMode": this.data.TransportMode,
 							"DocketNumber": this.data.DocketNumber,
-							"GRDate": this.data.GRDate,
+							"GRDate": this.GRDate,
 							"Packaging": "0",
 							"WeightPerKG": items[i].WeightInKG,
 							"EwayBillNumber": this.data.EwayBillNumber,
-							"EwayBillDate": this.data.EwayBillDate,
+							"EwayBillDate": this.EwayBillDate,
 							"MillNumber": this.data.MillNumber,
 							"MillName": this.data.MillName,
 							"PDIRNumber": this.data.PDIRNumber,

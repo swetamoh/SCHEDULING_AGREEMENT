@@ -455,7 +455,7 @@
                                 >
                                     <Label
                                         id="_IDGenText7"
-                                        text="IGST"
+                                        text="IGST %"
                                         design="Bold"
                                         wrapping="true"
                                     />
@@ -469,7 +469,7 @@
                                 >
                                     <Label
                                         id="_IDGenText9"
-                                        text="IGA"
+                                        text="IGST Amt"
                                         design="Bold"
                                         wrapping="true"
                                     />
@@ -483,7 +483,7 @@
                                 >
                                     <Label
                                         id="_IDGenText3"
-                                        text="CGST"
+                                        text="CGST %"
                                         design="Bold"
                                         wrapping="true"
                                     />
@@ -497,7 +497,7 @@
                                 >
                                     <Label
                                         id="_IDGenText10"
-                                        text="CGA"
+                                        text="CGST Amt"
                                         design="Bold"
                                         wrapping="true"
                                     />
@@ -511,7 +511,7 @@
                                 >
                                     <Label
                                         id="_IDGenText4"
-                                        text="SGST / UGST"
+                                        text="SGST % / UGST %"
                                         design="Bold"
                                         wrapping="true"
                                     />
@@ -525,7 +525,7 @@
                                 >
                                     <Label
                                         id="_IDGenText24"
-                                        text="SGA / UGA"
+                                        text="SGST Amt / UGST Amt"
                                         design="Bold"
                                         wrapping="true"
                                     />
@@ -554,7 +554,7 @@
                                     <Label
                                         id="_IDGenLabel24"
                                         design="Bold"
-                                        text="TCA"
+                                        text="TCS Amt"
                                         wrapping="true"
                                     />
                                 </Column>
