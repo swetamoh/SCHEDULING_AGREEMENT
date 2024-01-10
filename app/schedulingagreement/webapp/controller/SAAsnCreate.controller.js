@@ -542,13 +542,15 @@ sap.ui.define([
 			}
 		},
 		formatASNdates: function (input) {
-			var parts = input.split('/');
-			var year = parseInt(parts[2], 10);
-			var month = parseInt(parts[1], 10) - 1;
-			var day = parseInt(parts[0], 10);
-			var date = new Date(year, month, day);
-			var isoString = date.toISOString().split('T')[0] + 'T00:00:00';
-			return isoString + '+05:30';
+			    const parts = input.split('/');
+			    const year = parseInt(parts[2], 10);
+			    const month = parseInt(parts[1], 10) - 1;
+			    const day = parseInt(parts[0], 10)
+			    const date = new Date(year, month, day);
+			    const localTimezoneOffset = date.getTimezoneOffset() * 60000;
+			    const adjustedDate = new Date(date.getTime() - localTimezoneOffset);
+			    const isoString = adjustedDate.toISOString().split('T')[0] + 'T00:00:00';
+			    return isoString + '+05:30';
 		},
 
 		onAsnSave: function (event) {
