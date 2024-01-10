@@ -1,5 +1,10 @@
 namespace my.bookshop;
 
+using {
+  cuid,
+  managed
+} from '@sap/cds/common';
+
 entity SchedulingAgreements {
   key ScheduleNum   : String;
       SchLineNum    : String;
@@ -17,6 +22,7 @@ entity SchedulingAgreements {
                         on asnList.SchNum = $self;
       asnListHeader : Composition of many ASNList
                         on asnListHeader.SchNum = $self;
+      Files         : Composition of many Files on Files.SchNum = $self;
 }
 
 entity DocumentRowItems {
@@ -123,4 +129,17 @@ entity ASNListHeader {
       PlantName          : String;
       PlantCode          : String;
       VendorCode         : String;
+}
+
+entity Files : managed{
+  key SchNum : Association to SchedulingAgreements;
+  @Core.MediaType: mediaType
+  content: LargeBinary;
+
+  @Core.ContentDisposition.Filename: fileName
+  @Core.IsMediaType: true
+  mediaType: String;
+  fileName: String;
+  size: Integer;
+  url: String;
 }

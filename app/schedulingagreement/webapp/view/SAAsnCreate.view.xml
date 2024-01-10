@@ -5,6 +5,7 @@
     controllerName="sap.fiori.schedulingagreement.controller.SAAsnCreate"
     xmlns:l="sap.ui.layout"
     xmlns:f="sap.ui.layout.form"
+    xmlns:upload="sap.m.upload"
     class="sapUiSizeCompact"
     xmlns:fb="sap.ui.comp.filterbar"
 >
@@ -1008,34 +1009,46 @@
                     id="_IDGenIconTabFilter2"
                     icon="sap-icon://attachment"
                 >
-                    <UploadCollection
-                        id="UploadCollection"
-                        maximumFilenameLength="55"
-                        multiple="true"
-                        sameFilenameAllowed="false"
-                        instantUpload="false"
-                        maximumFileSize="10"
-                        noDataDescription="Drop files or use the &quot;+&quot; button for pending upload"
-                        change="onChange"
-                        fileDeleted="onFileDeleted"
-                        filenameLengthExceed="onFilenameLengthExceed"
-                        fileSizeExceed="onFileSizeExceed"
-                        typeMissmatch="onTypeMissmatch"
-                        uploadComplete="onUploadComplete"
-                        beforeUploadStarts="onBeforeUploadStarts"
-                    />
-                    <!-- <items>
-                            <UploadCollectionItem
-                                id="UploadCollItemId"
-                                fileName="{AttachData1>Filename}"
-                                mimeType="{AttachData1>Mimetype}"
-                                visibleDelete="false"
-                                visibleEdit="false"
-                                deletePress="onDeletePress"
-                                press="onItemPress"
-                            />
-                        </items>
-                    </UploadCollection> -->
+                <upload:UploadSet
+					id="uploadSet"
+					instantUpload="false"
+					uploadEnabled="true"
+                    afterItemAdded="onAfterItemAdded"
+					uploadCompleted="onUploadCompleted"
+				>
+					
+					<upload:toolbar>
+					</upload:toolbar>
+					<upload:items>
+						<upload:UploadSetItem
+							fileName="{fileName}"
+							mediaType="{mediaType}"
+							url="{url}"
+							enabledEdit="false"
+							visibleEdit="false"
+							openPressed="onOpenPressed"
+						>
+                        
+							<upload:attributes>
+								<ObjectAttribute
+									title="Uploaded By"
+									text="{createdBy}"
+									active="false"
+								/>
+								<ObjectAttribute
+									title="Uploaded on"
+									text="{createdAt}"
+									active="false"
+								/>
+								<ObjectAttribute
+									title="File Size"
+									text="{size}"
+									active="false"
+								/>
+							</upload:attributes>
+						</upload:UploadSetItem>
+					</upload:items>
+				</upload:UploadSet>
                  </IconTabFilter> 
             </items>
         </IconTabBar>
