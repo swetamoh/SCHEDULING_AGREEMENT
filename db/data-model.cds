@@ -32,6 +32,7 @@ entity DocumentRowItems {
       ItemCode      : String;
       ItemDesc      : String;
       HSNCode       : String;
+      ASNQty        : Integer;
       PoQty         : Integer;
       DeliveredQty  : Decimal;
       BalanceQty    : Decimal;
@@ -96,6 +97,7 @@ entity ASNList {
       PlantCode      : String;
       PlantName      : String;
       PoQty          : Integer;
+      ASNQty         : Integer;
       VendorCode     : String;
       VendorName     : String;
 }
