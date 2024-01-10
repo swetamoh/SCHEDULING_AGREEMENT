@@ -36,8 +36,12 @@ sap.ui.define([
 
 			this.popOverModel = new sap.ui.model.json.JSONModel();
 			//this.uploadCollectionTemp = this.getView().byId("UploadCollItemId").clone();
+			this.byId("uploadSet").attachEvent("openPressed", this.onOpenPressed, this);
 		},
 		handleRouteMatched: function (event) {
+			var oModel = this.getView().getModel();
+			var oUploadSet = this.byId("uploadSet");
+			oUploadSet.removeAllItems();
 
 			if (event.getParameter("name") === "SAAsnCreate") {
 				var that = this;
@@ -542,15 +546,15 @@ sap.ui.define([
 			}
 		},
 		formatASNdates: function (input) {
-			    const parts = input.split('/');
-			    const year = parseInt(parts[2], 10);
-			    const month = parseInt(parts[1], 10) - 1;
-			    const day = parseInt(parts[0], 10)
-			    const date = new Date(year, month, day);
-			    const localTimezoneOffset = date.getTimezoneOffset() * 60000;
-			    const adjustedDate = new Date(date.getTime() - localTimezoneOffset);
-			    const isoString = adjustedDate.toISOString().split('T')[0] + 'T00:00:00';
-			    return isoString + '+05:30';
+			const parts = input.split('/');
+			const year = parseInt(parts[2], 10);
+			const month = parseInt(parts[1], 10) - 1;
+			const day = parseInt(parts[0], 10)
+			const date = new Date(year, month, day);
+			const localTimezoneOffset = date.getTimezoneOffset() * 60000;
+			const adjustedDate = new Date(date.getTime() - localTimezoneOffset);
+			const isoString = adjustedDate.toISOString().split('T')[0] + 'T00:00:00';
+			return isoString + '+05:30';
 		},
 
 		onAsnSave: function (event) {
@@ -1050,6 +1054,7 @@ sap.ui.define([
 		},
 
 		//	********************************************Upload File start Code ***********************************
+		/*
 		onChange: function (oEvent) {
 			var oUploadCollection = oEvent.getSource();
 
@@ -1083,6 +1088,105 @@ sap.ui.define([
 			});
 			oEvent.getParameters().addHeaderParameter(oCustomerHeaderSlug);
 		},
+		*/
+
+		onAfterItemAdded: function (oEvent) {
+			let item = oEvent.getParameter("item");
+			let schNum = this.Schedule_No.replace(/\//g, '-');
+			
+			this._createEntity(item, schNum)
+			.then(() => {
+				this._uploadContent(item, schNum);
+			})
+			.catch((err) => {
+				console.log("Error: " + err);
+			})
+		},
+
+		onUploadCompleted: function (oEvent) {
+			var oUploadSet = this.byId("uploadSet");
+			var oUploadedItem = oEvent.getParameter("item");
+			var sUploadUrl = oUploadedItem.getUploadUrl();
+		
+			var sDownloadUrl = sUploadUrl
+			oUploadedItem.setUrl(sDownloadUrl);
+			oUploadSet.getBinding("items").refresh();
+			oUploadSet.invalidate();
+		},
+		_createEntity: function (item, schNum) {
+			var oModel = this.getView().getModel();
+			var oData = {
+				SchNum_ScheduleNum: schNum,
+				mediaType: item.getMediaType(),
+				fileName: item.getFileName(),
+				size: item.getFileObject().size,
+				//url: "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/547b58c0-9667-470f-a767-c8524482b3ed.PO.spfioripurchaseorder-0.0.1" + `/v2/odata/v4/catalog/Files(PNum_PoNum='${poNum}')/content`
+				url: this.getView().getModel().sServiceUrl + `/Files(SchNum_ScheduleNum='${schNum}')/content`
+
+			};
+		
+			return new Promise((resolve, reject) => {
+				oModel.create("/Files", oData, {
+					success: function () {
+						resolve();
+					},
+					error: function (oError) {
+						console.log("Error: ", oError);
+						reject(oError);
+					}
+				});
+			});
+		},
+
+		_uploadContent: function (item, schNum) {
+			var url = `/v2/odata/v4/catalog/Files(SchNum_ScheduleNum='${schNum}')/content`
+			//var url = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/547b58c0-9667-470f-a767-c8524482b3ed.PO.spfioripurchaseorder-0.0.1" + `/v2/odata/v4/catalog/Files(PNum_PoNum='${poNum}')/content`
+			item.setUploadUrl(url);    
+			var oUploadSet = this.byId("uploadSet");
+			oUploadSet.setHttpRequestMethod("PUT")
+			oUploadSet.uploadItem(item);
+		},
+
+		onOpenPressed: function (oEvent) {
+			oEvent.preventDefault();
+			//var item = oEvent.getSource();
+			var item = oEvent.getParameter("item");
+			this._fileName = item.getFileName();
+			this._download(item)
+				.then((blob) => {
+					var url = window.URL.createObjectURL(blob);
+					var link = document.createElement('a');
+					link.href = url;
+					link.setAttribute('download', this._fileName);
+					document.body.appendChild(link);
+					link.click();
+					document.body.removeChild(link);						
+				})
+				.catch((err)=> {
+					console.log(err);
+				});					
+		},
+		_download: function (item) {
+			console.log("_download")
+			var settings = {
+				url: item.getUrl(),
+				method: "GET",
+				xhrFields:{
+					responseType: "blob"
+				}
+			}	
+
+			return new Promise((resolve, reject) => {
+				$.ajax(settings)
+				.done((result, textStatus, request) => {
+					resolve(result);
+				})
+				.fail((err) => {
+					reject(err);
+				})
+			});						
+		},
+
 		onDeliveryCost: function (event) {
 			var invoiceAmount = this.getView().byId("invoiceAmtId").getValue().trim();
 			// var unplannedAmount = this.getView().byId("unplannedAmtId").getValue().trim();
