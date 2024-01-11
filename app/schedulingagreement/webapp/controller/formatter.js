@@ -14,6 +14,18 @@ sap.fiori.schedulingagreement.controller.formatter = {
 		}
 
 	},
+	formatAmount: function (oAmount) {
+		if (oAmount) {
+			var oFormat = sap.ui.core.format.NumberFormat.getFloatInstance({
+				"groupingEnabled": true,
+				"groupingSeparator": ',',
+				"groupingSize": 3,
+				"decimalSeparator": "." 
+			});
+			return oFormat.format(oAmount);
+		}
+		return "";
+	},
 
 	formatDate: function (oDate) {
 		if (oDate !== "" && oDate !== null && oDate !== undefined) {

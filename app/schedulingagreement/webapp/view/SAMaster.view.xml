@@ -15,7 +15,7 @@
 						   <ObjectStatus id="_IDGenObjectStatus2" text="{UpdatedBy}"/>
 						</secondStatus> -->
 						<attributes>
-							<ObjectAttribute id="_IDGenObjectAttribute3" text="{PoNum}"/>
+							<!-- <ObjectAttribute id="_IDGenObjectAttribute3" text="{PoNum}"/> -->
 							<ObjectAttribute id="_IDGenObjectAttribute1" title="Plant" text="{PlantCode}" visible="{= ${PlantCode} !== ''}"/>
 							<ObjectAttribute id="_IDGenObjectAttribute2" text="{PlantName}" visible="{= ${PlantName} !== ''}"/>
 						</attributes>
