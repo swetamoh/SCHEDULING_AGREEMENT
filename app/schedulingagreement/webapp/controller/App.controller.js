@@ -39,7 +39,7 @@ sap.ui.define(
               if( res.login_name[0] !==  res.email){
               sessionStorage.setItem('AddressCodeSA', res.login_name[0]);
               }else{
-                sessionStorage.setItem('AddressCodeSA', 'GIN-01-02');
+                sessionStorage.setItem('AddressCodeSA', 'GKE-01-01');
               }
               this.doRoute();
             }

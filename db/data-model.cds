@@ -22,7 +22,6 @@ entity SchedulingAgreements {
                         on asnList.SchNum = $self;
       asnListHeader : Composition of many ASNList
                         on asnListHeader.SchNum = $self;
-      Files         : Composition of many Files on Files.SchNum = $self;
 }
 
 entity DocumentRowItems {
@@ -110,8 +109,8 @@ entity ASNList {
 }
 
 entity ASNListHeader {
-  key SchNum             : Association to SchedulingAgreements;
-      AsnNum             : String;
+  key AsnNum             : String;
+      SchNum             : Association to SchedulingAgreements;
       BillNumber         : String;
       BillDate           : String;
       DocketNumber       : String;
@@ -131,15 +130,16 @@ entity ASNListHeader {
       VendorCode         : String;
 }
 
-entity Files : managed{
-  key SchNum : Association to SchedulingAgreements;
-  @Core.MediaType: mediaType
-  content: LargeBinary;
+entity Files : managed {
+  key AsnNum    : String;
 
-  @Core.ContentDisposition.Filename: fileName
-  @Core.IsMediaType: true
-  mediaType: String;
-  fileName: String;
-  size: Integer;
-  url: String;
+      @Core.MediaType                  : mediaType
+      content   : LargeBinary;
+
+      @Core.ContentDisposition.Filename: fileName
+      @Core.IsMediaType                : true
+      mediaType : String;
+      fileName  : String;
+      size      : Integer;
+      url       : String;
 }
