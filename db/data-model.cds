@@ -33,7 +33,7 @@ entity DocumentRowItems {
       VendorCode    : String;
       PlantCode     : String;
       PlantName     : String;
-      LineNum       : String;
+      LineNum       : Integer;
       ItemCode      : String;
       ItemDesc      : String;
       HSNCode       : String;
@@ -73,7 +73,7 @@ entity ASNList {
       SchLineNum     : String;
       PoNum          : String;
       SchDate        : Date;
-      LineNum        : String;
+      LineNum        : Integer;
       UOM            : String;
       HSNCode        : String;
       UnitPrice      : String;
