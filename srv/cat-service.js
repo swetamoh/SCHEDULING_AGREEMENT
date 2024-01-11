@@ -88,14 +88,14 @@ async function getSchedulingAgreements(AddressCode, UnitCode) {
             const documentRows = dataArray.flatMap(data =>
                 data.DocumentRows.map(row => {
                     return {
-                        SchLineNum: data.SchLineNum,
-                        PoNum: data.PoNum,
+                        SchLineNum: row.LineNum,
+                        PoNum: row.PoNum,
                         SchDate: data.SchDate,
                         VendorName: data.VendorName,
                         VendorCode: data.VendorCode,
                         PlantCode: data.PlantCode,
                         PlantName: data.PlantName,
-                        LineNum: row.LineNum,
+                        LineNum: row.BillLineNumber,
                         ItemCode: row.ItemCode,
                         ItemDesc: row.ItemDesc,
                         HSNCode: row.HSNCode,
