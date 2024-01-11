@@ -95,7 +95,7 @@ async function getSchedulingAgreements(AddressCode, UnitCode) {
                         VendorCode: data.VendorCode,
                         PlantCode: data.PlantCode,
                         PlantName: data.PlantName,
-                        LineNum: row.BillLineNumber,
+                        LineNum: parseInt(row.BillLineNumber),
                         ItemCode: row.ItemCode,
                         ItemDesc: row.ItemDesc,
                         HSNCode: row.HSNCode,
