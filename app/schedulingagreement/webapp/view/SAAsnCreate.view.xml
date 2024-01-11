@@ -841,7 +841,7 @@
                                         />
                                         <Text
                                             id="_IDGenText14"
-                                            text="{asnModel>UnitPrice}"
+                                            text="{path:'asnModel>UnitPrice',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
                                         <Input
                                             id="quantityId"
@@ -850,22 +850,22 @@
                                         />
                                         <Input
                                             id="pkgamtId"
-                                            value="{asnModel>Packing}"
+                                            value="{path:'asnModel>Packing',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                             change="onPackChange"
                                         />
                                         <Input
                                             id="freightId"
-                                            value="{asnModel>Frieght}"
+                                            value="{path:'asnModel>Frieght',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                             change="onFreightChange"
                                         />
                                         <Input
                                             id="othchargeId"
-                                            value="{asnModel>OtherCharges}"
+                                            value="{path:'asnModel>OtherCharges',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                             change="onOtherChange"
                                         />
                                         <Text
                                             id="assvalId"
-                                            text="{asnModel>ASSValue}"
+                                            text="{path:'asnModel>ASSValue',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
                                         <Text
                                             id="_IDGenText15"
@@ -873,7 +873,7 @@
                                         />
                                         <Text
                                             id="_IDGenText16"
-                                            text="{asnModel>IGA}"
+                                            text="{path:'asnModel>IGA',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
                                         <Text
                                             id="_IDGenText17"
@@ -881,7 +881,7 @@
                                         />
                                         <Text
                                             id="_IDGenText18"
-                                            text="{asnModel>CGA}"
+                                            text="{path:'asnModel>CGA',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
                                         <Text
                                             id="_IDGenText19"
@@ -889,7 +889,7 @@
                                         />
                                         <Text
                                             id="_IDGenText20"
-                                            text="{asnModel>SGA}"
+                                            text="{path:'asnModel>SGA',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
                                         <Input
                                             id="tcsId"
@@ -897,11 +897,11 @@
                                         />
                                         <Text
                                             id="tcaId"
-                                            text="{asnModel>TCA}"
+                                            text="{path:'asnModel>TCA',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
                                         <Text
                                             id="linevalId"
-                                            text="{asnModel>LineValue}"
+                                            text="{path:'asnModel>LineValue',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
                                         <!-- <Input
                                             id="pkgId"

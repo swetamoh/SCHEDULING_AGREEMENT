@@ -882,9 +882,10 @@ sap.ui.define([
 						}
 					});
 				}
-				this._createEntity(this.item, this.AsnNum)
+				var AsnNum= this.AsnNum.replace(/\//g, '-');
+				this._createEntity(this.item, AsnNum)
 				.then(() => {
-				this._uploadContent(this.item, this.AsnNum);
+				this._uploadContent(this.item, AsnNum);
 				})
 				.catch((err) => {
 				console.log("Error: " + err);
