@@ -98,7 +98,7 @@ sap.ui.define([
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
 				var unitCode = sessionStorage.getItem("unitCode") || "P01";
-				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'GIN-01-02';
+				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'GKE-01-01';
 				var oModel = this.getOwnerComponent().getModel();
 				this.getView().setModel(new sap.ui.model.json.JSONModel({ minDate: new Date() }), "dateModel");
 				var request = "/SchedulingAgreements";
@@ -578,7 +578,7 @@ sap.ui.define([
 				MessageBox.error("Please fill the Invoice Number");
 				return;
 			}
-			if (this.getView().byId("UploadCollection").getItems().length <= 0) {
+			if (this.getView().byId("uploadSet").getItems().length <= 0) {
 				MessageBox.error("Atleast One attachment is required.");
 				return;
 			}
@@ -882,6 +882,13 @@ sap.ui.define([
 						}
 					});
 				}
+				this._createEntity(this.item, this.AsnNum)
+				.then(() => {
+				this._uploadContent(this.item, this.AsnNum);
+				})
+				.catch((err) => {
+				console.log("Error: " + err);
+				})
 			}
 		},
 		handleLinkPress: function (oEvent) {
@@ -1091,12 +1098,12 @@ sap.ui.define([
 		*/
 
 		onAfterItemAdded: function (oEvent) {
-			let item = oEvent.getParameter("item");
+			this.item = oEvent.getParameter("item");
 			let schNum = this.Schedule_No.replace(/\//g, '-');
 			
-			this._createEntity(item, schNum)
+			this._createEntity(this.item, schNum)
 			.then(() => {
-				this._uploadContent(item, schNum);
+				this._uploadContent(this.item, schNum);
 			})
 			.catch((err) => {
 				console.log("Error: " + err);
@@ -1113,20 +1120,20 @@ sap.ui.define([
 			oUploadSet.getBinding("items").refresh();
 			oUploadSet.invalidate();
 		},
-		_createEntity: function (item, schNum) {
+		_createEntity: function (item, AsnNum) {
 			var oModel = this.getView().getModel();
 			var oData = {
-				SchNum_ScheduleNum: schNum,
+				AsnNum: AsnNum,
 				mediaType: item.getMediaType(),
 				fileName: item.getFileName(),
 				size: item.getFileObject().size,
-				//url: "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/547b58c0-9667-470f-a767-c8524482b3ed.PO.spfioripurchaseorder-0.0.1" + `/v2/odata/v4/catalog/Files(PNum_PoNum='${poNum}')/content`
-				url: this.getView().getModel().sServiceUrl + `/Files(SchNum_ScheduleNum='${schNum}')/content`
+				url: "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/v2/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`,
+				//url: this.getView().getModel().sServiceUrl + `/Files(SchNum_ScheduleNum='${schNum}')/content`
 
 			};
 		
 			return new Promise((resolve, reject) => {
-				oModel.create("/Files", oData, {
+				oModel.update(`/Files(AsnNum='${AsnNum}')`, oData, {
 					success: function () {
 						resolve();
 					},
@@ -1138,9 +1145,9 @@ sap.ui.define([
 			});
 		},
 
-		_uploadContent: function (item, schNum) {
-			var url = `/v2/odata/v4/catalog/Files(SchNum_ScheduleNum='${schNum}')/content`
-			//var url = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/547b58c0-9667-470f-a767-c8524482b3ed.PO.spfioripurchaseorder-0.0.1" + `/v2/odata/v4/catalog/Files(PNum_PoNum='${poNum}')/content`
+		_uploadContent: function (item, AsnNum) {
+			//var url = `/v2/odata/v4/catalog/Files(SchNum_ScheduleNum='${schNum}')/content`
+			var url = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/v2/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`
 			item.setUploadUrl(url);    
 			var oUploadSet = this.byId("uploadSet");
 			oUploadSet.setHttpRequestMethod("PUT")
