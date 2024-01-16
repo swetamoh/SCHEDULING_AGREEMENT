@@ -70,7 +70,7 @@
                     required="true"
                 />
                 <Input
-                    id="_IDGenInput1"
+                    id="invoiceNumId"
                     value="{asnModel>/BillNumber}"
                     maxLength="16"
                     width="185px"
@@ -1012,7 +1012,7 @@
                 <upload:UploadSet
 					id="uploadSet"
 					instantUpload="false"
-					uploadEnabled="true"
+					uploadEnabled="false"
                     afterItemAdded="onAfterItemAdded"
 					uploadCompleted="onUploadCompleted"
 				>

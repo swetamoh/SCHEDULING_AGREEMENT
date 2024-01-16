@@ -131,7 +131,8 @@ entity ASNListHeader {
 }
 
 entity Files : managed {
-  key AsnNum    : String;
+  key InvoiceNo : String;
+      AsnNum    : String;
 
       @Core.MediaType                  : mediaType
       content   : LargeBinary;
