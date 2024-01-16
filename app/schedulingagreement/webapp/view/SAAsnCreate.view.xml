@@ -531,7 +531,7 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                                <Column
+                                <!-- <Column
                                     id="_IDGenColumn16"
                                     minScreenWidth="Tablet"
                                     demandPopin="true"
@@ -558,7 +558,7 @@
                                         text="TCS Amt"
                                         wrapping="true"
                                     />
-                                </Column>
+                                </Column> -->
                                 <Column
                                     id="_IDGenColumn25"
                                     minScreenWidth="Tablet"
@@ -891,14 +891,14 @@
                                             id="_IDGenText20"
                                             text="{path:'asnModel>SGA',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
-                                        <Input
+                                        <!-- <Input
                                             id="tcsId"
                                             value="{asnModel>TCS}"
                                         />
                                         <Text
                                             id="tcaId"
                                             text="{path:'asnModel>TCA',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
-                                        />
+                                        /> -->
                                         <Text
                                             id="linevalId"
                                             text="{path:'asnModel>LineValue',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"

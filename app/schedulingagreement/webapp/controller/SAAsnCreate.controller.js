@@ -1106,8 +1106,8 @@ sap.ui.define([
 
 		onAfterItemAdded: function (oEvent) {
 			this.item = oEvent.getParameter("item");
-			this.invoiceNo = this.Schedule_No.replace(/\//g, '-');
-			//this.invoiceNo = this.getView().byId("invoiceNumId").getValue();
+			//this.invoiceNo = this.Schedule_No.replace(/\//g, '-');
+			this.invoiceNo = this.getView().byId("invoiceNumId").getValue();
 			
 			this._createEntity(this.item, this.invoiceNo)
 			.then(() => {
