@@ -760,7 +760,7 @@ sap.ui.define([
 				if (window.location.href.includes("launchpad")) {
 					this.hardcodedURL = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1";
 				}
-				var sPath = this.hardcodedURL + `/v2/odata/v4/catalog/PostASN`;
+				var sPath = this.hardcodedURL + `/sa/odata/v4/catalog/PostASN`;
 				$.ajax({
 					type: "POST",
 					headers: {
@@ -883,13 +883,19 @@ sap.ui.define([
 					});
 				}
 				var AsnNum= this.AsnNum.replace(/\//g, '-');
-				this._createEntity(this.item, AsnNum)
-				.then(() => {
-				this._uploadContent(this.item, AsnNum);
-				})
-				.catch((err) => {
-				console.log("Error: " + err);
-				})
+				var oData = {
+					AsnNum: AsnNum
+				};
+				oModel.update(`/Files(InvoiceNo='${this.invoiceNo}')`, oData, {
+					merge: true,
+					success: function () {
+						
+					},
+					error: function (oError) {
+						console.log("Error: ", oError);
+						
+					}
+				});
 			}
 		},
 		handleLinkPress: function (oEvent) {
@@ -1100,11 +1106,12 @@ sap.ui.define([
 
 		onAfterItemAdded: function (oEvent) {
 			this.item = oEvent.getParameter("item");
-			let schNum = this.Schedule_No.replace(/\//g, '-');
+			this.invoiceNo = this.Schedule_No.replace(/\//g, '-');
+			//this.invoiceNo = this.getView().byId("invoiceNumId").getValue();
 			
-			this._createEntity(this.item, schNum)
+			this._createEntity(this.item, this.invoiceNo)
 			.then(() => {
-				this._uploadContent(this.item, schNum);
+				this._uploadContent(this.item, this.invoiceNo);
 			})
 			.catch((err) => {
 				console.log("Error: " + err);
@@ -1121,20 +1128,20 @@ sap.ui.define([
 			oUploadSet.getBinding("items").refresh();
 			oUploadSet.invalidate();
 		},
-		_createEntity: function (item, AsnNum) {
+		_createEntity: function (item, InvoiceNo) {
 			var oModel = this.getView().getModel();
 			var oData = {
-				AsnNum: AsnNum,
+				InvoiceNo: InvoiceNo,
 				mediaType: item.getMediaType(),
 				fileName: item.getFileName(),
 				size: item.getFileObject().size,
-				url: "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/v2/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`,
+				url: "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/sa/odata/v4/catalog/Files(InvoiceNo='${InvoiceNo}')/content`,
 				//url: this.getView().getModel().sServiceUrl + `/Files(SchNum_ScheduleNum='${schNum}')/content`
 
 			};
 		
 			return new Promise((resolve, reject) => {
-				oModel.update(`/Files(AsnNum='${AsnNum}')`, oData, {
+				oModel.update(`/Files(InvoiceNo='${InvoiceNo}')`, oData, {
 					success: function () {
 						resolve();
 					},
@@ -1146,9 +1153,9 @@ sap.ui.define([
 			});
 		},
 
-		_uploadContent: function (item, AsnNum) {
-			//var url = `/v2/odata/v4/catalog/Files(SchNum_ScheduleNum='${schNum}')/content`
-			var url = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/v2/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`
+		_uploadContent: function (item, InvoiceNo) {
+			//var url = `/sa/odata/v4/catalog/Files(SchNum_ScheduleNum='${schNum}')/content`
+			var url = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/sa/odata/v4/catalog/Files(InvoiceNo='${InvoiceNo}')/content`
 			item.setUploadUrl(url);    
 			var oUploadSet = this.byId("uploadSet");
 			oUploadSet.setHttpRequestMethod("PUT")
@@ -1267,8 +1274,10 @@ sap.ui.define([
 			if (oEvent.getParameter("value") == "") {
 				this.getView().byId("DP1").setEnabled(false);
 				this.getView().byId("DP1").setValue("");
+				this.getView().byId("uploadSet").setUploadEnabled(false);
 			} else {
 				this.getView().byId("DP1").setEnabled(true);
+				this.getView().byId("uploadSet").setUploadEnabled(true);
 			}
 		},
 		onFromDateChange: function (oEvent) {
