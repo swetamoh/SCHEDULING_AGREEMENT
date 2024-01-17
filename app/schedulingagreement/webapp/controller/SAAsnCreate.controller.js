@@ -578,7 +578,8 @@ sap.ui.define([
 				MessageBox.error("Please fill the Invoice Number");
 				return;
 			}
-			if (this.getView().byId("uploadSet").getItems().length <= 0) {
+			//if (this.getView().byId("uploadSet").getItems().length <= 0) {
+				if (!this.item) {
 				MessageBox.error("Atleast One attachment is required.");
 				return;
 			}
@@ -886,16 +887,24 @@ sap.ui.define([
 				var oData = {
 					AsnNum: AsnNum
 				};
-				oModel.update(`/Files(InvoiceNo='${this.invoiceNo}')`, oData, {
-					merge: true,
-					success: function () {
+				// oModel.update(`/Files(InvoiceNo='${this.invoiceNo}')`, oData, {
+				// 	merge: true,
+				// 	success: function () {
 						
-					},
-					error: function (oError) {
-						console.log("Error: ", oError);
+				// 	},
+				// 	error: function (oError) {
+				// 		console.log("Error: ", oError);
 						
-					}
-				});
+				// 	}
+				// });
+				this._createEntity(this.item, AsnNum)
+			.then(() => {
+				this._uploadContent(this.item,AsnNum);
+			})
+			.catch((err) => {
+				console.log("Error: " + err);
+			})
+
 			}
 		},
 		handleLinkPress: function (oEvent) {
@@ -1109,13 +1118,13 @@ sap.ui.define([
 			//this.invoiceNo = this.Schedule_No.replace(/\//g, '-');
 			this.invoiceNo = this.getView().byId("invoiceNumId").getValue();
 			
-			this._createEntity(this.item, this.invoiceNo)
-			.then(() => {
-				this._uploadContent(this.item, this.invoiceNo);
-			})
-			.catch((err) => {
-				console.log("Error: " + err);
-			})
+			// this._createEntity(this.item, this.invoiceNo)
+			// .then(() => {
+			// 	this._uploadContent(this.item, this.invoiceNo);
+			// })
+			// .catch((err) => {
+			// 	console.log("Error: " + err);
+			// })
 		},
 
 		onUploadCompleted: function (oEvent) {
@@ -1128,20 +1137,20 @@ sap.ui.define([
 			oUploadSet.getBinding("items").refresh();
 			oUploadSet.invalidate();
 		},
-		_createEntity: function (item, InvoiceNo) {
+		_createEntity: function (item, AsnNum) {
 			var oModel = this.getView().getModel();
 			var oData = {
-				InvoiceNo: InvoiceNo,
+				AsnNum: AsnNum,
 				mediaType: item.getMediaType(),
 				fileName: item.getFileName(),
 				size: item.getFileObject().size,
-				url: "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/sa/odata/v4/catalog/Files(InvoiceNo='${InvoiceNo}')/content`,
+				url: "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/sa/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`,
 				//url: this.getView().getModel().sServiceUrl + `/Files(SchNum_ScheduleNum='${schNum}')/content`
 
 			};
 		
 			return new Promise((resolve, reject) => {
-				oModel.update(`/Files(InvoiceNo='${InvoiceNo}')`, oData, {
+				oModel.update(`/Files(AsnNum='${AsnNum}')`, oData, {
 					success: function () {
 						resolve();
 					},
@@ -1153,9 +1162,9 @@ sap.ui.define([
 			});
 		},
 
-		_uploadContent: function (item, InvoiceNo) {
+		_uploadContent: function (item, AsnNum) {
 			//var url = `/sa/odata/v4/catalog/Files(SchNum_ScheduleNum='${schNum}')/content`
-			var url = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/sa/odata/v4/catalog/Files(InvoiceNo='${InvoiceNo}')/content`
+			var url = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/sa/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`
 			item.setUploadUrl(url);    
 			var oUploadSet = this.byId("uploadSet");
 			oUploadSet.setHttpRequestMethod("PUT")
