@@ -32,6 +32,7 @@
           "semanticObject": "schedulingagreement",
           "action": "Manage",
           "title": "{{flpTitle}}",
+          "subTitle": "{{flpSubtitle}}",
           "icon": "sap-icon://documents",
           "signature": {
             "parameters": {},

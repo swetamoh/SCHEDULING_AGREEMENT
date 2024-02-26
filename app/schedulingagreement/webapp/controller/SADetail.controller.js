@@ -89,7 +89,7 @@ sap.ui.define([
 							}
 							that.detailModel.refresh(true);
 						} else {
-							MessageBox.error("Schedule Number  not found");
+							//MessageBox.error("Schedule Number  not found");
 						}
 					},
 					error: function (oError) {
