@@ -93,7 +93,7 @@ sap.ui.define([
 						}
 					},
 					error: function (oError) {
-						var value = JSON.parse(oError.response.body);
+						var value = JSON.parse(oError.responseText);
 						MessageBox.error(value.error.message.value);
 					}
 				});
