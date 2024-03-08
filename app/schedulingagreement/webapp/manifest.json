@@ -33,7 +33,7 @@
           "action": "Manage",
           "title": "{{flpTitle}}",
           "subTitle": "{{flpSubtitle}}",
-          "icon": "sap-icon://documents",
+          "icon": "sap-icon://my-sales-order",
           "signature": {
             "parameters": {},
             "additionalParameters": "allowed"
@@ -117,57 +117,57 @@
           "targetAggregation": "pages",
           "controlId": "app",
           "subroutes": [
-              {
-                  "pattern": "",
-                  "name": "SAMaster",
-                  "view": "SAMaster",
-                  "targetControl": "splitApp",
-                  "targetAggregation": "masterPages",
-                  "subroutes": [
-                      {
-                          "pattern": "NoData",
-                          "name": "NoData",
-                          "view": "NoData",
-                          "targetAggregation": "detailPages"
-                      },
-                      {
-                          "pattern": "Detail/{Schedule_No}",
-                          "name": "SADetail",
-                          "view": "SADetail",
-                          "targetAggregation": "detailPages"
-                      }
-                  ]
-              }
+            {
+              "pattern": "",
+              "name": "SAMaster",
+              "view": "SAMaster",
+              "targetControl": "splitApp",
+              "targetAggregation": "masterPages",
+              "subroutes": [
+                {
+                  "pattern": "NoData",
+                  "name": "NoData",
+                  "view": "NoData",
+                  "targetAggregation": "detailPages"
+                },
+                {
+                  "pattern": "Detail/{Schedule_No}",
+                  "name": "SADetail",
+                  "view": "SADetail",
+                  "targetAggregation": "detailPages"
+                }
+              ]
+            }
           ]
-      },
-      {
+        },
+        {
           "pattern": "AsnCreate/{Schedule_No}",
           "name": "SAAsnCreate",
           "view": "SAAsnCreate",
           "targetAggregation": "pages",
           "controlId": "app"
-      },
-      {
+        },
+        {
           "pattern": "AsnEdit/{Schedule_No}/{Asn_No}/:Amount:",
           "name": "SAAsnEdit",
           "view": "SAAsnEdit",
           "targetAggregation": "pages",
           "controlId": "app"
-      },
-      {
+        },
+        {
           "pattern": "SAConfirm/{Schedule_No}",
           "name": "SAConfirm",
           "view": "SAConfirm",
           "targetAggregation": "pages",
           "controlId": "app"
-      },
-      {
+        },
+        {
           "pattern": "ItemDisplay/{Schedule_No}/{Material_No}/{Line_No}",
           "name": "ItemDisplay",
           "view": "ItemDisplay",
           "targetAggregation": "pages",
           "controlId": "app"
-      }
+        }
       ]
     },
     "rootView": {

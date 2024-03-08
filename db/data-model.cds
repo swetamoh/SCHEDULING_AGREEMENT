@@ -1,9 +1,6 @@
 namespace my.bookshop;
 
-using {
-  cuid,
-  managed
-} from '@sap/cds/common';
+using {managed} from '@sap/cds/common';
 
 entity SchedulingAgreements {
   key ScheduleNum   : String;
@@ -62,6 +59,8 @@ entity DocumentRowItems {
       LineValue     : String;
       WeightInKG    : String;
       SchNum        : Association to SchedulingAgreements;
+      RateAggreed   : Boolean default true;
+      SupplierRate  : Integer;
 }
 
 entity ASNList {
@@ -106,6 +105,8 @@ entity ASNList {
       VendorCode     : String;
       VendorName     : String;
       TOTAL          : String;
+      RateAggreed    : Boolean default true;
+      SupplierRate   : Integer;
 }
 
 entity ASNListHeader {
@@ -128,6 +129,9 @@ entity ASNListHeader {
       PlantName          : String;
       PlantCode          : String;
       VendorCode         : String;
+      TotalInvNetAmnt    : Integer;
+      TotalGstAmnt       : Integer;
+      RateStatus         : String;
 }
 
 entity Files : managed {
