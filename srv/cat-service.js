@@ -48,7 +48,7 @@ module.exports = (srv) => {
             return response;
         } catch (error) {
             console.error('Error in PostASN API call:', error);
-            throw new Error(`Error posting ASN: ${error.message}`);
+            req.reject(400,`Error posting ASN: ${error.message}`);
         }
     });
 
