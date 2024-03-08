@@ -47,9 +47,6 @@ sap.ui.define([
 
 				this.byId("rateOk").setSelected(true);
 
-				this.modulePath = jQuery.sap.getModulePath("sap/fiori/schedulingagreement");
-				this.modulePath = this.modulePath === "." ? "" : this.modulePath;
-
 				this.byId("totalInvNetAmnt").setValueState("None");
 				this.byId("totalGstAmnt").setValueState("None");
 
@@ -774,9 +771,13 @@ sap.ui.define([
 
 				}
 				var formdatastr = JSON.stringify(form);
+				// this.hardcodedURL = "";
+				// if (window.location.href.includes("launchpad")) {
+				// 	this.hardcodedURL = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1";
+				// }
 				this.hardcodedURL = "";
-				if (window.location.href.includes("launchpad")) {
-					this.hardcodedURL = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1";
+				if (window.location.href.includes("site")) {
+					this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
 				}
 				var sPath = this.hardcodedURL + `/sa/odata/v4/catalog/PostASN`;
 				$.ajax({
