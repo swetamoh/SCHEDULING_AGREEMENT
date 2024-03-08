@@ -36,15 +36,15 @@ sap.ui.define(
             url: modulePath + slash + "user-api/attributes",
             type: "GET",
             success: res => {
-              if( res.login_name[0] !==  res.email){
-              sessionStorage.setItem('AddressCodeSA', res.login_name[0]);
-              }else{
-                sessionStorage.setItem('AddressCodeSA', 'REP-04-04');
+              if (res.login_name[0] !== res.email) {
+                sessionStorage.setItem('AddressCodeSA', res.login_name[0]);
+              } else {
+                sessionStorage.setItem('AddressCodeSA', 'JSE-01-01');
               }
               this.doRoute();
             }
           });
-        } 
+        }
         // else {
         //   $.sap.logData = {
         //     "companycode": "1000",

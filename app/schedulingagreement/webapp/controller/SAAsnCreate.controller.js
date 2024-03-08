@@ -104,7 +104,7 @@ sap.ui.define([
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
 				var unitCode = sessionStorage.getItem("unitCode") || "P01";
-				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'REP-04-04';
+				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
 				var oModel = this.getOwnerComponent().getModel();
 				this.getView().setModel(new sap.ui.model.json.JSONModel({ minDate: new Date() }), "dateModel");
 				var request = "/SchedulingAgreements";
