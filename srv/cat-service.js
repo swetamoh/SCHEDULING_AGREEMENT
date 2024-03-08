@@ -48,7 +48,7 @@ module.exports = (srv) => {
             return response;
         } catch (error) {
             console.error('Error in PostASN API call:', error);
-            req.reject(400,`Error posting ASN: ${error.message}`);
+            req.reject(400, `Error posting ASN: ${error.message}`);
         }
     });
 
@@ -86,7 +86,7 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList) {
 
             let itemRecord = [], filter, supplierRate, rateAggreed;
             if (schNum) {
-                itemRecord = await SELECT.from(ASNList).where({ SchNum: schNum });
+                itemRecord = await SELECT.from(ASNList).where({ SCHNUM_SCHEDULENUM: schNum });
             }
 
             // Extracting DocumentRows details
