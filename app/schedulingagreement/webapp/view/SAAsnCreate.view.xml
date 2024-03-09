@@ -11,7 +11,7 @@
 >
     <Page
         id="_IDGenPage1"
-        title="Create ASN"
+        title="Submit Invoice"
         titleAlignment="Center"
         showNavButton="true"
         navButtonPress="sap.fiori.schedulingagreement.controller.formatter.onNavBack"
