@@ -104,7 +104,7 @@ sap.ui.define([
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
 				var unitCode = sessionStorage.getItem("unitCode") || "P01";
-				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'REP-04-04';
+				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
 				var oModel = this.getOwnerComponent().getModel();
 				this.getView().setModel(new sap.ui.model.json.JSONModel({ minDate: new Date() }), "dateModel");
 				var request = "/SchedulingAgreements";
@@ -143,400 +143,14 @@ sap.ui.define([
 						}
 					},
 					error: function (oError) {
-						var value = JSON.parse(oError.response.body);
+						var value = JSON.parse(oError.responseText);
 						MessageBox.error(value.error.message.value);
 					}
 				});
-				// ,App='SA'
-				//this.oDataModel.read("/ASN_HEADERSet(Schedule_No='" + this.Schedule_No + "')?$expand=ASNItemnav",
-				//sap.ui.core.BusyIndicator.show();
-				// this.oDataModel.read("/ASN_HEADERSet(Schedule_No='" + this.Schedule_No + "')", {
-				// 	urlParameters: {
-				// 		"$expand": "ASNItemnav"
-				// 	},
-				// 	success: function (oData, oResponse) {
-				// 		sap.ui.core.BusyIndicator.hide();
-				// 		var POItems = oData.ASNItemnav.results;
-				// 		let pkgMatQty;
-				// 		var msg = '';
-				// 		var arr = [];
-				// 		oData.ASNItemnav.results = POItems.filter(function (item) {
-				// 			pkgMatQty = parseFloat(item.Menge) / parseFloat(item.SOQ);
-				// 			item.PkgMatQty = isNaN(pkgMatQty) ? "0" : isFinite(pkgMatQty) === false ? "0" : (Math.ceil(pkgMatQty)).toString();
-				// 			item.NetprVen = item.Netpr.trim();
-				// 			return item.Menge !== "0.00";
-				// 		});
-
-				// 		for (var i = 0; i < oData.ASNItemnav.results.length; i++) {
-				// 			if (oData.ASNItemnav.results[i].Meins == "EA") {
-				// 				oData.ASNItemnav.results[i].Menge = parseInt(oData.ASNItemnav.results[i].Menge).toString();
-				// 			}
-				// 			that.checkData.push({
-				// 				"Ebelp": oData.ASNItemnav.results[i].Ebelp,
-				// 				"Etenr": oData.ASNItemnav.results[i].Etenr,
-				// 				"Matnr": oData.ASNItemnav.results[i].Matnr,
-				// 				"Menge": oData.ASNItemnav.results[i].Menge
-				// 			}); //To check ASN qty for previous line item
-
-				// 			// if(oData.ASNItemnav.results[i].Warningmsg!= '')
-				// 			// 	msg = msg + "\n" + oData.ASNItemnav.results[i].Warningmsg;
-				// 			if (oData.ASNItemnav.results[i].Warningmsg != '') {
-				// 				arr.push(oData.ASNItemnav.results[i].Warningmsg);
-				// 			}
-				// 		}
-				// 		var RemovedupArr = that.removeDuplicates(arr);
-				// 		for (var i = 0; i < RemovedupArr.length; i++) {
-				// 			msg = msg + "\n" + RemovedupArr[i];
-				// 		}
-				// 		// POItems.forEach(function (item, index, object) {
-				// 		// 	if (item.Menge === "0.00") {
-				// 		// 		object.splice(index, 1);
-				// 		// 	}
-				// 		// });
-
-				// 		oData.UnplannedCost = oData.UnplannedCost ? oData.UnplannedCost : 0;
-				// 		that.asnModel.setData(oData);
-				// 		that.asnModel.refresh(true);
-				// 		// that.getView().byId("DP1").setDateValue(new Date());
-				// 		var oTable = that.getView().byId("AsnCreateTable");
-				// 		var oBindingInfo = oTable.getBindingInfo('items');
-				// 		delete oBindingInfo.filters;
-				// 		oTable.bindAggregation('items', oBindingInfo);
-				// 		setTimeout(() => {
-				// 			if (msg && msg != '')
-				// 				MessageBox.warning(msg);
-				// 		}, 1000);
-				// 	},
-				// 	error: function (oError) {
-				// 		sap.ui.core.BusyIndicator.hide();
-				// 		var value = JSON.parse(oError.response.body);
-				// 		MessageBox.error(value.error.message.value, {
-				// 			onClose: function () {
-				// 				sap.fiori.schedulingagreement.controller.formatter.onNavBack();
-				// 			}
-				// 		});
-				// 	}
-				// });
-
-				// Get CSRF token
-
-				// if (!this.header_xcsrf_token) {
-				// 	var model = this.getView().getModel();
-				// 	var oServiceUrl = model.sServiceUrl + "/";
-				// 	var that = this;
-
-				// 	sap.ui.core.BusyIndicator.show(0);
-				// 	model._request({
-				// 		requestUri: oServiceUrl,
-				// 		method: "GET",
-				// 		headers: {
-				// 			"X-Requested-With": "XMLHttpRequest",
-				// 			"Content-Type": "application/atom+xml",
-				// 			"DataServiceVersion": "2.0",
-				// 			"X-CSRF-Token": "Fetch"
-				// 		}
-				// 	}, function (data, response) {
-				// 		sap.ui.core.BusyIndicator.hide();
-				// 		that.header_xcsrf_token = response.headers["x-csrf-token"];
-				// 	});
-				// }
-				// sap.ui.core.BusyIndicator.hide();
-				// var slash = window.location.href.includes("site") ? "/" : "";
-				// var modulePath = jQuery.sap.getModulePath("sap/fiori/schedulingagreement");
-				// modulePath = modulePath === "." ? "" : modulePath;
-				// var serviceUrl = modulePath + slash + "sap/opu/odata/shiv/NW_SUPP_PORTAL_SA_SRV/AsnAttachementSet";
-				// var site = window.location.href.includes("site");
-				// if (site) {
-				// 	this.getView().byId("UploadCollection").setUploadUrl(serviceUrl);
-				// }
-				// else
-				// 	this.getView().byId("UploadCollection").setUploadUrl("/sap/opu/odata/shiv/NW_SUPP_PORTAL_SA_SRV/AsnAttachementSet");
 
 			}
 			sap.ui.core.BusyIndicator.hide();
 		},
-		// removeDuplicates: function (arr) {
-		// 	return arr.filter((item,
-		// 		index) => arr.indexOf(item) === index);
-		// },
-		onUnplannedCostChange: function (oEvent) {
-			if (oEvent.getParameter("newValue").includes("-")) {
-				MessageBox.error("Unplanned cost less than 0 is not allowed!");
-				var newVal = Math.abs(parseFloat(oEvent.getParameter("newValue")));
-				oEvent.getSource().setValue(newVal);
-			}
-			if (oEvent.getParameter("newValue").includes(".")) {
-				var splitValue = oEvent.getParameter("newValue").split(".");
-				if (splitValue[1].length > 2) {
-					MessageBox.error("Value upto 2 decimals is allowed.");
-					oEvent.getSource().setValue(parseFloat(oEvent.getParameter("newValue")).toFixed(2));
-				}
-			}
-		},
-
-		onSwitchChange: function (e) {
-			const val = e.getParameter("state");
-			var obj = e.getSource().getParent().getBindingContext("asnModel").getObject();
-			if (val == true)
-				obj.TaxChange = "X";
-			else
-				obj.TaxChange = "";
-			this.asnModel.refresh(true);
-		},
-		onQuanChange: function (e) {
-			const val = e.getParameter("newValue"),
-				obj = e.getSource().getParent().getBindingContext("asnModel").getObject();
-			var Meins = obj.Meins;
-			obj.Menge = val;
-			if (Meins == "EA") {
-				if (val.includes(".")) {
-					MessageBox.error("Fractional Values are not allowed");
-					e.getSource().setValue(parseInt(val, 10).toString());
-					return;
-				}
-			}
-			const pkgMatQty = parseFloat(val) / parseFloat(obj.SOQ);
-			obj.PkgMatQty = isNaN(pkgMatQty) ? "0" : isFinite(pkgMatQty) === false ? "0" : (Math.ceil(pkgMatQty)).toString();
-
-			var oTable = this.getView().byId("AsnCreateTable");
-			var contexts = oTable.getSelectedContexts();
-
-			// for (var i = 0; i < contexts.length; i++) {
-			// 	var index = contexts[i].getPath().substring(contexts[i].getPath().lastIndexOf("/") + 1);
-			// 	var item = contexts[i].getProperty();
-			// 	for (var j = 0; j < oTable.getItems().length; j++) {
-			// 		// if (oTable.getItems()[index - 1]) {
-			// 		var previousItem = oTable.getItems()[j].getBindingContext("asnModel").getProperty();
-			// 		var previousIndex = oTable.getItems()[j].getBindingContext("asnModel").getPath()
-			// 			.substring(oTable.getItems()[j].getBindingContext("asnModel").getPath().lastIndexOf("/") + 1);
-			// 		if ((previousItem.Matnr === item.Matnr && previousItem.Ebelp === item.Ebelp) && parseInt(previousIndex) < parseInt(index) &&
-			// 			(!oTable.getItems()[j].getSelected() || (previousItem.Menge !== this.checkData[previousIndex].Menge))) {
-			// 			var forwardItem = oTable.getItems()[j + 1].getBindingContext("asnModel").getProperty();
-			// 			if (forwardItem.Matnr === item.Matnr && forwardItem.Ebelp === item.Ebelp) {
-			// 				oTable.getItems()[j + 1].setSelected(false);
-			// 			}
-			// 			// MessageBox.error("Please select the schedule line item " + previousItem.Etenr);
-			// 			// return;
-			// 		}
-			// 	}
-			// }
-
-			var selected = e.getSource().getParent().getProperty("selected");
-			var data = this.asnModel.getData();
-			data.ASNamt = 0;
-			var index = e.getSource().getParent().getBindingContext("asnModel").getPath().split("/")[3];
-			var items = contexts.map(function (c) {
-				return c.getObject();
-			});
-
-			data.ASNItemnav.results[index].Menge = e.getSource().getValue();
-
-			for (var i = 0; i < items.length; i++) {
-
-				if (!items[i].Netpr) {
-					items[i].Netpr = 0;
-				}
-				if (!items[i].Cgst) {
-					items[i].Cgst = 0;
-				}
-				if (!items[i].Igst) {
-					items[i].Igst = 0;
-				}
-				if (!items[i].Sgst) {
-					items[i].Sgst = 0;
-				}
-
-				// data.ASNamt = parseFloat(data.ASNamt) + (parseFloat(items[i].Menge) * ((parseFloat(items[i].Netpr)) + (parseFloat(items[i].Cgst)) +
-				// 	(parseFloat(items[i].Igst)) + (parseFloat(items[i].Sgst))));
-				var NetPr = (parseFloat(items[i].Menge) * (parseFloat(items[i].Netpr))).toFixed(2);
-				var Cgst = (parseFloat(items[i].Menge) * (parseFloat(items[i].Cgst))).toFixed(2);
-				var Igst = (parseFloat(items[i].Menge) * (parseFloat(items[i].Igst))).toFixed(2);
-				var Sgst = (parseFloat(items[i].Menge) * (parseFloat(items[i].Sgst))).toFixed(2);
-
-				data.ASNamt = parseFloat(data.ASNamt) + parseFloat(NetPr) + parseFloat(Cgst) + parseFloat(Igst) + parseFloat(Sgst);
-				// data.ASNamt = parseFloat(data.ASNamt).toFixed(2);
-			}
-			// }
-			data.ASNamt = parseFloat(data.ASNamt).toFixed(2);
-			//PP Change
-			//data.ASNamt = Math.round(data.ASNamt);
-
-			data.InvoiceAmt = data.ASNamt;
-			var InvoiceVal = +this.asnModel.getData().InvoiceAmt + +this.asnModel.getData().UnplannedCost;
-			this.asnModel.getData().InvoiceVal = parseFloat(InvoiceVal).toFixed(2);
-
-			//PP Change
-			//Math.round(InvoiceVal.toFixed(2));
-			this.asnModel.refresh(true);
-
-			// this.onAsnQtyChange(e);
-		},
-
-		onAsnQtyChange: function (oEvent) {
-			var Obj = oEvent.getSource().getParent().getBindingContext("asnModel").getObject();
-
-			var CurrentLineItemIndex = oEvent.getSource().getParent().getBindingContext("asnModel").getPath().split("/")[3];
-
-			var CurrentLineSelected = oEvent.getSource().getParent().getSelected();
-			var CurrentLineAsnQtyDifference = parseFloat(Obj.Con_Qty) - (parseFloat(Obj.Asn_Created) + parseFloat(Obj.Menge));
-
-			var oTable = this.getView().byId("AsnCreateTable");
-			oTable.getItems().forEach(function (r) {
-
-				var Index = r.getBindingContext("asnModel").getPath().split("/")[3];
-
-				var cb = r.$().find('.sapMCb');
-				var oCb = sap.ui.getCore().byId(cb.attr('id'));
-				if (Index > CurrentLineItemIndex) {
-					if (Index == parseInt(CurrentLineItemIndex, 10) + 1 && CurrentLineSelected && parseFloat(CurrentLineAsnQtyDifference) == 0) {
-						oCb.setEnabled(true);
-					} else {
-						oCb.setSelected(false);
-						oTable.setSelectedItem(r, false);
-						oCb.setEnabled(false);
-					}
-				}
-			});
-		},
-		onSelectionChangeEnableDisableCheck: function (oEvent) {
-			var Obj = oEvent.getParameter("listItem").getBindingContext("asnModel").getObject();
-
-			var CurrentLineItemIndex = oEvent.getParameter("listItem").getBindingContext("asnModel").getPath().split("/")[3];
-
-			var CurrentLineSelected = oEvent.getParameter("listItem").getSelected();
-			var CurrentLineAsnQtyDifference = parseFloat(Obj.Con_Qty) - (parseFloat(Obj.Asn_Created) + parseFloat(Obj.Menge));
-
-			var oTable = this.getView().byId("AsnCreateTable");
-			oTable.getItems().forEach(function (r) {
-
-				var Index = r.getBindingContext("asnModel").getPath().split("/")[3];
-
-				var cb = r.$().find('.sapMCb');
-				var oCb = sap.ui.getCore().byId(cb.attr('id'));
-				if (Index > CurrentLineItemIndex) {
-					if (Index == parseInt(CurrentLineItemIndex, 10) + 1 && CurrentLineSelected && parseFloat(CurrentLineAsnQtyDifference) == 0) {
-						oCb.setEnabled(true);
-					} else {
-						oCb.setSelected(false);
-						oTable.setSelectedItem(r, false);
-						oCb.setEnabled(false);
-					}
-				}
-			});
-		},
-
-		// onRowSelect: function (e) {
-		// 	var data = this.asnModel.getData();
-		// 	data.ASNamt = 0;
-		// 	data.InvVal = 0;
-		// 	// this.asnModel.refresh(true);
-		// 	var oTable = this.getView().byId("AsnCreateTable");
-		// 	var contexts = oTable.getSelectedContexts();
-
-		// 	// for (var i = 0; i < contexts.length; i++) {
-		// 	// 	var index = contexts[i].getPath().substring(contexts[i].getPath().lastIndexOf("/") + 1);
-		// 	// 	var item = contexts[i].getProperty();
-		// 	// 	for (var j = 0; j < oTable.getItems().length; j++) {
-		// 	// 		// if (oTable.getItems()[index - 1]) {
-		// 	// 		var previousItem = oTable.getItems()[j].getBindingContext("asnModel").getProperty();
-		// 	// 		var previousIndex = oTable.getItems()[j].getBindingContext("asnModel").getPath()
-		// 	// 			.substring(oTable.getItems()[j].getBindingContext("asnModel").getPath().lastIndexOf("/") + 1);
-		// 	// 		if ((previousItem.Matnr === item.Matnr && previousItem.Ebelp === item.Ebelp) && parseInt(previousIndex) < parseInt(index) &&
-		// 	// 			(!oTable.getItems()[j].getSelected() || (previousItem.Menge !== this.checkData[previousIndex].Menge))) {
-		// 	// 			var forwardItem = oTable.getItems()[j + 1].getBindingContext("asnModel").getProperty();
-		// 	// 			if (forwardItem.Matnr === item.Matnr && forwardItem.Ebelp === item.Ebelp) {
-		// 	// 				oTable.getItems()[j + 1].setSelected(false);
-		// 	// 			}
-		// 	// 			// MessageBox.error("Please select the schedule line item " + previousItem.Etenr);
-		// 	// 			// return;
-		// 	// 		}
-		// 	// 	}
-		// 	// }
-
-		// 	contexts = oTable.getSelectedContexts();
-		// 	if (contexts.length) { //Check whether table has any selected contexts
-		// 		var items = contexts.map(function (c) {
-		// 			return c.getObject();
-		// 		});
-
-		// 		if (items.length) {
-		// 			for (var i = 0; i < items.length; i++) {
-		// 				if (parseFloat(items[i].Menge) >= 0) {
-		// 					if (!items[i].Netpr) {
-		// 						items[i].Netpr = "0";
-		// 					}
-		// 					if (!items[i].Cgst) {
-		// 						items[i].Cgst = "0";
-		// 					}
-		// 					if (!items[i].Igst) {
-		// 						items[i].Igst = "0";
-		// 					}
-		// 					if (!items[i].Sgst) {
-		// 						items[i].Sgst = "0";
-		// 					}
-		// 					var nMenge = parseFloat(items[i].Menge) / parseFloat(items[i].PerUnit);
-		// 					// data.ASNamt = parseFloat(data.ASNamt) + (parseFloat(items[i].Menge) * ((parseFloat(items[i].Netpr)) + (parseFloat(items[i].Cgst)) +
-		// 					// 	(parseFloat(items[i].Igst)) + (parseFloat(items[i].Sgst))));	
-		// 					// var NetPr = (parseFloat(items[i].Menge) * (parseFloat(items[i].Netpr))).toFixed(2);
-		// 					// var Cgst = (parseFloat(items[i].Menge) * (parseFloat(items[i].Cgst))).toFixed(2);
-		// 					// var Igst = (parseFloat(items[i].Menge) * (parseFloat(items[i].Igst))).toFixed(2);
-		// 					// var Sgst = (parseFloat(items[i].Menge) * (parseFloat(items[i].Sgst))).toFixed(2);
-		// 					var NetPr = (nMenge * (parseFloat(items[i].Netpr))).toFixed(2);
-		// 					var Cgst = (nMenge * (parseFloat(items[i].Cgst))).toFixed(2);
-		// 					var Igst = (nMenge * (parseFloat(items[i].Igst))).toFixed(2);
-		// 					var Sgst = (nMenge * (parseFloat(items[i].Sgst))).toFixed(2);
-
-		// 					data.ASNamt = parseFloat(data.ASNamt) + parseFloat(NetPr) + parseFloat(Cgst) + parseFloat(Igst) + parseFloat(Sgst);
-		// 					data.InvVal = parseFloat(data.InvVal) + (parseFloat(items[i].NetprVen) * nMenge);
-		// 				} else {
-		// 					MessageBox.information("Please enter quantity for selected items");
-		// 					return;
-		// 				}
-
-		// 			}
-		// 			data.ASNamt = parseFloat(data.ASNamt).toFixed(2);
-
-		// 			//data.ASNamt = Math.round(data.ASNamt);
-
-		// 			data.InvoiceAmt = data.ASNamt;
-
-		// 			data.InvVal = parseFloat(data.InvVal).toFixed(2);
-
-		// 			//data.InvVal = Math.round(data.InvVal);
-
-		// 			data.InvoiceVal = data.InvVal;
-
-		// 			// var unplannedAmount = this.asnModel.getData().UnplannedCost;
-
-		// 			// unplannedAmount = Math.abs(parseFloat(unplannedAmount));
-		// 			// unplannedAmount = unplannedAmount ? unplannedAmount : 0;
-		// 			// var InvoiceVal = +this.asnModel.getData().InvoiceAmt + unplannedAmount;
-
-		// 			// this.asnModel.getData().InvoiceVal = Math.round(InvoiceVal.toFixed(2));
-
-		// 			this.asnModel.refresh(true);
-		// 		}
-		// 	} else {
-		// 		data.ASNamt = 0.00;
-		// 		data.InvoiceAmt = data.ASNamt;
-
-		// 		var unplannedAmount = this.asnModel.getData().UnplannedCost;
-
-		// 		unplannedAmount = Math.abs(parseFloat(unplannedAmount));
-		// 		unplannedAmount = unplannedAmount ? unplannedAmount : 0;
-		// 		var InvoiceVal = +data.InvoiceAmt + unplannedAmount;
-
-		// 		this.asnModel.getData().InvoiceVal = InvoiceVal.toFixed(2);
-
-		// 		this.asnModel.refresh(true);
-		// 	}
-
-		// 	// this.onSelectionChangeEnableDisableCheck(e);
-		// 	// else {
-		// 	// 	MessageBox.information("Please select the item");
-		// 	// 	e.getSource().setValue();
-		// 	// }
-		// },
 
 		onNavBack: function () {
 			jQuery.sap.require("sap.ui.core.routing.History");
@@ -805,7 +419,8 @@ sap.ui.define([
 						this.onAsnSaveDB();
 					}.bind(this),
 					error: function (error) {
-						MessageBox.error("ASN creation failed");
+						var errormsg = JSON.parse(error.responseText)
+						MessageBox.error(errormsg.error.message.value);
 					}
 				});
 			}
@@ -976,170 +591,12 @@ sap.ui.define([
 			this.QuantFrag.openBy(e.getSource());
 		},
 
-		// onFilter: function () {
-		// 	var oTable = this.getView().byId("AsnCreateTable");
-		// 	var oBindingInfo = oTable.getBinding('items');
-		// 	var Matnr = this.getView().byId("MaterialId").getValue();
-		// 	var Maktx = this.getView().byId("MaterialId").getValue();
-		// 	var Eindt = this.getView().byId("DelDateId").getValue();
-		// 	if (!Eindt) {
-		// 		Eindt = "";
-		// 	}
-		// 	if (!Matnr) {
-		// 		Matnr = "";
-		// 	}
-		// 	//===============================================
-		// 	if (Eindt && Matnr) {
-		// 		var afilter1 =
-		// 			new sap.ui.model.Filter({
-		// 				filters: [
-		// 					new sap.ui.model.Filter({
-		// 						path: 'Maktx',
-		// 						operator: sap.ui.model.FilterOperator.Contains,
-		// 						value1: Maktx
-		// 					}),
-		// 					new sap.ui.model.Filter({
-		// 						path: 'Matnr',
-		// 						operator: sap.ui.model.FilterOperator.Contains,
-		// 						value1: Matnr
-		// 					})
-		// 				],
-		// 				and: false
-		// 			});
+		
 
-		// 		var aFilter2 = new sap.ui.model.Filter({
-		// 			path: 'Eindt',
-		// 			operator: sap.ui.model.FilterOperator.EQ,
-		// 			value1: Eindt
-		// 		});
-
-		// 		var afilters = [afilter1, aFilter2];
-		// 	} else if (Matnr) {
-		// 		afilters = [
-		// 			new sap.ui.model.Filter({
-		// 				filters: [
-		// 					new sap.ui.model.Filter({
-		// 						path: 'Matnr',
-		// 						operator: sap.ui.model.FilterOperator.Contains,
-		// 						value1: Matnr
-		// 					}),
-		// 					new sap.ui.model.Filter({
-		// 						path: 'Maktx',
-		// 						operator: sap.ui.model.FilterOperator.Contains,
-		// 						value1: Maktx
-		// 					})
-		// 				],
-		// 				and: false
-		// 			})
-		// 		];
-		// 	} else if (Eindt) {
-		// 		afilters = [
-		// 			new sap.ui.model.Filter("Eindt", sap.ui.model.FilterOperator.EQ, Eindt)
-		// 		];
-		// 	} else {
-		// 		delete oBindingInfo.filters;
-		// 	}
-		// 	oBindingInfo.filter(afilters);
-		// },
-
-		// onFilterClear: function () {
-		// 	this.getView().byId("DelDateId").setValue("");
-		// 	this.getView().byId("MaterialId").setValue("");
-		// 	var oTable = this.getView().byId("AsnCreateTable");
-		// 	var oBindingInfo = oTable.getBinding('items');
-		// 	oBindingInfo.filter([]);
-		// },
-
-		onMaterialHelpReq: function (oEvent) {
-			this.inputId = oEvent.getSource().getId();
-			var that = this;
-			if (!this.matFrag) {
-				this.matFrag = sap.ui.xmlfragment("sap.fiori.schedulingagreement.view.materialFrag", this);
-				this.matTemp = sap.ui.getCore().byId("materialTempId").clone();
-			}
-
-			sap.ui.getCore().byId("materialF4Id").bindAggregation("items", {
-				path: "oDataModel>/MaterialHelpSet?$filter=Schedule_No eq '" + that.Schedule_No + "'",
-				template: that.matTemp
-			});
-			this.matFrag.open();
-		},
-		materialValueHelpClose: function (oEvent) {
-			var oTable = this.getView().byId("AsnCreateTable");
-			var oBindingInfo = oTable.getBindingInfo('items');
-			var Val = oEvent.getParameter("selectedItem").getBindingContext("oDataModel").getObject().Matnr;
-			this.getView().byId("MaterialId").setValue(Val);
-			var Matnr = this.getView().byId("MaterialId").getValue();
-			var Eindt = this.getView().byId("DelDateId").getValue();
-			if (!Eindt) {
-				Eindt = "";
-			}
-			if (!Matnr) {
-				Matnr = "";
-			}
-			//===============================================
-			var both = false;
-			if (Eindt && Matnr) {
-				both = true;
-			}
-
-			oBindingInfo.filters = [
-				new sap.ui.model.Filter({
-					filters: [
-						new sap.ui.model.Filter({
-							path: 'Matnr',
-							operator: sap.ui.model.FilterOperator.Contains,
-							value1: Matnr
-						}),
-						new sap.ui.model.Filter({
-							path: 'Eindt',
-							operator: sap.ui.model.FilterOperator.EQ,
-							value1: Eindt
-						})
-					],
-					and: both
-				})
-			];
-
-			oTable.bindAggregation('items', oBindingInfo);
-		},
+		
 
 		//	********************************************Upload File start Code ***********************************
-		/*
-		onChange: function (oEvent) {
-			var oUploadCollection = oEvent.getSource();
-
-			// var model = this.getView().getModel();
-			// var oServiceUrl = model.sServiceUrl;
-			// oUploadCollection.setUploadUrl(oServiceUrl + "/LotAttachmentSet");
-
-			// Header Token
-
-			if (this.header_xcsrf_token) {
-				var oCustomerHeaderToken = new sap.m.UploadCollectionParameter({
-					name: "x-csrf-token",
-					value: this.header_xcsrf_token
-				});
-				oUploadCollection.addHeaderParameter(oCustomerHeaderToken);
-			}
-
-		},
-
-		onStartUpload: function (oEvent) {
-			var oUploadCollection = this.getView().byId("UploadCollection");
-			oUploadCollection.upload();
-		},
-
-		onBeforeUploadStarts: function (oEvent) {
-			// Header Slug
-			// var that = this;
-			var oCustomerHeaderSlug = new sap.m.UploadCollectionParameter({
-				name: "slug",
-				value: this.asn + "/" + this.year + "/" + oEvent.getParameter("fileName")
-			});
-			oEvent.getParameters().addHeaderParameter(oCustomerHeaderSlug);
-		},
-		*/
+		
 
 		onAfterItemAdded: function (oEvent) {
 			this.item = oEvent.getParameter("item");
@@ -1167,12 +624,16 @@ sap.ui.define([
 		},
 		_createEntity: function (item, AsnNum) {
 			var oModel = this.getView().getModel();
+			this.hardcodedURL = "";
+				if (window.location.href.includes("site")) {
+					this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
+				}
 			var oData = {
 				AsnNum: AsnNum,
 				mediaType: item.getMediaType(),
 				fileName: item.getFileName(),
 				size: item.getFileObject().size,
-				url: "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/sa/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`,
+				url: this.hardcodedURL + `/sa/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`,
 				//url: this.getView().getModel().sServiceUrl + `/Files(SchNum_ScheduleNum='${schNum}')/content`
 
 			};
@@ -1192,7 +653,11 @@ sap.ui.define([
 
 		_uploadContent: function (item, AsnNum) {
 			//var url = `/sa/odata/v4/catalog/Files(SchNum_ScheduleNum='${schNum}')/content`
-			var url = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1" + `/sa/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`
+			this.hardcodedURL = "";
+				if (window.location.href.includes("site")) {
+					this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
+				}
+			var url = this.hardcodedURL + `/sa/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`
 			item.setUploadUrl(url);
 			var oUploadSet = this.byId("uploadSet");
 			oUploadSet.setHttpRequestMethod("PUT")

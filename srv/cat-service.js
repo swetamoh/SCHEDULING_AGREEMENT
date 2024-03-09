@@ -48,7 +48,7 @@ module.exports = (srv) => {
             return response;
         } catch (error) {
             console.error('Error in PostASN API call:', error);
-            req.reject(400,`Error posting ASN: ${error.message}`);
+            req.reject(400, `Error posting ASN: ${error.message}`);
         }
     });
 
@@ -84,22 +84,21 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList) {
                 };
             });
 
-            let itemRecord = [], filter, supplierRate, rateAggreed;
+            let itemRecord = [], filter, supplierRate = true, rateAggreed = "";
             if (schNum) {
-                itemRecord = await SELECT.from(ASNList).where({ SchNum: schNum });
+                itemRecord = await SELECT.from(ASNList).where({ SCHNUM_SCHEDULENUM: schNum });
             }
 
             // Extracting DocumentRows details
             const documentRows = dataArray.flatMap(data =>
                 data.DocumentRows.map(row => {
 
-                    filter = itemRecord.filter(item => item.ItemCode === row.ItemCode);
-                    if (filter.length > 0) {
-                        rateAggreed = filter[0].RateAggreed;
-                        supplierRate = filter[0].SupplierRate;
-                    } else {
-                        rateAggreed = true;
-                        supplierRate = "";
+                    if (schNum) {
+                        filter = itemRecord.filter(item => item.ItemCode === row.ItemCode && item.SchLineNum === row.LineNum);
+                        if (filter.length > 0) {
+                            rateAggreed = filter[0].RateAggreed;
+                            supplierRate = filter[0].SupplierRate;
+                        }
                     }
 
                     return {

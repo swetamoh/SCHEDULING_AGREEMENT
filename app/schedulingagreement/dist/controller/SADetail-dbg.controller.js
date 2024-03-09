@@ -55,7 +55,7 @@ sap.ui.define([
 				// 	"LoginType": that.loginData.userType
 				// });
 				var unitCode = sessionStorage.getItem("unitCode") || 'P01';
-				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'REP-04-04';
+				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
 				// this.Vendor_No = event.getParameter("arguments").Vendor_No;
@@ -93,7 +93,7 @@ sap.ui.define([
 						}
 					},
 					error: function (oError) {
-						var value = JSON.parse(oError.response.body);
+						var value = JSON.parse(oError.responseText);
 						MessageBox.error(value.error.message.value);
 					}
 				});
