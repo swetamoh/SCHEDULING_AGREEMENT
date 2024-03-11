@@ -2,7 +2,7 @@ const axios = require('axios');
 
 module.exports = (srv) => {
 
-    const { SchedulingAgreements, ASNList } = srv.entities;
+    const { SchedulingAgreements, ASNList, ASNListHeader } = srv.entities;
 
     srv.on('READ', SchedulingAgreements, async (req) => {
         const { AddressCode, UnitCode } = req._queryOptions
@@ -10,7 +10,7 @@ module.exports = (srv) => {
         // const AddressCode = 'JSE-01-01';
         // const UnitCode = 'P01';
 
-        const results = await getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList);
+        const results = await getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, ASNListHeader);
         if (results.error) req.reject(500, results.error);
 
         const expandDocumentRows = req.query.SELECT.columns && req.query.SELECT.columns.some(({ expand, ref }) => expand && ref[0] === "DocumentRows");
@@ -54,7 +54,7 @@ module.exports = (srv) => {
 
 };
 
-async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList) {
+async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, ASNListHeader) {
     try {
         const response = await axios({
             method: 'get',
@@ -69,6 +69,11 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList) {
         if (response.data && response.data.d) {
             const dataArray = JSON.parse(response.data.d);
 
+            let record = [];
+            if (schNum) {
+                record = await SELECT.from(ASNListHeader).where({ SCHNUM_SCHEDULENUM: schNum }).orderBy('createdAt desc');
+            }
+
             const schedulingAgreements = dataArray.map(data => {
                 return {
                     ScheduleNum: data.SchNum,
@@ -80,13 +85,15 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList) {
                     VendorCode: data.VendorCode,
                     VendorName: data.VendorName,
                     PlantCode: data.PlantCode,
-                    PlantName: data.PlantName
+                    PlantName: data.PlantName,
+                    TotalInvNetAmnt: record.length > 0 ? record[0].TotalInvNetAmnt : "",
+                    TotalGstAmnt: record.length > 0 ? record[0].TotalGstAmnt : ""
                 };
             });
 
             let itemRecord = [], filter, supplierRate = true, rateAggreed = "";
             if (schNum) {
-                itemRecord = await SELECT.from(ASNList).where({ SCHNUM_SCHEDULENUM: schNum });
+                itemRecord = await SELECT.from(ASNList).where({ SCHNUM_SCHEDULENUM: schNum }).orderBy('createdAt desc');
             }
 
             // Extracting DocumentRows details
@@ -94,11 +101,11 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList) {
                 data.DocumentRows.map(row => {
 
                     if (schNum) {
-                        filter = itemRecord.filter(item => item.ItemCode === row.ItemCode && item.SchLineNum === row.LineNum);
-                        if (filter.length > 0) {
-                            rateAggreed = filter[0].RateAggreed;
-                            supplierRate = filter[0].SupplierRate;
-                        }
+                        filter = itemRecord.filter(item => item.ItemCode === row.ItemCode);
+                        rateAggreed = filter[0]?.RateAggreed;
+                        rateAggreed = rateAggreed === undefined ? true : rateAggreed;
+                        supplierRate = filter[0]?.SupplierRate;
+                        supplierRate = supplierRate === undefined ? '' : supplierRate;
                     }
 
                     return {
@@ -154,6 +161,7 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList) {
             }
         }
     } catch (error) {
+        req.reject(500, error);
         console.error('Error in API call:', error);
         throw error;
     }
