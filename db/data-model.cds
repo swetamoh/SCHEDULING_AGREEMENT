@@ -63,7 +63,7 @@ entity DocumentRowItems {
       SupplierRate  : Integer;
 }
 
-entity ASNList {
+entity ASNList : managed{
   key UUID           : UUID;
       SchNum         : Association to SchedulingAgreements;
       ItemCode       : String;
@@ -109,7 +109,7 @@ entity ASNList {
       SupplierRate   : Integer;
 }
 
-entity ASNListHeader {
+entity ASNListHeader : managed {
   key AsnNum             : String;
       SchNum             : Association to SchedulingAgreements;
       BillNumber         : String;
