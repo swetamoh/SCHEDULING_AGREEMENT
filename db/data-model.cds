@@ -1,4 +1,4 @@
-namespace my.bookshop;
+namespace my.schedulingagreement;
 
 using {managed} from '@sap/cds/common';
 
