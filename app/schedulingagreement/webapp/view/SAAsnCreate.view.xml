@@ -45,6 +45,12 @@
                 />
             </attributes>
         </ObjectHeader>
+        <MessageStrip
+            id="_IDGenMessageStrip1"
+            type="Information"
+            class="sapUiTinyMargin"
+            text="Please enter manufacturing date under Remarks column for perishable materials."
+        />
         <f:SimpleForm
             id="AsnFormId"
             editable="true"
@@ -114,7 +120,6 @@
                     width="185px"
                     change="onRowSelect"
                 />
-               
                 <Label
                     id="_IDGenLabel210"
                     text="Transport Name"
@@ -220,6 +225,7 @@
                 <Label
                     id="_IDGenLabel27"
                     text="Manf. Month"
+                    visible="false"
                 />
                 <DatePicker
                     id="_IDGenDatePicker2"
@@ -228,15 +234,16 @@
                     valueFormat="yyyyMMdd"
                     displayFormat="long"
                     enabled="true"
+                    visible="false"
                 />
-                <Label
+                <!-- <Label
                     id="_IDGenLabel313"
                     text="Rate ok for all items"
                 />
                 <CheckBox
                     id="rateOk"
                     select="onRateOkChange"
-                />
+                /> -->
             </f:content>
         </f:SimpleForm>
         <IconTabBar id="_IDGenIconTabBar1">
@@ -257,12 +264,11 @@
                             selectionChange="onRowSelect"
                             rememberSelections="true"
                         >
-                            
                             <columns>
-                                <Column
+                                <!-- <Column
                                     id="_IDGenColumn289"
                                     width="5rem"
-                                />
+                                /> -->
                                 <Column
                                     id="_IDGenColumn1"
                                     minScreenWidth="Tablet"
@@ -369,7 +375,7 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                                <Column
+                                <!-- <Column
                                     id="_IDGenColumn212"
                                     minScreenWidth="Tablet"
                                     demandPopin="true"
@@ -396,7 +402,7 @@
                                         text="Rate as per Supplier"
                                         wrapping="true"
                                     />
-                                </Column>
+                                </Column> -->
                                 <Column
                                     id="_IDGenColumn27"
                                     minScreenWidth="Tablet"
@@ -551,7 +557,7 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                                
+
                                 <Column
                                     id="_IDGenColumn25"
                                     minScreenWidth="Tablet"
@@ -566,7 +572,7 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                               
+
                                 <Column
                                     id="_IDGenColumn28"
                                     minScreenWidth="Tablet"
@@ -581,17 +587,30 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                                
+                                <Column
+                                    id="_IDGenColumn222"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                    width="10rem"
+                                    hAlign="Center"
+                                >
+                                    <Label
+                                        id="_IDGenLabel322"
+                                        design="Bold"
+                                        text="Remarks"
+                                        wrapping="true"
+                                    />
+                                </Column>
                             </columns>
                             <items>
                                 <ColumnListItem id="_IDGenColumnListItem1">
                                     <cells>
-                                        <ObjectStatus
+                                        <!-- <ObjectStatus
                                             id="_IDGenObjectStatus1"
                                             text="{= ${asnModel>SupplierRate} > 0 ? 'Rate Mismatch' : 'Rate Matched'}"
                                             icon="{= ${asnModel>SupplierRate} > 0 ? 'sap-icon://alert' : 'sap-icon://sys-enter-2'}"
                                             state="{= ${asnModel>SupplierRate} > 0 ? 'Warning' : 'Success'}"
-                                        />
+                                        /> -->
                                         <Input
                                             id="_IDGenText11"
                                             value="{asnModel>LineNum}"
@@ -624,7 +643,7 @@
                                             id="_IDGenText14"
                                             text="{path:'asnModel>UnitPrice',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
-                                        <CheckBox
+                                        <!-- <CheckBox
                                             id="_IDGenCheckBox1"
                                             selected="{asnModel>RateAggreed}"
                                             select="onRateAgreedChange"
@@ -634,7 +653,7 @@
                                             type="Number"
                                             value="{asnModel>SupplierRate}"
                                             enabled="{= ${asnModel>RateAggreed} === false}"
-                                        />
+                                        /> -->
                                         <Input
                                             id="quantityId"
                                             value="{asnModel>BalanceQty}"
@@ -691,7 +710,11 @@
                                             id="wgtId"
                                             value="{asnModel>WeightInKG}"
                                         />
-                                        
+                                        <DatePicker
+                                            id="_IDGenDatePicker3"
+                                            value="{asnModel>MatExpDate}"
+                                            valueFormat="yyyyMMdd"
+                                        />
                                     </cells>
                                 </ColumnListItem>
                             </items>

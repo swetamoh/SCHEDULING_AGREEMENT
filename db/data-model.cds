@@ -63,7 +63,7 @@ entity DocumentRowItems {
       SupplierRate  : Integer;
 }
 
-entity ASNList : managed{
+entity ASNList : managed {
   key UUID           : UUID;
       SchNum         : Association to SchedulingAgreements;
       ItemCode       : String;
@@ -107,6 +107,7 @@ entity ASNList : managed{
       TOTAL          : String;
       RateAggreed    : Boolean default true;
       SupplierRate   : Integer;
+      MatExpDate     : String;
 }
 
 entity ASNListHeader : managed {

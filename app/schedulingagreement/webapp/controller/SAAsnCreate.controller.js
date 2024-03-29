@@ -45,7 +45,7 @@ sap.ui.define([
 
 			if (event.getParameter("name") === "SAAsnCreate") {
 
-				this.byId("rateOk").setSelected(true);
+				//this.byId("rateOk").setSelected(true);
 
 				this.byId("totalInvNetAmnt").setValueState("None");
 				this.byId("totalGstAmnt").setValueState("None");
@@ -235,7 +235,9 @@ sap.ui.define([
 							this.BillDate = dateFormat.format(DateInstance);
 							this.BillDate = this.formatASNdates(this.BillDate);
 						}
-						if (this.data.ManufacturingMonth) {
+						if (this.data.ManufacturingMonth === undefined) {
+							this.data.ManufacturingMonth = "";
+						}else if (this.data.ManufacturingMonth) {
 							var date = this.data.ManufacturingMonth.substring(4, 6) + "/" + this.data.ManufacturingMonth.substring(6, 8) + "/" + this.data.ManufacturingMonth.substring(0, 4);
 							var DateInstance = new Date(date);
 							var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
@@ -368,7 +370,7 @@ sap.ui.define([
 							"TransportName": this.data.TransportName,
 							"TransportMode": this.data.TransportMode,
 							"DocketNumber": this.data.DocketNumber,
-							"GRDate": this.GRDate,
+							"GRDate": this.data.GRDate,
 							"Packaging": "0",
 							"WeightPerKG": items[i].WeightInKG,
 							"EwayBillNumber": this.data.EwayBillNumber,
@@ -378,7 +380,7 @@ sap.ui.define([
 							"PDIRNumber": this.data.PDIRNumber,
 							"HeatNumber": this.data.HeatNumber,
 							"BatchNumber": this.data.BatchNumber,
-							"ManufacturingMonth": this.ManufacturingMonth
+							"ManufacturingMonth": this.data.ManufacturingMonth
 						};
 						form.RowDetails.push(row);
 					}
@@ -453,8 +455,8 @@ sap.ui.define([
 				"PlantCode": this.data.PlantCode,
 				"VendorCode": this.data.VendorCode,
 				"TotalInvNetAmnt": this.data.TotalInvNetAmnt,
-				"TotalGstAmnt": this.data.TotalGstAmnt,
-				"RateStatus": this.data.DocumentRows.results.every(item => item.RateAggreed === true) ? "Rate Matched" : "Rate Un-Matched"
+				"TotalGstAmnt": this.data.TotalGstAmnt
+				//"RateStatus": this.data.DocumentRows.results.every(item => item.RateAggreed === true) ? "Rate Matched" : "Rate Un-Matched"
 			};
 			var ASNItemData = [];
 
