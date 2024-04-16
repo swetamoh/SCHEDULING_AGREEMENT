@@ -181,9 +181,11 @@ sap.ui.define([
 		onAsnSave: function (event) {
 			// var that = this;
 			// var oModel = this.getOwnerComponent().getModel();
+			sap.ui.core.BusyIndicator.show();
 			this.data = this.asnModel.getData();
 			var form = {
-				"UnitCode": sessionStorage.getItem("unitCode") || "P01",
+				//"UnitCode": sessionStorage.getItem("unitCode") || "P01",
+				"UnitCode": this.data.PlantCode,
 				"CreatedBy": "Manikandan",
 				"CreatedIP": "",
 				"RowDetails": []
@@ -407,6 +409,7 @@ sap.ui.define([
 					}),
 					context: this,
 					success: function (data, textStatus, jqXHR) {
+						sap.ui.core.BusyIndicator.hide();
 						this.AsnNum = data.d.PostASN;
 						MessageBox.success(this.AsnNum + " ASN created succesfully", {
 							actions: [sap.m.MessageBox.Action.OK],
@@ -421,6 +424,7 @@ sap.ui.define([
 						this.onAsnSaveDB();
 					}.bind(this),
 					error: function (error) {
+						sap.ui.core.BusyIndicator.hide();
 						var errormsg = JSON.parse(error.responseText)
 						MessageBox.error(errormsg.error.message.value);
 					}
@@ -455,7 +459,8 @@ sap.ui.define([
 				"PlantCode": this.data.PlantCode,
 				"VendorCode": this.data.VendorCode,
 				"TotalInvNetAmnt": this.data.TotalInvNetAmnt,
-				"TotalGstAmnt": this.data.TotalGstAmnt
+				"TotalGstAmnt": this.data.TotalGstAmnt,
+				"TransporterID": this.data.TransporterID
 				//"RateStatus": this.data.DocumentRows.results.every(item => item.RateAggreed === true) ? "Rate Matched" : "Rate Un-Matched"
 			};
 			var ASNItemData = [];
@@ -505,7 +510,6 @@ sap.ui.define([
 				oModel.create("/ASNListHeader", ASNHeaderData, null, function (oData, response) {
 					//MessageBox.success("ASN created succesfully");
 
-
 				}, function (oError) {
 					try {
 						var error = JSON.parse(oError.response.body);
@@ -517,7 +521,6 @@ sap.ui.define([
 				});
 				for (var i = 0; i < ASNItemData.length; i++) {
 					oModel.create("/ASNList", ASNItemData[i], null, function (oData, response) {
-
 					}, function (oError) {
 						try {
 							var error = JSON.parse(oError.response.body);
@@ -832,6 +835,15 @@ sap.ui.define([
 			if (data[path].OtherCharges) {
 				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].OtherCharges);
 			}
+			if (data[path].IGST) {
+				data[path].IGA = (parseFloat(data[path].IGST) * parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) / 100;;
+			}
+			if (data[path].CGST) {
+				data[path].CGA = (parseFloat(data[path].CGST) * parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) / 100;;
+			}
+			if (data[path].SGST) {
+				data[path].SGA = (parseFloat(data[path].SGST) * parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) / 100;;
+			}
 			this.asnModel.refresh(true);
 		},
 		onPackChange: function (e) {
@@ -886,10 +898,12 @@ sap.ui.define([
 			this.byId("AsnCreateTable").getSelectedItems().forEach(item => {
 				obj = item.getBindingContext("asnModel").getObject();
 				totalInvNetAmnt += parseFloat(obj.BalanceQty) * parseFloat(obj.UnitPrice);
-				totalGstAmnt += parseFloat(obj.IGST) + parseFloat(obj.CGST) + parseFloat(obj.SGST);
+				totalGstAmnt += ((parseFloat(obj.IGST) + parseFloat(obj.CGST) + parseFloat(obj.SGST)) * parseFloat(obj.BalanceQty) * parseFloat(obj.UnitPrice)) / 100;
 			});
 			const totalInvNetAmntCtr = this.byId("totalInvNetAmnt"),
 				totalGstAmntCtr = this.byId("totalGstAmnt");
+			totalInvNetAmntCtr.setValue(totalInvNetAmnt);
+			totalGstAmntCtr.setValue(totalGstAmnt);	
 			if (totalInvNetAmnt === parseFloat(totalInvNetAmntCtr.getValue())) {
 				totalInvNetAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
 			} else {

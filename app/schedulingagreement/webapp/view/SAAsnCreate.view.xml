@@ -141,6 +141,16 @@
                     width="185px"
                 />
                 <Label
+                    id="_IDGenLabel37"
+                    text="Transporter ID"
+                />
+                <Input
+                    id="_IDGenInput15"
+                    type="Text"
+                    value="{asnModel>/TransporterID}"
+                    width="185px"
+                />
+                <Label
                     id="_IDGenLabel230"
                     text="EWAY Bill No"
                 />
@@ -413,7 +423,7 @@
                                     <Label
                                         id="_IDGenLabel34"
                                         design="Bold"
-                                        text="QTY"
+                                        text="Dispatch QTY"
                                         wrapping="true"
                                     />
                                 </Column>

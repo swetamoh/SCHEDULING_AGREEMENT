@@ -133,6 +133,7 @@ entity ASNListHeader : managed {
       TotalInvNetAmnt    : Integer;
       TotalGstAmnt       : Integer;
       RateStatus         : String;
+      TransporterID      : String;
 }
 
 entity Files : managed {

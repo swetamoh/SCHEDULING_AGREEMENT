@@ -161,7 +161,6 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, A
             }
         }
     } catch (error) {
-        req.reject(500, error);
         console.error('Error in API call:', error);
         throw error;
     }
