@@ -239,7 +239,7 @@ sap.ui.define([
 						}
 						if (this.data.ManufacturingMonth === undefined) {
 							this.data.ManufacturingMonth = "";
-						}else if (this.data.ManufacturingMonth) {
+						} else if (this.data.ManufacturingMonth) {
 							var date = this.data.ManufacturingMonth.substring(4, 6) + "/" + this.data.ManufacturingMonth.substring(6, 8) + "/" + this.data.ManufacturingMonth.substring(0, 4);
 							var DateInstance = new Date(date);
 							var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
@@ -388,45 +388,54 @@ sap.ui.define([
 					}
 
 				}
-				var formdatastr = JSON.stringify(form);
-				// this.hardcodedURL = "";
-				// if (window.location.href.includes("launchpad")) {
-				// 	this.hardcodedURL = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1";
-				// }
-				this.hardcodedURL = "";
-				if (window.location.href.includes("site")) {
-					this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
-				}
-				var sPath = this.hardcodedURL + `/sa/odata/v4/catalog/PostASN`;
-				$.ajax({
-					type: "POST",
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					url: sPath,
-					data: JSON.stringify({
-						asnData: formdatastr
-					}),
-					context: this,
-					success: function (data, textStatus, jqXHR) {
-						sap.ui.core.BusyIndicator.hide();
-						this.AsnNum = data.d.PostASN;
-						MessageBox.success(this.AsnNum + " ASN created succesfully", {
-							actions: [sap.m.MessageBox.Action.OK],
-							icon: sap.m.MessageBox.Icon.SUCCESS,
-							title: "Success",
-							onClose: function (oAction) {
-								if (oAction === "OK") {
-									sap.fiori.schedulingagreement.controller.formatter.onNavBack();
-								}
+				var messagecontent = "TOTAL INVOICE AMOUNT is " + this.data.TotalInvNetAmnt + "\n Are you sure you want to proceed for ASN generation?"
+				MessageBox.confirm(messagecontent, {
+					actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CLOSE],
+					icon: sap.m.MessageBox.Icon.QUESTION,
+					onClose: function (oAction) {
+						if (oAction === "OK") {
+							var formdatastr = JSON.stringify(form);
+							// this.hardcodedURL = "";
+							// if (window.location.href.includes("launchpad")) {
+							// 	this.hardcodedURL = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1";
+							// }
+							this.hardcodedURL = "";
+							if (window.location.href.includes("site")) {
+								this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
 							}
-						});
-						this.onAsnSaveDB();
-					}.bind(this),
-					error: function (error) {
-						sap.ui.core.BusyIndicator.hide();
-						var errormsg = JSON.parse(error.responseText)
-						MessageBox.error(errormsg.error.message.value);
+							var sPath = this.hardcodedURL + `/sa/odata/v4/catalog/PostASN`;
+							$.ajax({
+								type: "POST",
+								headers: {
+									'Content-Type': 'application/json'
+								},
+								url: sPath,
+								data: JSON.stringify({
+									asnData: formdatastr
+								}),
+								context: this,
+								success: function (data, textStatus, jqXHR) {
+									sap.ui.core.BusyIndicator.hide();
+									this.AsnNum = data.d.PostASN;
+									MessageBox.success(this.AsnNum + " ASN created succesfully", {
+										actions: [sap.m.MessageBox.Action.OK],
+										icon: sap.m.MessageBox.Icon.SUCCESS,
+										title: "Success",
+										onClose: function (oAction) {
+											if (oAction === "OK") {
+												sap.fiori.schedulingagreement.controller.formatter.onNavBack();
+											}
+										}
+									});
+									this.onAsnSaveDB();
+								}.bind(this),
+								error: function (error) {
+									sap.ui.core.BusyIndicator.hide();
+									var errormsg = JSON.parse(error.responseText)
+									MessageBox.error(errormsg.error.message.value);
+								}
+							});
+						}
 					}
 				});
 			}
@@ -596,12 +605,12 @@ sap.ui.define([
 			this.QuantFrag.openBy(e.getSource());
 		},
 
-		
 
-		
+
+
 
 		//	********************************************Upload File start Code ***********************************
-		
+
 
 		onAfterItemAdded: function (oEvent) {
 			this.item = oEvent.getParameter("item");
@@ -630,9 +639,9 @@ sap.ui.define([
 		_createEntity: function (item, AsnNum) {
 			var oModel = this.getView().getModel();
 			this.hardcodedURL = "";
-				if (window.location.href.includes("site")) {
-					this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
-				}
+			if (window.location.href.includes("site")) {
+				this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
+			}
 			var oData = {
 				AsnNum: AsnNum,
 				mediaType: item.getMediaType(),
@@ -659,9 +668,9 @@ sap.ui.define([
 		_uploadContent: function (item, AsnNum) {
 			//var url = `/sa/odata/v4/catalog/Files(SchNum_ScheduleNum='${schNum}')/content`
 			this.hardcodedURL = "";
-				if (window.location.href.includes("site")) {
-					this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
-				}
+			if (window.location.href.includes("site")) {
+				this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
+			}
 			var url = this.hardcodedURL + `/sa/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`
 			item.setUploadUrl(url);
 			var oUploadSet = this.byId("uploadSet");
@@ -903,7 +912,7 @@ sap.ui.define([
 			const totalInvNetAmntCtr = this.byId("totalInvNetAmnt"),
 				totalGstAmntCtr = this.byId("totalGstAmnt");
 			totalInvNetAmntCtr.setValue(totalInvNetAmnt);
-			totalGstAmntCtr.setValue(totalGstAmnt);	
+			totalGstAmntCtr.setValue(totalGstAmnt);
 			if (totalInvNetAmnt === parseFloat(totalInvNetAmntCtr.getValue())) {
 				totalInvNetAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
 			} else {
