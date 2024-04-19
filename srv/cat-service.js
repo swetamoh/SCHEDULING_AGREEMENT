@@ -32,6 +32,11 @@ module.exports = (srv) => {
         return results.schedulingAgreements;
     });
 
+    //GetTransportModeListAPI
+    srv.on('GetTransportModeList', async (req) => {
+        return GetTransportModeList()
+    });
+
     srv.on('getSchedulingAgreementMaterialQuantityList', async (req) => {
         const { UnitCode, PoNum, MaterialCode, PoLineNum } = req.data;
         // Replace '-' with '/' for PoNum
@@ -70,9 +75,9 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, A
             const dataArray = JSON.parse(response.data.d);
 
             let record = [];
-            if (schNum) {
-                record = await SELECT.from(ASNListHeader).where({ SCHNUM_SCHEDULENUM: schNum }).orderBy('createdAt desc');
-            }
+            // if (schNum) {
+            //     record = await SELECT.from(ASNListHeader).where({ SCHNUM_SCHEDULENUM: schNum }).orderBy('createdAt desc');
+            // }
 
             const schedulingAgreements = dataArray.map(data => {
                 return {
@@ -86,27 +91,27 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, A
                     VendorName: data.VendorName,
                     PlantCode: data.PlantCode,
                     PlantName: data.PlantName,
-                    TotalInvNetAmnt: record.length > 0 ? record[0].TotalInvNetAmnt : "",
-                    TotalGstAmnt: record.length > 0 ? record[0].TotalGstAmnt : ""
+                    TotalInvNetAmnt: "",
+                    TotalGstAmnt: ""
                 };
             });
 
             let itemRecord = [], filter, supplierRate = true, rateAggreed = "";
-            if (schNum) {
-                itemRecord = await SELECT.from(ASNList).where({ SCHNUM_SCHEDULENUM: schNum }).orderBy('createdAt desc');
-            }
+            // if (schNum) {
+            //     itemRecord = await SELECT.from(ASNList).where({ SCHNUM_SCHEDULENUM: schNum }).orderBy('createdAt desc');
+            // }
 
             // Extracting DocumentRows details
             const documentRows = dataArray.flatMap(data =>
                 data.DocumentRows.map(row => {
 
-                    if (schNum) {
-                        filter = itemRecord.filter(item => item.ItemCode === row.ItemCode);
-                        rateAggreed = filter[0]?.RateAggreed;
-                        rateAggreed = rateAggreed === undefined ? true : rateAggreed;
-                        supplierRate = filter[0]?.SupplierRate;
-                        supplierRate = supplierRate === undefined ? '' : supplierRate;
-                    }
+                    // if (schNum) {
+                    //     filter = itemRecord.filter(item => item.ItemCode === row.ItemCode);
+                    //     rateAggreed = filter[0]?.RateAggreed;
+                    //     rateAggreed = rateAggreed === undefined ? true : rateAggreed;
+                    //     supplierRate = filter[0]?.SupplierRate;
+                    //     supplierRate = supplierRate === undefined ? '' : supplierRate;
+                    // }
 
                     return {
                         SchLineNum: row.LineNum,
@@ -144,8 +149,8 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, A
                         TCA: row.TCA,
                         LineValue: row.LineValue,
                         WeightInKG: row.WeightInKG,
-                        RateAggreed: rateAggreed,
-                        SupplierRate: supplierRate,
+                        RateAggreed: true,
+                        SupplierRate: 0,
                         SchNum_ScheduleNum: data.SchNum  // associating with the current Scheduling Agreement
                     };
                 })
@@ -163,6 +168,29 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, A
     } catch (error) {
         console.error('Error in API call:', error);
         throw error;
+    }
+}
+
+async function GetTransportModeList() {
+    try {
+        const response = await axios({
+            method: 'get',
+            url: `https://imperialauto.co:84/IAIAPI.asmx/GetTransportModeList?RequestBy='MA017'`,
+            headers: {
+                'Authorization': 'Bearer ibeMppBlZOk=',
+                'Content-Type': 'application/json'
+            },
+            data: {}
+        });
+
+        const transportData = JSON.parse(response.data.d);
+        return transportData.map(item => ({
+            TransCode: item.TransportMode
+        }));
+
+    } catch (error) {
+        console.error("Error fetching transport mode data:", error);
+        //throw new Error("Failed to fetch account data");
     }
 }
 

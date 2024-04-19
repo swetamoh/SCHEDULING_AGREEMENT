@@ -11,6 +11,10 @@ type AgreementMaterialQuantityInfo {
     Status: String;
 };
 
+type TransType {
+    TransCode: String;
+};
+
 
 service CatalogService {
     entity SchedulingAgreements as projection on my.SchedulingAgreements;
@@ -22,6 +26,7 @@ service CatalogService {
     entity Files as projection on my.Files;
 
     function getSchedulingAgreementMaterialQuantityList(UnitCode:String, PoNum: String, MaterialCode: String, PoLineNum: String) returns array of AgreementMaterialQuantityInfo;
-    
+    function GetTransportModeList() returns array of TransType;
+
     action PostASN(asnData: String) returns String;
 }

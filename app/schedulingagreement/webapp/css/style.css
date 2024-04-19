@@ -1,3 +1,6 @@
 .disablekb input {
     pointer-events: none;
 }
+.messageText .sapMText{
+    font-weight: bolder;
+}

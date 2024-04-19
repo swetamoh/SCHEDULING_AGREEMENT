@@ -38,6 +38,7 @@ entity DocumentRowItems {
       PoQty         : Integer;
       DeliveredQty  : Decimal;
       BalanceQty    : Decimal;
+      Balance       : Decimal;
       UnitPrice     : Decimal;
       UOM           : String;
       Currency      : String;
@@ -77,6 +78,7 @@ entity ASNList : managed {
       HSNCode        : String;
       UnitPrice      : String;
       BalanceQty     : String;
+      Balance        : String;
       DeliveredQty   : Decimal;
       ASSValue       : String;
       Packing        : String;
@@ -108,6 +110,7 @@ entity ASNList : managed {
       RateAggreed    : Boolean default true;
       SupplierRate   : Integer;
       MatExpDate     : String;
+      Pkg            : String;
 }
 
 entity ASNListHeader : managed {
@@ -131,9 +134,13 @@ entity ASNListHeader : managed {
       PlantCode          : String;
       VendorCode         : String;
       TotalInvNetAmnt    : Integer;
-      TotalGstAmnt       : Integer;
+      TotalCGstAmnt      : Integer;
+      TotalSGstAmnt      : Integer;
+      TotalIGstAmnt      : Integer;
+      TotalAmnt          : Integer;
       RateStatus         : String;
       TransporterID      : String;
+      TotalPkg           : Integer;
 }
 
 entity Files : managed {
