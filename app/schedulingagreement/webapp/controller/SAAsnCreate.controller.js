@@ -972,7 +972,7 @@ sap.ui.define([
 			totalCGstAmntCtr.setValue(parseFloat(this.formatAmnt(totalCGstAmnt)));
 			totalSGstAmntCtr.setValue(parseFloat(this.formatAmnt(totalSGstAmnt)));
 			totalIGstAmntCtr.setValue(parseFloat(this.formatAmnt(totalIGstAmnt)));
-			totalAmntCtr.setValue(totalAmnt);
+			totalAmntCtr.setValue(parseFloat(this.formatAmnt(totalAmnt)));
 			totalPkgCtr.setValue(totalPkgtAmnt);
 			if (totalInvNetAmnt === parseFloat(totalInvNetAmntCtr.getValue())) {
 				totalInvNetAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
