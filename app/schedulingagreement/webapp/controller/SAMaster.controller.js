@@ -79,6 +79,7 @@ sap.ui.define([
 					path: "/SchedulingAgreements?search=" + sValue,
 					parameters: {
 						custom: {
+							AddressCode: this.AddressCodeSA,
 							unitCode: this.unitCode
 						}
 					},
