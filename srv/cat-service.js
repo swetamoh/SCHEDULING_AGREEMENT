@@ -149,6 +149,7 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, A
                         TCA: row.TCA,
                         LineValue: row.LineValue,
                         WeightInKG: row.WeightInKG,
+                        ItemRevNumber: row.ItemRevNumber,
                         RateAggreed: true,
                         SupplierRate: 0,
                         SchNum_ScheduleNum: data.SchNum  // associating with the current Scheduling Agreement

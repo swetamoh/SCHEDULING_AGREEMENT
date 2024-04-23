@@ -59,6 +59,7 @@ entity DocumentRowItems {
       TCA           : String;
       LineValue     : String;
       WeightInKG    : String;
+      ItemRevNumber : String;
       SchNum        : Association to SchedulingAgreements;
       RateAggreed   : Boolean default true;
       SupplierRate  : Integer;
@@ -111,6 +112,7 @@ entity ASNList : managed {
       SupplierRate   : Integer;
       MatExpDate     : String;
       Pkg            : String;
+      ItemRevNumber  : String;
 }
 
 entity ASNListHeader : managed {
