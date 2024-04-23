@@ -298,14 +298,22 @@
                 <Label
                     id="_IDGenLabel43"
                     text="Total Packing"
-                    required="true"
                 />
                 <Input
                     id="totalPkg"
-                    type="Number"
+                    type="Text"
                     value="{asnModel>/TotalPkg}"
                     width="20rem"
-                    enabled="false"
+                />
+                <Label
+                    id="_IDGenLabel46"
+                    text="Total Weight"
+                />
+                <Input
+                    id="_IDGenInput46"
+                    type="Text"
+                    value="{asnModel>/TotalWeight}"
+                    width="20rem"
                 />
                 <!-- <Label
                     id="_IDGenLabel313"
@@ -487,6 +495,20 @@
                                         design="Bold"
                                         text="Scheduled Qty"
                                         wrapping="true"
+                                    />
+                                </Column>
+                                <Column
+                                    id="_IDGenColumn47"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                    width="6rem"
+                                    hAlign="Center"
+                                >
+                                    <Label
+                                        id="_IDGenLabel47"
+                                        design="Bold"
+                                        wrapping="true"
+                                        text="Delivered Qty"
                                     />
                                 </Column>
                                 <Column
@@ -770,6 +792,9 @@
                                         /> -->
                                         <Text
                                             text="{asnModel>PoQty}"
+                                        />
+                                        <Text
+                                            text="{asnModel>DeliveredQty}"
                                         />
                                         <Text
                                             text="{asnModel>ASNQty}"

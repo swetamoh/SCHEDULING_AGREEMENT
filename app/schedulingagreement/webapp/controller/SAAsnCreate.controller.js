@@ -78,7 +78,7 @@ sap.ui.define([
 				//this.checkData = [];
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
-				var unitCode = sessionStorage.getItem("unitCode") || "P01";
+				var unitCode = event.getParameter("arguments").UnitCode || "P01";
 				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
 				var oModel = this.getOwnerComponent().getModel();
 				this.getView().setModel(new sap.ui.model.json.JSONModel({ minDate: new Date() }), "dateModel");
@@ -456,7 +456,7 @@ sap.ui.define([
 				});
 			}
 		}else{
-				MessageBox.error("Please fill correct Eway Bill Number");
+				MessageBox.error("Eway Bill Number should be 12 digit");
 				return;
 				
 		}
@@ -946,7 +946,7 @@ sap.ui.define([
 		},
 
 		onRowSelect: function () {
-			let obj, totalInvNetAmnt = 0, totalCGstAmnt = 0, totalSGstAmnt = 0, totalIGstAmnt = 0, totalAmnt = 0, totalPkgtAmnt = 0;
+			let obj, totalInvNetAmnt = 0, totalCGstAmnt = 0, totalSGstAmnt = 0, totalIGstAmnt = 0, totalAmnt = 0;
 			this.byId("AsnCreateTable").getSelectedItems().forEach(item => {
 				obj = item.getBindingContext("asnModel").getObject();
 				totalInvNetAmnt += parseFloat(obj.Balance) * parseFloat(obj.UnitPrice);
@@ -957,23 +957,18 @@ sap.ui.define([
 				}if(parseFloat(obj.IGST) !== 0){
 					totalIGstAmnt += (parseFloat(obj.IGST) * parseFloat(obj.Balance) * parseFloat(obj.UnitPrice)) / 100;
 				}
-				if(parseFloat(obj.Pkg) !== 0){
-					totalPkgtAmnt += parseFloat(obj.Pkg);
-				}
 				totalAmnt = totalInvNetAmnt + totalCGstAmnt + totalSGstAmnt + totalIGstAmnt;
 			});
 			const totalInvNetAmntCtr = this.byId("totalInvNetAmnt"),
 				totalCGstAmntCtr = this.byId("totalCGstAmnt"),
 				totalSGstAmntCtr = this.byId("totalSGstAmnt"),
 				totalIGstAmntCtr = this.byId("totalIGstAmnt"),
-				totalAmntCtr = this.byId("totalAmnt"),
-				totalPkgCtr = this.byId("totalPkg");
+				totalAmntCtr = this.byId("totalAmnt");
 			totalInvNetAmntCtr.setValue(parseFloat(this.formatAmnt(totalInvNetAmnt)));
 			totalCGstAmntCtr.setValue(parseFloat(this.formatAmnt(totalCGstAmnt)));
 			totalSGstAmntCtr.setValue(parseFloat(this.formatAmnt(totalSGstAmnt)));
 			totalIGstAmntCtr.setValue(parseFloat(this.formatAmnt(totalIGstAmnt)));
 			totalAmntCtr.setValue(parseFloat(this.formatAmnt(totalAmnt)));
-			totalPkgCtr.setValue(totalPkgtAmnt);
 			if (totalInvNetAmnt === parseFloat(totalInvNetAmntCtr.getValue())) {
 				totalInvNetAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
 			} else {

@@ -75,7 +75,7 @@
                                         text="Material Desc"
                                     />
                                 </Column>
-                                <Column
+                                <!-- <Column
                                     id="_IDGenColumn41"
                                     minScreenWidth="Tablet"
                                     demandPopin="true"
@@ -84,7 +84,7 @@
                                         id="_IDGenText41"
                                         text="Rev. No."
                                     />
-                                </Column>
+                                </Column> -->
                                 <Column
                                     id="_IDGenColumn3"
                                     minScreenWidth="Tablet"
@@ -176,10 +176,10 @@
                                             id="_IDGenText10"
                                             text="{detailModel>ItemDesc}"
                                         />
-                                        <Text
+                                        <!-- <Text
                                             id="_IDGenText110"
                                             text=""
-                                        />
+                                        /> -->
                                         <Text
                                             id="_IDGenText11"
                                             text="{detailModel>HSNCode}"

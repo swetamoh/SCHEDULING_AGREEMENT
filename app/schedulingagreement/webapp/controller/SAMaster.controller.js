@@ -47,7 +47,8 @@ sap.ui.define([
 					this.byId("masterListId").setSelectedItem(selectedItem, true);
 					var SchNum = selectedItem.getProperty("title").replace(/\//g, '-');
 					this.router.navTo("SADetail", {
-						"Schedule_No": SchNum
+						"Schedule_No": SchNum,
+						"UnitCode": this.unitCode
 					});
 				} else {
 					this.router.navTo('NoData');
@@ -59,7 +60,8 @@ sap.ui.define([
 			var SchNo = oEvent.getParameter("listItem").getProperty("title");
 			var SchNum = SchNo.replace(/\//g, '-');
 			this.router.navTo("SADetail", {
-				"Schedule_No": SchNum
+				"Schedule_No": SchNum,
+				"UnitCode": this.unitCode
 			});
 		},
 
@@ -103,9 +105,9 @@ sap.ui.define([
 		},
 
 		handlePlantClose: function (oEvent) {
-			var data = oEvent.getParameter("selectedItem").getProperty("title");
+			this.unitCodeFilter = oEvent.getParameter("selectedItem").getProperty("title");
 			this.desc = oEvent.getParameter("selectedItem").getProperty("description");
-			sessionStorage.setItem("unitCode", data);
+			//sessionStorage.setItem("unitCode", data);
 			this.PlantF4Frag.destroy();
 			this.PlantF4Frag = "";
 			this.getData();
@@ -116,8 +118,8 @@ sap.ui.define([
 			this.PlantF4Frag = "";
 		},
 		getData: function () {
-			this.unitCode = sessionStorage.getItem("unitCode") || "P01";
-			this.PlantFilter = this.unitCode + "(" + this.desc + ")";
+			this.getView().byId("clearFilterId").setVisible(true);
+			this.PlantFilter = this.unitCodeFilter + "(" + this.desc + ")";
 			this.getView().byId("plantFilterId").setText(this.PlantFilter);
 			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
 			this.byId("masterListId").bindAggregation("items", {
@@ -125,7 +127,25 @@ sap.ui.define([
 				parameters: {
 					custom: {
 						AddressCode: this.AddressCodeSA,
-						UnitCode: this.unitCode
+						UnitCode: this.unitCodeFilter
+					},
+					countMode: 'None'
+				},
+				template: this.listTemp
+			});
+			this.routeToDetail();
+		},
+		onFilterClear: function () {
+			this.getView().byId("clearFilterId").setVisible(false);
+			this.getView().byId("plantFilterId").setText("");
+			var unitCode = sessionStorage.getItem("unitCode") || "P01";
+			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
+			this.byId("masterListId").bindAggregation("items", {
+				path: "/SchedulingAgreements",
+				parameters: {
+					custom: {
+						AddressCode: this.AddressCodeSA,
+						UnitCode: unitCode
 					},
 					countMode: 'None'
 				},

@@ -54,7 +54,7 @@ sap.ui.define([
 				// 	"loginId": that.loginData.loginName,
 				// 	"LoginType": that.loginData.userType
 				// });
-				var unitCode = sessionStorage.getItem("unitCode") || 'P01';
+				this.unitCode = event.getParameter("arguments").UnitCode || 'P01';
 				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
@@ -67,7 +67,7 @@ sap.ui.define([
 					urlParameters: {
 						"$expand": "DocumentRows",
                         AddressCode: this.AddressCodeSA,
-                        UnitCode: unitCode
+                        UnitCode: this.unitCode
                     },
 					success: function (oData) {
 						var filteredPurchaseOrder = oData.results.find(po => po.ScheduleNum === that.Schedule_No);
@@ -125,7 +125,8 @@ sap.ui.define([
 			var that = this;
 			var Schedule_No = that.Schedule_No.replace(/\//g, '-');
 			that.router.navTo("SAAsnCreate", {
-				"Schedule_No": Schedule_No
+				"Schedule_No": Schedule_No,
+				"UnitCode": this.unitCode
 			});
 			// ,App='SA'
 			// this.oDataModel.read("/ASN_HEADERSet(Schedule_No='" + this.Schedule_No + "')?$expand=ASNItemnav",
