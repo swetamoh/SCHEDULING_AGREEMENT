@@ -876,6 +876,7 @@
                 >
                     <upload:UploadSet
                         id="uploadSet"
+                        fileTypes="pdf"
                         instantUpload="false"
                         uploadEnabled="false"
                         afterItemAdded="onAfterItemAdded"
