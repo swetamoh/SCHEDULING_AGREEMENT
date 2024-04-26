@@ -237,8 +237,37 @@ sap.ui.define([
 				var items = contexts.map(function (c) {
 					return c.getObject();
 				});
+
 				for (var i = 0; i < items.length; i++) {
 
+					let allEqualIGST = items => items.every(val => val.IGST === items[0].IGST);
+					let allEqualCGST = items => items.every(val => val.CGST === items[0].CGST);
+					let allEqualSGST = items => items.every(val => val.SGST === items[0].SGST);
+
+					if (!allEqualIGST) {
+						MessageBox.error("Please select line items with same IGST %");
+						sap.ui.core.BusyIndicator.hide();
+
+						return;
+					}
+					if (!allEqualCGST) {
+						MessageBox.error("Please select line items with same CGST %");
+						sap.ui.core.BusyIndicator.hide();
+
+						return;
+					}
+					if (!allEqualSGST) {
+						MessageBox.error("Please select line items with same SGST %");
+						sap.ui.core.BusyIndicator.hide();
+
+						return;
+					}
+					if (items[i].LineNum !== (i+1)) {
+						MessageBox.error("Please enter correct Bill Line No.");
+						sap.ui.core.BusyIndicator.hide();
+
+						return;
+					}
 					if (!items[i].Balance) {
 						MessageBox.error("ASN Quantity is required for selected items");
 						sap.ui.core.BusyIndicator.hide();
