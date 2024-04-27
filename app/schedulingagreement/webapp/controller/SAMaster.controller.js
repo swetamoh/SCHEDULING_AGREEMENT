@@ -24,7 +24,7 @@ sap.ui.define([
 			// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 			// }
 			this.unitCode = sessionStorage.getItem("unitCode") || "P01";
-			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
+			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA");
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
 				parameters: {

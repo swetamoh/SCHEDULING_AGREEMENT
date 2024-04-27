@@ -26,11 +26,13 @@ sap.ui.define(
             url: modulePath + slash + "user-api/attributes",
             type: "GET",
             success: res => {
+             if(!sessionStorage.getItem('AddressCodeSA')){
               if (res.email === 'manishgupta8@kpmg.com' || res.email === 'swetamohanty1@kpmg.com' || res.email === 'mohsinahmad@kpmg.com' || res.email === 'rishabhyadav3@kpmg.com' || res.email === 'vikrantnanda@kpmg.com') {
                 sessionStorage.setItem('AddressCodeSA', 'JSE-01-01');
               } else {
                 sessionStorage.setItem('AddressCodeSA', res.login_name[0]);
               }
+            }
               this.setHeaders(res.login_name[0], res.type[0].substring(0, 1).toUpperCase());
             }
           });
