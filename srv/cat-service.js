@@ -5,12 +5,13 @@ module.exports = (srv) => {
     const { SchedulingAgreements, ASNList, ASNListHeader } = srv.entities;
 
     srv.on('READ', SchedulingAgreements, async (req) => {
-        const { AddressCode, UnitCode } = req._queryOptions
+        const { AddressCode, UnitCode } = req._queryOptions;
+        const loginid = req.headers.loginid;
         const schNum = req._queryOptions.SchNum || "";
         // const AddressCode = 'JSE-01-01';
         // const UnitCode = 'P01';
 
-        const results = await getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, ASNListHeader);
+        const results = await getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, ASNListHeader, loginid);
         if (results.error) req.reject(500, results.error);
 
         const expandDocumentRows = req.query.SELECT.columns && req.query.SELECT.columns.some(({ expand, ref }) => expand && ref[0] === "DocumentRows");
@@ -34,22 +35,25 @@ module.exports = (srv) => {
 
     //GetTransportModeListAPI
     srv.on('GetTransportModeList', async (req) => {
-        return GetTransportModeList()
+        const loginid = req.headers.loginid;
+        return GetTransportModeList(loginid)
     });
 
     srv.on('getSchedulingAgreementMaterialQuantityList', async (req) => {
         const { UnitCode, PoNum, MaterialCode, PoLineNum } = req.data;
+        const loginid = req.headers.loginid;
         // Replace '-' with '/' for PoNum
         const formattedPoNum = PoNum.replace(/-/g, '/');
-        return getSchedulingAgreementMaterialQuantityList(UnitCode, formattedPoNum, MaterialCode, PoLineNum)
+        return getSchedulingAgreementMaterialQuantityList(UnitCode, formattedPoNum, MaterialCode, PoLineNum, loginid)
     });
 
     srv.on('PostASN', async (req) => {
         const asnDataString = req.data.asnData;
         const asnDataParsed = JSON.parse(asnDataString);
         const asnDataFormatted = JSON.stringify(asnDataParsed, null, 2);
+        const loginid = req.headers.loginid;
         try {
-            const response = await postASN(asnDataFormatted);
+            const response = await postASN(asnDataFormatted, loginid);
             return response;
         } catch (error) {
             console.error('Error in PostASN API call:', error);
@@ -59,20 +63,21 @@ module.exports = (srv) => {
 
 };
 
-async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, ASNListHeader) {
+async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, ASNListHeader, loginid) {
     try {
-        const response = await axios({
-            method: 'get',
-            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialList?AddressCode='${AddressCode}'&UnitCode='${UnitCode}'&RequestBy='Manikandan'`,
-            headers: {
-                'Authorization': 'Bearer IncMpsaotdlKHYyyfGiVDg==',
-                'Content-Type': 'application/json'
-            },
-            data: {}
-        });
+        const token = await generateToken(loginid),
+            legApi = await cds.connect.to('Legacy'),
+            response = await legApi.send({
+                query: `GET GetSchedulingAgreementMaterialList?AddressCode='${AddressCode}'&UnitCode='${UnitCode}'&RequestBy='${loginid}'`,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: {}
+            });
 
-        if (response.data && response.data.d) {
-            const dataArray = JSON.parse(response.data.d);
+        if (response.d) {
+            const dataArray = JSON.parse(response.d);
 
             let record = [];
             // if (schNum) {
@@ -163,7 +168,7 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, A
             };
         } else {
             return {
-                error: response.data.ErrorDescription
+                error: response.ErrorDescription
             }
         }
     } catch (error) {
@@ -172,19 +177,20 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, A
     }
 }
 
-async function GetTransportModeList() {
+async function GetTransportModeList(loginid) {
     try {
-        const response = await axios({
-            method: 'get',
-            url: `https://imperialauto.co:84/IAIAPI.asmx/GetTransportModeList?RequestBy='MA017'`,
-            headers: {
-                'Authorization': 'Bearer ibeMppBlZOk=',
-                'Content-Type': 'application/json'
-            },
-            data: {}
-        });
+        const token = await generateToken(loginid),
+            legApi = await cds.connect.to('Legacy'),
+            response = await legApi.send({
+                query: `GET GetTransportModeList?RequestBy='${loginid}'`,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: {}
+            });
 
-        const transportData = JSON.parse(response.data.d);
+        const transportData = JSON.parse(response.d);
         return transportData.map(item => ({
             TransCode: item.TransportMode
         }));
@@ -195,22 +201,23 @@ async function GetTransportModeList() {
     }
 }
 
-async function getSchedulingAgreementMaterialQuantityList(UnitCode, PoNum, MaterialCode, PoLineNum) {
+async function getSchedulingAgreementMaterialQuantityList(UnitCode, PoNum, MaterialCode, PoLineNum, loginid) {
     try {
-        const response = await axios({
-            method: 'get',
-            url: `https://imperialauto.co:84/IAIAPI.asmx/GetSchedulingAgreementMaterialQuantityList?UnitCode='${UnitCode}'&PoNum='${PoNum}'&MaterialCode='${MaterialCode}'&PoLineNum='${PoLineNum}'&RequestBy='Manikandan'`,
-            headers: {
-                'Authorization': 'Bearer IncMpsaotdlKHYyyfGiVDg==',
-                'Content-Type': 'application/json'
-            },
-            data: {}
-        });
+        const token = await generateToken(loginid),
+            legApi = await cds.connect.to('Legacy'),
+            response = await legApi.send({
+                query: `GET GetSchedulingAgreementMaterialQuantityList?UnitCode='${UnitCode}'&PoNum='${PoNum}'&MaterialCode='${MaterialCode}'&PoLineNum='${PoLineNum}'&RequestBy='${loginid}'`,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: {}
+            });
 
-        if (response.data && response.data.d) {
-            return JSON.parse(response.data.d);
+        if (response.d) {
+            return JSON.parse(response.d);
         } else {
-            console.error('Error parsing response:', response.data);
+            console.error('Error parsing response:');
             throw new Error('Error parsing the response from the API.');
         }
     } catch (error) {
@@ -219,25 +226,51 @@ async function getSchedulingAgreementMaterialQuantityList(UnitCode, PoNum, Mater
     }
 }
 
-async function postASN(asnData) {
+async function postASN(asnData, loginid) {
     try {
-        const response = await axios({
-            method: 'post',
-            url: 'https://imperialauto.co:84/IAIAPI.asmx/PostASN',
-            headers: {
-                'Authorization': 'Bearer IncMpsaotdlKHYyyfGiVDg==',
-                'Content-Type': 'application/json'
-            },
-            data: asnData
-        });
+        const token = await generateToken(loginid),
+            legApi = await cds.connect.to('Legacy'),
+            response = await legApi.send({
+                query: `POST PostASN`,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: asnData
+            });
 
-        if (response.data && response.data.SuccessCode) {
-            return response.data.SuccessCode.replace(/,/g, '');
+        if (response.SuccessCode) {
+            return response.SuccessCode.replace(/,/g, '');
         } else {
-            throw new Error(response.data.ErrorDescription || 'Unknown error occurred');
+            throw new Error(response.ErrorDescription || 'Unknown error occurred');
         }
     } catch (error) {
         console.error('Error in postASN:', error);
         throw error;
+    }
+}
+
+async function generateToken(username) {
+    try {
+        const legApi = await cds.connect.to('Legacy'),
+            response = await legApi.send({
+                query: `POST GenerateToken`,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "InputKey": username
+                }
+            });
+
+        if (response.d) {
+            return response.d;
+        } else {
+            console.error('Error parsing token response:', response.data);
+            throw new Error('Error parsing the token response from the API.');
+        }
+    } catch (error) {
+        console.error('Error generating token:', error);
+        throw new Error('Unable to generate token.');
     }
 }

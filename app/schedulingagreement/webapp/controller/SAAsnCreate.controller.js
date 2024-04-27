@@ -188,7 +188,7 @@ sap.ui.define([
 			var form = {
 				//"UnitCode": sessionStorage.getItem("unitCode") || "P01",
 				"UnitCode": this.data.PlantCode,
-				"CreatedBy": "Manikandan",
+				"CreatedBy": this.getView().getModel().getHeaders().loginId,
 				"CreatedIP": "",
 				"RowDetails": []
 			};
