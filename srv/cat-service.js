@@ -1,4 +1,4 @@
-const axios = require('axios');
+// const axios = require('axios');
 
 module.exports = (srv) => {
 
@@ -79,7 +79,7 @@ async function getSchedulingAgreements(AddressCode, UnitCode, schNum, ASNList, A
         if (response.d) {
             const dataArray = JSON.parse(response.d);
 
-            let record = [];
+            // let record = [];
             // if (schNum) {
             //     record = await SELECT.from(ASNListHeader).where({ SCHNUM_SCHEDULENUM: schNum }).orderBy('createdAt desc');
             // }
