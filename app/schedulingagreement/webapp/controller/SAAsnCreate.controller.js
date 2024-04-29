@@ -262,7 +262,7 @@ sap.ui.define([
 
 						return;
 					}
-					if (items[i].LineNum !== (i+1)) {
+					if (parseInt(items[i].LineNum) !== (i+1)) {
 						MessageBox.error("Please enter correct Bill Line No.");
 						sap.ui.core.BusyIndicator.hide();
 
@@ -452,6 +452,7 @@ sap.ui.define([
 							$.ajax({
 								type: "POST",
 								headers: {
+									'loginid': that.getView().getModel().getHeaders().loginId,
 									'Content-Type': 'application/json'
 								},
 								url: sPath,
