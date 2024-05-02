@@ -42,7 +42,7 @@
                             items="{detailModel>/}"
                         >
                             <columns>
-                                <Column
+                                <!-- <Column
                                     id="_IDGenColumn1"
                                     minScreenWidth="Tablet"
                                     demandPopin="true"
@@ -52,7 +52,7 @@
                                         id="_IDGenText1"
                                         text="Item No."
                                     />
-                                </Column>
+                                </Column> -->
                                <Column
                                     id="_IDGenColumn2"
                                     minScreenWidth="Tablet"
@@ -161,10 +161,10 @@
                             <items>
                                 <ColumnListItem id="_IDGenColumnListItem1">
                                     <cells>
-                                       <Text
+                                       <!-- <Text
                                             id="_IDGenText9"
                                             text="{detailModel>LineNum}"
-                                        />
+                                        /> -->
                                         <Link
                                             id="_IDGenLink1"
                                             text="{detailModel>ItemCode}"
