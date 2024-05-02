@@ -25,6 +25,7 @@ sap.ui.define([
 			// }
 			this.unitCode = sessionStorage.getItem("unitCode") || "P04";
 			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA");
+			sap.ui.core.BusyIndicator.show();
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
 				parameters: {
@@ -37,6 +38,7 @@ sap.ui.define([
 				// filters: filter,
 				template: this.listTemp
 			});
+			sap.ui.core.BusyIndicator.hide();
 			this.routeToDetail();
 		},
 
@@ -75,6 +77,7 @@ sap.ui.define([
 				// if (sap.ui.getCore().getModel("filterModel").getData().Vendor_No) {
 				// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 				// }
+				sap.ui.core.BusyIndicator.show();
 				this.byId("masterListId").bindAggregation("items", {
 					path: "/SchedulingAgreements?search=" + sValue,
 					parameters: {
@@ -86,6 +89,7 @@ sap.ui.define([
 					// filters: filter,
 					template: this.listTemp
 				});
+				sap.ui.core.BusyIndicator.hide();
 			}
 			this.routeToDetail();
 		},
@@ -123,6 +127,7 @@ sap.ui.define([
 			this.PlantFilter = this.unitCodeFilter + "(" + this.desc + ")";
 			this.getView().byId("plantFilterId").setText(this.PlantFilter);
 			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
+			sap.ui.core.BusyIndicator.show();
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
 				parameters: {
@@ -134,6 +139,7 @@ sap.ui.define([
 				},
 				template: this.listTemp
 			});
+			sap.ui.core.BusyIndicator.hide();
 			this.routeToDetail();
 		},
 		onFilterClear: function () {
@@ -141,6 +147,7 @@ sap.ui.define([
 			this.getView().byId("plantFilterId").setText("");
 			var unitCode = sessionStorage.getItem("unitCode") || "P01";
 			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
+			sap.ui.core.BusyIndicator.show();
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
 				parameters: {
@@ -152,6 +159,7 @@ sap.ui.define([
 				},
 				template: this.listTemp
 			});
+			sap.ui.core.BusyIndicator.hide();
 			this.routeToDetail();
 		},
 		

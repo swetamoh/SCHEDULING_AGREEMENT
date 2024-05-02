@@ -62,6 +62,7 @@ sap.ui.define([
 
 				// var request = "/PO_HEADERSet(Po_No='" + this.Po_Num + "',Vendor_No='" + this.Vendor_No + "')?$expand=headertoitemNav";
 
+				sap.ui.core.BusyIndicator.show();
 				var request = "/SchedulingAgreements";
 				oModel.read(request, {
 					urlParameters: {
@@ -70,6 +71,7 @@ sap.ui.define([
                         UnitCode: this.unitCode
                     },
 					success: function (oData) {
+						sap.ui.core.BusyIndicator.hide();
 						var filteredPurchaseOrder = oData.results.find(po => po.ScheduleNum === that.Schedule_No);
 						if (filteredPurchaseOrder) {
 							that.detailHeaderModel.setData(filteredPurchaseOrder);
@@ -93,6 +95,7 @@ sap.ui.define([
 						}
 					},
 					error: function (oError) {
+						sap.ui.core.BusyIndicator.hide();
 						var value = JSON.parse(oError.responseText);
 						MessageBox.error(value.error.message.value);
 					}
