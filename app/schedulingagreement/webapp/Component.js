@@ -1,7 +1,6 @@
 /**
  * eslint-disable @sap/ui5-jsdocs/no-jsdoc
  */
-
 sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/m/MessageBox",
@@ -93,6 +92,8 @@ sap.ui.define([
                 // enable routing
                 HashChanger.getInstance().replaceHash("");
                 this.getRouter().initialize();
+                jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.10.0/jszip.js");
+                jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.10.0/xlsx.js");
               },
         });
     }

@@ -23,7 +23,7 @@ sap.ui.define([
 			// if (sap.ui.getCore().getModel("filterModel").getData().Vendor_No) {
 			// 	filter.push(new sap.ui.model.Filter("Vendor_No", "EQ", sap.ui.getCore().getModel("filterModel").getData().Vendor_No));
 			// }
-			this.unitCode = sessionStorage.getItem("unitCode") || "P01";
+			this.unitCode = sessionStorage.getItem("unitCode") || "P04";
 			this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA");
 			this.byId("masterListId").bindAggregation("items", {
 				path: "/SchedulingAgreements",
