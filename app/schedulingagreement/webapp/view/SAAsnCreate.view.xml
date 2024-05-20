@@ -77,7 +77,7 @@
                     />
                     <Label
                         id="_IDGenLabel1"
-                        text=" Invoice Number"
+                        text=" Invoice/Delivery Number"
                         required="true"
                     />
                     <Input
@@ -95,7 +95,7 @@
                     <DatePicker
                         id="DP1"
                         value="{asnModel>/BillDate}"
-                        placeholder="Invoice Date"
+                        placeholder="Invoice/Delivery Date"
                         valueFormat="yyyyMMdd"
                         displayFormat="long"
                         width="20rem"
