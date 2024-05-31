@@ -1,8 +1,11 @@
+
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	"sap/m/MessageBox"
+	"sap/m/MessageBox",
+	"sap/ui/export/Spreadsheet",
+	"sap/ui/export/library"
 
-], function (Controller, MessageBox) {
+], function (Controller, MessageBox, Spreadsheet, exportLibrary) {
 	"use strict";
 
 	return Controller.extend("sap.fiori.schedulingagreement.controller.SAAsnCreate", {
@@ -45,51 +48,26 @@ sap.ui.define([
 
 			if (event.getParameter("name") === "SAAsnCreate") {
 
-				this.byId("rateOk").setSelected(true);
+				//this.byId("rateOk").setSelected(true);
 
 				this.byId("totalInvNetAmnt").setValueState("None");
-				this.byId("totalGstAmnt").setValueState("None");
+				this.byId("totalCGstAmnt").setValueState("None");
+				this.byId("totalSGstAmnt").setValueState("None");
+				this.byId("totalIGstAmnt").setValueState("None");
+				this.byId("totalAmnt").setValueState("None");
+				this.byId("ewayBillNumberId").setValueState("None");
 
 				var that = this;
 				this.getView().byId("AsnCreateTable").removeSelections(true);
-				var datePicker = this.getView().byId("DP1");
+				// var datePicker = this.getView().byId("DP1");
 
-				datePicker.addDelegate({
-					onAfterRendering: function () {
-						datePicker.$().find('INPUT').attr('disabled', true).css('color', '#000000');
-					}
-				}, datePicker);
-
-				//=====================================================================
-
-				// var oTable = this.getView().byId('AsnCreateTable');
-				// oTable.addDelegate({
+				// datePicker.addDelegate({
 				// 	onAfterRendering: function () {
-				// 		var header = this.$().find('thead');
-				// 		var selectAllCb = header.find('.sapMCb');
-				// 		selectAllCb.remove();
-
-				// 		this.getItems().forEach(function (r) {
-				// 			var Index = r.getBindingContext("asnModel").getPath().split("/")[3];
-				// 			// var obj = r.getBindingContext("asnModel").getObject();
-				// 			// var status = obj.Status;
-				// 			var cb = r.$().find('.sapMCb');
-				// 			var oCb = sap.ui.getCore().byId(cb.attr('id'));
-				// 			if (Index == 0) {
-				// 				oCb.setEnabled(true);
-				// 			} else {
-				// 				oCb.setEnabled(false);
-				// 			}
-				// 		});
+				// 		datePicker.$().find('INPUT').attr('disabled', true).css('color', '#000000');
 				// 	}
-				// }, oTable);
+				// }, datePicker);
 
-				//=====================================================================
 
-				// code for date Restriction
-				// this.getView().byId("DP1").setDateValue(new Date());
-				// var fdate = new Date();
-				// this.getView().byId("DP1").setMaxDate(fdate);
 				var Today = new Date();
 				// var Tomorrow = new Date();
 				// var Yesterday = new Date();
@@ -103,7 +81,7 @@ sap.ui.define([
 				//this.checkData = [];
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
-				var unitCode = sessionStorage.getItem("unitCode") || "P01";
+				var unitCode = event.getParameter("arguments").UnitCode || "P01";
 				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
 				var oModel = this.getOwnerComponent().getModel();
 				this.getView().setModel(new sap.ui.model.json.JSONModel({ minDate: new Date() }), "dateModel");
@@ -123,21 +101,25 @@ sap.ui.define([
 
 							that.asnModel.setData(filteredPurchaseOrder);
 							that.asnModel.refresh(true);
-							// var asnModelData = that.getView().getModel("asnModel").getData();
-							// for (var i = 0; i < asnModelData.DocumentRows.results.length; i++) {
-							// 	asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].BalanceQty) * parseFloat(asnModelData.DocumentRows.results[i].UnitPrice);
-							// 	if (asnModelData.DocumentRows.results[i].Packing) {
-							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].Packing);
-							// 	}
-							// 	if (asnModelData.DocumentRows.results[i].Frieght) {
-							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].Frieght);
-							// 	}
-							// 	if (asnModelData.DocumentRows.results[i].OtherCharges) {
-							// 		asnModelData.DocumentRows.results[i].ASSValue = parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].OtherCharges);
-							// 	}
-							// }
+							var asnModelData = that.getView().getModel("asnModel").getData();
+							for (var i = 0; i < asnModelData.DocumentRows.results.length; i++) {
+								asnModelData.DocumentRows.results[i].Balance = parseFloat(asnModelData.DocumentRows.results[i].PoQty) - parseFloat(asnModelData.DocumentRows.results[i].ASNQty);
+								asnModelData.DocumentRows.results[i].Pkg = "0";
+								asnModelData.DocumentRows.results[i].ASSValue = (parseFloat(asnModelData.DocumentRows.results[i].Balance) * parseFloat(asnModelData.DocumentRows.results[i].UnitPrice));
+								if (asnModelData.DocumentRows.results[i].IGST !== "0") {
+									asnModelData.DocumentRows.results[i].IGA = ((parseFloat(asnModelData.DocumentRows.results[i].IGST) * parseFloat(asnModelData.DocumentRows.results[i].Balance) * parseFloat(asnModelData.DocumentRows.results[i].UnitPrice)) / 100);
+								}
+								if (asnModelData.DocumentRows.results[i].CGST !== "0") {
+									asnModelData.DocumentRows.results[i].CGA = ((parseFloat(asnModelData.DocumentRows.results[i].CGST) * parseFloat(asnModelData.DocumentRows.results[i].Balance) * parseFloat(asnModelData.DocumentRows.results[i].UnitPrice)) / 100);
+								}
+								if (asnModelData.DocumentRows.results[i].SGST !== "0") {
+									asnModelData.DocumentRows.results[i].SGA = ((parseFloat(asnModelData.DocumentRows.results[i].SGST) * parseFloat(asnModelData.DocumentRows.results[i].Balance) * parseFloat(asnModelData.DocumentRows.results[i].UnitPrice)) / 100);
+								}
+								asnModelData.DocumentRows.results[i].LineValue = (parseFloat(asnModelData.DocumentRows.results[i].ASSValue) + parseFloat(asnModelData.DocumentRows.results[i].IGA) + parseFloat(asnModelData.DocumentRows.results[i].CGA) + parseFloat(asnModelData.DocumentRows.results[i].SGA));
+
+							}
 							that.asnModel.refresh(true);
-							//that.initializeScheduleNumber();
+							that.initializeAPIS();
 						} else {
 							MessageBox.error("Schedule agreement not found");
 						}
@@ -151,7 +133,30 @@ sap.ui.define([
 			}
 			sap.ui.core.BusyIndicator.hide();
 		},
-
+		initializeAPIS: function () {
+			this.GetTransportModeList()
+			// .catch(function (error) {
+			// 	MessageBox.error("Failed to fetch data: " + error.message);
+			// });
+		},
+		GetTransportModeList: function () {
+			var oModel = this.getView().getModel();
+			return new Promise(function (resolve, reject) {
+				oModel.callFunction("/GetTransportModeList", {
+					method: "GET",
+					success: function (oData, response) {
+						var transportData = oData.results;
+						var oTransportModel = new sap.ui.model.json.JSONModel();
+						oTransportModel.setData({ items: transportData });
+						this.getView().setModel(oTransportModel, "transport");
+						resolve();
+					}.bind(this),
+					error: function (oError) {
+						reject(new Error("Failed to fetch transport data."));
+					}
+				});
+			}.bind(this));
+		},
 		onNavBack: function () {
 			jQuery.sap.require("sap.ui.core.routing.History");
 			var oHistory = sap.ui.core.routing.History.getInstance(),
@@ -179,253 +184,331 @@ sap.ui.define([
 		},
 
 		onAsnSave: function (event) {
-			// var that = this;
+			var that = this;
 			// var oModel = this.getOwnerComponent().getModel();
-			this.data = this.asnModel.getData();
-			var form = {
-				"UnitCode": sessionStorage.getItem("unitCode") || "P01",
-				"CreatedBy": "Manikandan",
-				"CreatedIP": "",
-				"RowDetails": []
-			};
-			var oTable = this.getView().byId("AsnCreateTable");
-			var contexts = oTable.getSelectedContexts();
-			if (this.data.BillNumber) {
-				if (!this.data.BillDate) {
-					MessageBox.error("Please fill the Invoice Date");
+			if (this.validateFields()) {
+				this.data = this.asnModel.getData();
+				var form = {
+					//"UnitCode": sessionStorage.getItem("unitCode") || "P01",
+					"UnitCode": this.data.PlantCode,
+					"CreatedBy": this.getOwnerComponent().getModel().getHeaders().loginId,
+					"CreatedIP": "",
+					"RowDetails": []
+				};
+				var oTable = this.getView().byId("AsnCreateTable");
+				var contexts = oTable.getSelectedContexts();
+				// if (this.data.BillNumber) {
+				// 	if (!this.data.BillDate) {
+				// 		MessageBox.error("Please fill the Invoice Date");
+				// 		return;
+				// 	}
+				// } else {
+				// 	MessageBox.error("Please fill the Invoice Number");
+				// 	return;
+				// }
+
+				if (!this.data.BillNumber && !this.data.DeliveryNumber) {
+					MessageBox.error("Please fill Invoice Number or Delivery Number");
 					return;
 				}
-			} else {
-				MessageBox.error("Please fill the Invoice Number");
-				return;
-			}
-			if (!this.data.TotalInvNetAmnt) {
-				MessageBox.error("Please fill Total Invoice Net Amount");
-				return;
-			} else if (!this.data.TotalGstAmnt) {
-				MessageBox.error("Please fill Total GST Amount");
-				return;
-			}
-			//if (this.getView().byId("uploadSet").getItems().length <= 0) {
-			if (!this.item) {
-				MessageBox.error("Atleast One attachment is required.");
-				return;
-			}
-			if (!contexts.length) {
-				MessageBox.error("No Item Selected");
-				return;
-			} else {
-				var items = contexts.map(function (c) {
-					return c.getObject();
-				});
-				for (var i = 0; i < items.length; i++) {
-
-					if (!items[i].BalanceQty) {
-						MessageBox.error("ASN Quantity is required for selected items");
-						sap.ui.core.BusyIndicator.hide();
-
-						return;
-					} else {
-						if (this.data.BillDate) {
-							var date = this.data.BillDate.substring(4, 6) + "/" + this.data.BillDate.substring(6, 8) + "/" + this.data.BillDate.substring(0, 4);
-							var DateInstance = new Date(date);
-							var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
-								pattern: "dd/MM/yyyy"
-							});
-							this.BillDate = dateFormat.format(DateInstance);
-							this.BillDate = this.formatASNdates(this.BillDate);
-						}
-						if (this.data.ManufacturingMonth) {
-							var date = this.data.ManufacturingMonth.substring(4, 6) + "/" + this.data.ManufacturingMonth.substring(6, 8) + "/" + this.data.ManufacturingMonth.substring(0, 4);
-							var DateInstance = new Date(date);
-							var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
-								pattern: "dd/MM/yyyy"
-							});
-							this.ManufacturingMonth = dateFormat.format(DateInstance);
-							this.ManufacturingMonth = this.formatASNdates(this.ManufacturingMonth);
-						}
-						// if(items[i].IGST === undefined){
-						// 	items[i].IGST = "";
-						// }
-						// if(items[i].IGA === undefined){
-						// 	items[i].IGA = "";
-						// }
-						// if(items[i].CGST === undefined){
-						// 	items[i].CGST = "";
-						// }
-						// if(items[i].CGA === undefined){
-						// 	items[i].CGA = "";
-						// }
-						// if(items[i].SGST === undefined){
-						// 	items[i].SGST = "";
-						// }
-						// if(items[i].SGA === undefined){
-						// 	items[i].SGA = "";
-						// }
-						if (items[i].TCS === undefined) {
-							items[i].TCS = "";
-						}
-						// if(items[i].TCA === undefined){
-						// 	items[i].TCA = "";
-						// }
-						// if(items[i].LineValue === undefined){
-						// 	items[i].LineValue = "";
-						// }
-						// if(items[i].Packages === undefined){
-						// 	items[i].Packages = "";
-						// }
-						// if(items[i].WeightInKG === undefined){
-						// 	items[i].WeightInKG = "";
-						// }
-						if (this.data.TransportName === undefined) {
-							this.data.TransportName = "";
-						}
-						if (this.data.TransportMode === undefined) {
-							this.data.TransportMode = "";
-						}
-						if (this.data.DocketNumber === undefined) {
-							this.data.DocketNumber = "";
-						}
-						if (this.data.GRDate === undefined) {
-							this.data.GRDate = "";
-						} else if (this.data.GRDate) {
-							var date = this.data.GRDate.substring(4, 6) + "/" + this.data.GRDate.substring(6, 8) + "/" + this.data.GRDate.substring(0, 4);
-							var DateInstance = new Date(date);
-							var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
-								pattern: "dd/MM/yyyy"
-							});
-							this.GRDate = dateFormat.format(DateInstance);
-							this.GRDate = this.formatASNdates(this.GRDate);
-						}
-						if (this.data.EwayBillNumber === undefined) {
-							this.data.EwayBillNumber = "";
-						}
-						if (this.data.EwayBillDate === undefined) {
-							this.data.EwayBillDate = "";
-						} else if (this.data.EwayBillDate) {
-							var date = this.data.EwayBillDate.substring(4, 6) + "/" + this.data.EwayBillDate.substring(6, 8) + "/" + this.data.EwayBillDate.substring(0, 4);
-							var DateInstance = new Date(date);
-							var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
-								pattern: "dd/MM/yyyy"
-							});
-							this.EwayBillDate = dateFormat.format(DateInstance);
-							this.EwayBillDate = this.formatASNdates(this.EwayBillDate);
-						}
-						if (this.data.MillNumber === undefined) {
-							this.data.MillNumber = "";
-						}
-						if (this.data.MillName === undefined) {
-							this.data.MillName = "";
-						}
-						if (this.data.PDIRNumber === undefined) {
-							this.data.PDIRNumber = "";
-						}
-						if (this.data.HeatNumber === undefined) {
-							this.data.HeatNumber = "";
-						}
-						if (this.data.BatchNumber === undefined) {
-							this.data.BatchNumber = "";
-						}
-						if (this.data.ManufacturingMonth === undefined) {
-							this.ManufacturingMonth = "";
-						}
-						if (items[i].Packing === undefined) {
-							items[i].Packing = "0";
-						}
-						if (items[i].Frieght === undefined) {
-							items[i].Frieght = "0";
-						}
-						if (items[i].OtherCharges === undefined) {
-							items[i].OtherCharges = "0";
-						}
-
-						var row = {
-							"BillLineNumber": items[i].LineNum,
-							"BillNumber": this.data.BillNumber,
-							"BillDate": this.BillDate,
-							"ScheduleNumber": items[i].SchNum_ScheduleNum,
-							"ScheduleLineNumber": items[i].SchLineNum,
-							"PONumber": items[i].PoNum,
-							"IAIVendorCode": this.data.VendorCode,
-							"IAIItemCode": items[i].ItemCode,
-							"UOM": items[i].UOM,
-							"HSNCode": items[i].HSNCode,
-							"Rate": items[i].UnitPrice,
-							"Quantity": items[i].BalanceQty,
-							"PackingAmount": items[i].Packing,
-							"Freight": items[i].Frieght,
-							"OtherCharges": items[i].OtherCharges,
-							"AssValue": items[i].ASSValue.toString(),
-							"IGST": items[i].IGST,
-							"IGA": items[i].IGA,
-							"CGST": items[i].CGST,
-							"CGA": items[i].CGA,
-							"SGST": items[i].SGST,
-							"SGA": items[i].SGA,
-							"TCS": items[i].TCS,
-							"TCA": items[i].TCA,
-							"LineValue": items[i].LineValue,
-							"TransportName": this.data.TransportName,
-							"TransportMode": this.data.TransportMode,
-							"DocketNumber": this.data.DocketNumber,
-							"GRDate": this.GRDate,
-							"Packaging": "0",
-							"WeightPerKG": items[i].WeightInKG,
-							"EwayBillNumber": this.data.EwayBillNumber,
-							"EwayBillDate": this.EwayBillDate,
-							"MillNumber": this.data.MillNumber,
-							"MillName": this.data.MillName,
-							"PDIRNumber": this.data.PDIRNumber,
-							"HeatNumber": this.data.HeatNumber,
-							"BatchNumber": this.data.BatchNumber,
-							"ManufacturingMonth": this.ManufacturingMonth
-						};
-						form.RowDetails.push(row);
-					}
-
+				if (this.data.BillNumber && !this.data.BillDate) {
+					MessageBox.error("Please fill Invoice Date");
+					return;
 				}
-				var formdatastr = JSON.stringify(form);
-				// this.hardcodedURL = "";
-				// if (window.location.href.includes("launchpad")) {
-				// 	this.hardcodedURL = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1";
-				// }
-				this.hardcodedURL = "";
-				if (window.location.href.includes("site")) {
-					this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
+				if (this.data.DeliveryNumber && !this.data.DeliveryDate) {
+					MessageBox.error("Please fill Delivery Date");
+					return;
 				}
-				var sPath = this.hardcodedURL + `/sa/odata/v4/catalog/PostASN`;
-				$.ajax({
-					type: "POST",
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					url: sPath,
-					data: JSON.stringify({
-						asnData: formdatastr
-					}),
-					context: this,
-					success: function (data, textStatus, jqXHR) {
-						this.AsnNum = data.d.PostASN;
-						MessageBox.success(this.AsnNum + " ASN created succesfully", {
-							actions: [sap.m.MessageBox.Action.OK],
-							icon: sap.m.MessageBox.Icon.SUCCESS,
-							title: "Success",
-							onClose: function (oAction) {
-								if (oAction === "OK") {
-									sap.fiori.schedulingagreement.controller.formatter.onNavBack();
-								}
+
+				if (this.data.EwayBillNumber === undefined) {
+					this.data.EwayBillNumber = "";
+				}
+				if (!this.data.TotalInvNetAmnt) {
+					MessageBox.error("Please fill Total Invoice Net Amount");
+					return;
+				} else if (!this.data.TotalCGstAmnt) {
+					MessageBox.error("Please fill Total CGST Amount");
+					return;
+				}
+				else if (!this.data.TotalSGstAmnt) {
+					MessageBox.error("Please fill Total SGST Amount");
+					return;
+				}
+				else if (!this.data.TotalIGstAmnt) {
+					MessageBox.error("Please fill Total IGST Amount");
+					return;
+				}
+				else if (!this.data.TotalAmnt) {
+					MessageBox.error("Please fill Total Amount");
+					return;
+				}
+				//if (this.getView().byId("uploadSet").getItems().length <= 0) {
+				if (!this.item) {
+					MessageBox.error("Atleast one attachment is required");
+					return;
+				}
+				if (!contexts.length) {
+					MessageBox.error("No item selected");
+					return;
+				} else {
+					var items = contexts.map(function (c) {
+						return c.getObject();
+					});
+
+					for (var i = 0; i < items.length; i++) {
+
+						let allEqualIGST = items => items.every(val => val.IGST === items[0].IGST);
+						let allEqualCGST = items => items.every(val => val.CGST === items[0].CGST);
+						let allEqualSGST = items => items.every(val => val.SGST === items[0].SGST);
+
+						if (!allEqualIGST) {
+							MessageBox.error("Please select line items with same IGST %");
+							sap.ui.core.BusyIndicator.hide();
+
+							return;
+						}
+						if (!allEqualCGST) {
+							MessageBox.error("Please select line items with same CGST %");
+							sap.ui.core.BusyIndicator.hide();
+
+							return;
+						}
+						if (!allEqualSGST) {
+							MessageBox.error("Please select line items with same SGST %");
+							sap.ui.core.BusyIndicator.hide();
+
+							return;
+						}
+						if (parseInt(items[i].LineNum) !== (i + 1)) {
+							MessageBox.error("Please enter correct Bill Line No.");
+							sap.ui.core.BusyIndicator.hide();
+
+							return;
+						}
+						if (!items[i].Balance) {
+							MessageBox.error("ASN Quantity is required for selected items");
+							sap.ui.core.BusyIndicator.hide();
+
+							return;
+						} else {
+							if (this.data.BillDate) {
+								var date = this.data.BillDate.substring(4, 6) + "/" + this.data.BillDate.substring(6, 8) + "/" + this.data.BillDate.substring(0, 4);
+								var DateInstance = new Date(date);
+								var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+									pattern: "dd/MM/yyyy"
+								});
+								this.BillDate = dateFormat.format(DateInstance);
+								this.BillDate = this.formatASNdates(this.BillDate);
 							}
-						});
-						this.onAsnSaveDB();
-					}.bind(this),
-					error: function (error) {
-						var errormsg = JSON.parse(error.responseText)
-						MessageBox.error(errormsg.error.message.value);
+							if (this.data.ManufacturingMonth === undefined) {
+								this.data.ManufacturingMonth = "";
+							} else if (this.data.ManufacturingMonth) {
+								var date = this.data.ManufacturingMonth.substring(4, 6) + "/" + this.data.ManufacturingMonth.substring(6, 8) + "/" + this.data.ManufacturingMonth.substring(0, 4);
+								var DateInstance = new Date(date);
+								var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+									pattern: "dd/MM/yyyy"
+								});
+								this.ManufacturingMonth = dateFormat.format(DateInstance);
+								this.ManufacturingMonth = this.formatASNdates(this.ManufacturingMonth);
+							}
+							// if(items[i].IGST === undefined){
+							// 	items[i].IGST = "";
+							// }
+							// if(items[i].IGA === undefined){
+							// 	items[i].IGA = "";
+							// }
+							// if(items[i].CGST === undefined){
+							// 	items[i].CGST = "";
+							// }
+							// if(items[i].CGA === undefined){
+							// 	items[i].CGA = "";
+							// }
+							// if(items[i].SGST === undefined){
+							// 	items[i].SGST = "";
+							// }
+							// if(items[i].SGA === undefined){
+							// 	items[i].SGA = "";
+							// }
+							if (items[i].TCS === undefined) {
+								items[i].TCS = "";
+							}
+							if (items[i].TCA === undefined) {
+								items[i].TCA = "";
+							}
+							// if(items[i].LineValue === undefined){
+							// 	items[i].LineValue = "";
+							// }
+							// if(items[i].Packages === undefined){
+							// 	items[i].Packages = "";
+							// }
+							// if(items[i].WeightInKG === undefined){
+							// 	items[i].WeightInKG = "";
+							// }
+							if (this.data.TransportName === undefined) {
+								this.data.TransportName = "";
+							}
+							if (this.data.TransportMode === undefined) {
+								this.data.TransportMode = "";
+							}
+							if (this.data.DocketNumber === undefined) {
+								this.data.DocketNumber = "";
+							}
+							if (this.data.GRDate === undefined) {
+								this.data.GRDate = "";
+							} else if (this.data.GRDate) {
+								var date = this.data.GRDate.substring(4, 6) + "/" + this.data.GRDate.substring(6, 8) + "/" + this.data.GRDate.substring(0, 4);
+								var DateInstance = new Date(date);
+								var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+									pattern: "dd/MM/yyyy"
+								});
+								this.GRDate = dateFormat.format(DateInstance);
+								this.GRDate = this.formatASNdates(this.GRDate);
+							}
+							if (this.data.EwayBillDate === undefined) {
+								this.data.EwayBillDate = "";
+							} else if (this.data.EwayBillDate) {
+								var date = this.data.EwayBillDate.substring(4, 6) + "/" + this.data.EwayBillDate.substring(6, 8) + "/" + this.data.EwayBillDate.substring(0, 4);
+								var DateInstance = new Date(date);
+								var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+									pattern: "dd/MM/yyyy"
+								});
+								this.EwayBillDate = dateFormat.format(DateInstance);
+								this.EwayBillDate = this.formatASNdates(this.EwayBillDate);
+							}
+							if (this.data.MillNumber === undefined) {
+								this.data.MillNumber = "";
+							}
+							if (this.data.MillName === undefined) {
+								this.data.MillName = "";
+							}
+							if (this.data.PDIRNumber === undefined) {
+								this.data.PDIRNumber = "";
+							}
+							if (this.data.HeatNumber === undefined) {
+								this.data.HeatNumber = "";
+							}
+							if (this.data.BatchNumber === undefined) {
+								this.data.BatchNumber = "";
+							}
+							if (this.data.ManufacturingMonth === undefined) {
+								this.ManufacturingMonth = "";
+							}
+							if (items[i].Packing === undefined) {
+								items[i].Packing = "0";
+							}
+							if (items[i].Frieght === undefined) {
+								items[i].Frieght = "0";
+							}
+							if (items[i].OtherCharges === undefined) {
+								items[i].OtherCharges = "0";
+							}
+
+							var row = {
+								"BillLineNumber": items[i].LineNum,
+								"BillDate": this.BillDate || this.data.DeliveryDate,
+								"BillNumber": this.data.BillNumber || this.data.DeliveryNumber,
+								"ScheduleNumber": items[i].SchNum_ScheduleNum,
+								"ScheduleLineNumber": items[i].SchLineNum,
+								"PONumber": items[i].PoNum,
+								"IAIVendorCode": this.data.VendorCode,
+								"IAIItemCode": items[i].ItemCode,
+								"UOM": items[i].UOM,
+								"HSNCode": items[i].HSNCode,
+								"Rate": items[i].UnitPrice,
+								"Quantity": items[i].Balance,
+								"PackingAmount": items[i].Packing,
+								"Freight": items[i].Frieght,
+								"OtherCharges": items[i].OtherCharges,
+								"AssValue": items[i].ASSValue.toString(),
+								"IGST": items[i].IGST,
+								"IGA": items[i].IGA,
+								"CGST": items[i].CGST,
+								"CGA": items[i].CGA,
+								"SGST": items[i].SGST,
+								"SGA": items[i].SGA,
+								"TCS": items[i].TCS,
+								"TCA": items[i].TCA,
+								"LineValue": items[i].LineValue,
+								"TransportName": this.data.TransportName,
+								"TransportMode": this.data.TransportMode,
+								"DocketNumber": this.data.DocketNumber,
+								"GRDate": this.data.GRDate,
+								"Packaging": "0",
+								"WeightPerKG": items[i].WeightInKG,
+								"EwayBillNumber": this.data.EwayBillNumber,
+								"EwayBillDate": this.EwayBillDate,
+								"MillNumber": this.data.MillNumber,
+								"MillName": this.data.MillName,
+								"PDIRNumber": this.data.PDIRNumber,
+								"HeatNumber": this.data.HeatNumber,
+								"BatchNumber": this.data.BatchNumber,
+								"ManufacturingMonth": this.data.ManufacturingMonth
+							};
+							form.RowDetails.push(row);
+						}
+
 					}
-				});
+					var messagecontent = "TOTAL AMOUNT = " + this.data.TotalAmnt + " INR" + "\n \n \n Are you sure you want to proceed for ASN generation?";
+					MessageBox.confirm(messagecontent, {
+						actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CLOSE],
+						icon: sap.m.MessageBox.Icon.QUESTION,
+						styleClass: "messageText",
+						onClose: function (oAction) {
+							if (oAction === "OK") {
+								sap.ui.core.BusyIndicator.show();
+								var formdatastr = JSON.stringify(form);
+								// this.hardcodedURL = "";
+								// if (window.location.href.includes("launchpad")) {
+								// 	this.hardcodedURL = "https://impautosuppdev.launchpad.cfapps.ap10.hana.ondemand.com/a91d9b1c-a59b-495f-aee2-3d22b25c7a3c.schedulingagreement.sapfiorischedulingagreement-0.0.1";
+								// }
+								this.hardcodedURL = "";
+								if (window.location.href.includes("site")) {
+									this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
+								}
+								var sPath = this.hardcodedURL + `/sa/odata/v4/catalog/PostASN`;
+								$.ajax({
+									type: "POST",
+									headers: {
+										'loginid': that.getView().getModel().getHeaders().loginId,
+										'Content-Type': 'application/json'
+									},
+									url: sPath,
+									data: JSON.stringify({
+										asnData: formdatastr
+									}),
+									context: this,
+									success: function (data, textStatus, jqXHR) {
+										sap.ui.core.BusyIndicator.hide();
+										this.AsnNum = data.d.PostASN;
+										MessageBox.success(this.AsnNum + " ASN created succesfully", {
+											actions: [sap.m.MessageBox.Action.OK],
+											icon: sap.m.MessageBox.Icon.SUCCESS,
+											title: "Success",
+											onClose: function (oAction) {
+												if (oAction === "OK") {
+													sap.fiori.schedulingagreement.controller.formatter.onNavBack();
+												}
+											}
+										});
+										that.onAsnSaveDB(this.AsnNum);
+									}.bind(this),
+									error: function (error) {
+										sap.ui.core.BusyIndicator.hide();
+										var errormsg = JSON.parse(error.responseText)
+										MessageBox.error(errormsg.error.message.value);
+									}
+								});
+							}
+						}
+					});
+				}
+			} else {
+				MessageBox.error("Eway Bill Number should be 12 digit");
+				return;
+
 			}
 		},
-		onAsnSaveDB: function () {
+		onAsnSaveDB: function (ASNNUM) {
 			// var that = this;
 			//this.getView().byId("MaterialSearchId").setValue("");
 			//this.onRowSelect(event);
@@ -434,9 +517,11 @@ sap.ui.define([
 			this.data = this.asnModel.getData();
 			var ASNHeaderData = {
 				"SchNum_ScheduleNum": this.data.ScheduleNum,
-				"AsnNum": this.AsnNum,
+				"AsnNum": ASNNUM,
 				"BillDate": this.data.BillDate,
 				"BillNumber": this.data.BillNumber,
+				"DeliveryNumber": this.data.DeliveryNumber,
+				"DeliveryDate": this.data.DeliveryDate,
 				"DocketNumber": this.data.DocketNumber,
 				"GRDate": this.data.GRDate,
 				"TransportName": this.data.TransportName,
@@ -453,28 +538,47 @@ sap.ui.define([
 				"PlantCode": this.data.PlantCode,
 				"VendorCode": this.data.VendorCode,
 				"TotalInvNetAmnt": this.data.TotalInvNetAmnt,
-				"TotalGstAmnt": this.data.TotalGstAmnt,
-				"RateStatus": this.data.DocumentRows.results.every(item => item.RateAggreed === true) ? "Rate Matched" : "Rate Un-Matched"
+				"TotalCGstAmnt": this.data.TotalCGstAmnt,
+				"TotalSGstAmnt": this.data.TotalSGstAmnt,
+				"TotalIGstAmnt": this.data.TotalIGstAmnt,
+				"TotalAmnt": this.data.TotalAmnt,
+				"TransporterID": this.data.TransporterID
+				//"RateStatus": this.data.DocumentRows.results.every(item => item.RateAggreed === true) ? "Rate Matched" : "Rate Un-Matched"
 			};
 			var ASNItemData = [];
 
 			var oTable = this.getView().byId("AsnCreateTable");
 			var contexts = oTable.getSelectedContexts();
 
-			if (ASNHeaderData.BillNumber) {
-				if (!ASNHeaderData.BillDate) {
-					MessageBox.error("Please fill the Invoice Date");
-					return;
-				}
-			} else {
-				MessageBox.error("Please fill the Invoice Number");
+			if (!ASNHeaderData.BillNumber && !ASNHeaderData.DeliveryNumber) {
+				MessageBox.error("Please fill Invoice Number or Delivery Number");
+				return;
+			}
+			if (ASNHeaderData.BillNumber && !ASNHeaderData.BillDate) {
+				MessageBox.error("Please fill Invoice Date");
+				return;
+			}
+			if (ASNHeaderData.DeliveryNumber && !ASNHeaderData.DeliveryDate) {
+				MessageBox.error("Please fill Delivery Date");
 				return;
 			}
 			if (!ASNHeaderData.TotalInvNetAmnt) {
 				MessageBox.error("Please fill Total Invoice Net Amount");
 				return;
-			} else if (!ASNHeaderData.TotalGstAmnt) {
-				MessageBox.error("Please fill Total GST Amount");
+			} else if (!ASNHeaderData.TotalCGstAmnt) {
+				MessageBox.error("Please fill Total CGST Amount");
+				return;
+			}
+			else if (!ASNHeaderData.TotalSGstAmnt) {
+				MessageBox.error("Please fill Total SGST Amount");
+				return;
+			}
+			else if (!ASNHeaderData.TotalIGstAmnt) {
+				MessageBox.error("Please fill Total IGST Amount");
+				return;
+			}
+			else if (!ASNHeaderData.TotalAmnt) {
+				MessageBox.error("Please fill Total Amount");
 				return;
 			}
 
@@ -488,13 +592,17 @@ sap.ui.define([
 
 				for (var i = 0; i < items.length; i++) {
 
-					if (!items[i].BalanceQty) {
+					if (!items[i].Balance) {
 						MessageBox.error("ASN Quantity is required for selected items");
 						sap.ui.core.BusyIndicator.hide();
 
 						return;
 					} else {
 						items[i].ASSValue = items[i].ASSValue.toString();
+						items[i].CGA = items[i].CGA.toString();
+						items[i].LineValue = items[i].LineValue.toString();
+						items[i].SGA = items[i].SGA.toString();
+						items[i].IGA = items[i].IGA.toString();
 						ASNItemData.push(items[i]);
 
 					}
@@ -502,7 +610,6 @@ sap.ui.define([
 				}
 				oModel.create("/ASNListHeader", ASNHeaderData, null, function (oData, response) {
 					//MessageBox.success("ASN created succesfully");
-
 
 				}, function (oError) {
 					try {
@@ -515,7 +622,6 @@ sap.ui.define([
 				});
 				for (var i = 0; i < ASNItemData.length; i++) {
 					oModel.create("/ASNList", ASNItemData[i], null, function (oData, response) {
-
 					}, function (oError) {
 						try {
 							var error = JSON.parse(oError.response.body);
@@ -526,10 +632,10 @@ sap.ui.define([
 						}
 					});
 				}
-				var AsnNum = this.AsnNum.replace(/\//g, '-');
-				var oData = {
-					AsnNum: AsnNum
-				};
+				var AsnNum = ASNNUM.replace(/\//g, '-');
+				// var oData = {
+				// 	AsnNum: AsnNum
+				// };
 				// oModel.update(`/Files(InvoiceNo='${this.invoiceNo}')`, oData, {
 				// 	merge: true,
 				// 	success: function () {
@@ -591,12 +697,12 @@ sap.ui.define([
 			this.QuantFrag.openBy(e.getSource());
 		},
 
-		
 
-		
+
+
 
 		//	********************************************Upload File start Code ***********************************
-		
+
 
 		onAfterItemAdded: function (oEvent) {
 			this.item = oEvent.getParameter("item");
@@ -625,9 +731,9 @@ sap.ui.define([
 		_createEntity: function (item, AsnNum) {
 			var oModel = this.getView().getModel();
 			this.hardcodedURL = "";
-				if (window.location.href.includes("site")) {
-					this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
-				}
+			if (window.location.href.includes("site")) {
+				this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
+			}
 			var oData = {
 				AsnNum: AsnNum,
 				mediaType: item.getMediaType(),
@@ -654,9 +760,9 @@ sap.ui.define([
 		_uploadContent: function (item, AsnNum) {
 			//var url = `/sa/odata/v4/catalog/Files(SchNum_ScheduleNum='${schNum}')/content`
 			this.hardcodedURL = "";
-				if (window.location.href.includes("site")) {
-					this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
-				}
+			if (window.location.href.includes("site")) {
+				this.hardcodedURL = jQuery.sap.getModulePath("sap.fiori.schedulingagreement");
+			}
 			var url = this.hardcodedURL + `/sa/odata/v4/catalog/Files(AsnNum='${AsnNum}')/content`
 			item.setUploadUrl(url);
 			var oUploadSet = this.byId("uploadSet");
@@ -771,14 +877,14 @@ sap.ui.define([
 		onTypeMissmatch: function (oEvent) {
 			MessageBox.error("Only PDF files are allowed.");
 		},
-		onInvNoChange: function (oEvent) {
-
+		onInvNoChange: function (oEvent, dateControl) {
+			this.byId(dateControl).setValue("");
 			if (oEvent.getParameter("value") == "") {
-				this.getView().byId("DP1").setEnabled(false);
-				this.getView().byId("DP1").setValue("");
+				// this.getView().byId("DP1").setEnabled(true);
+				// this.getView().byId("DP1").setValue("");
 				this.getView().byId("uploadSet").setUploadEnabled(false);
 			} else {
-				this.getView().byId("DP1").setEnabled(true);
+				// this.getView().byId("DP1").setEnabled(true);
 				this.getView().byId("uploadSet").setUploadEnabled(true);
 			}
 		},
@@ -819,18 +925,30 @@ sap.ui.define([
 				obj = e.getSource().getParent().getBindingContext("asnModel").getObject();
 			var path = e.getSource().getParent().getBindingContextPath().split("/")[3];
 			var data = this.asnModel.getData().DocumentRows.results;
-			data[path].BalanceQty = val;
-			data[path].ASSValue = parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice);
+			data[path].Balance = val;
+			data[path].ASSValue = (parseFloat(data[path].Balance) * parseFloat(data[path].UnitPrice));
 			if (data[path].Packing) {
-				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].Packing);
+				data[path].ASSValue = (parseFloat(data[path].ASSValue) + parseFloat(data[path].Packing));
 			}
 			if (data[path].Frieght) {
-				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].Frieght);
+				data[path].ASSValue = (parseFloat(data[path].ASSValue) + parseFloat(data[path].Frieght));
 			}
 			if (data[path].OtherCharges) {
-				data[path].ASSValue = parseFloat(data[path].ASSValue) + parseFloat(data[path].OtherCharges);
+				data[path].ASSValue = (parseFloat(data[path].ASSValue) + parseFloat(data[path].OtherCharges));
 			}
+			if (data[path].IGST !== "0") {
+				data[path].IGA = ((parseFloat(data[path].IGST) * parseFloat(data[path].Balance) * parseFloat(data[path].UnitPrice)) / 100);
+			}
+			if (data[path].CGST !== "0") {
+				data[path].CGA = ((parseFloat(data[path].CGST) * parseFloat(data[path].Balance) * parseFloat(data[path].UnitPrice)) / 100);
+			}
+			if (data[path].SGST !== "0") {
+				data[path].SGA = ((parseFloat(data[path].SGST) * parseFloat(data[path].Balance) * parseFloat(data[path].UnitPrice)) / 100);
+			}
+			data[path].LineValue = (parseFloat(data[path].ASSValue) + parseFloat(data[path].IGA) + parseFloat(data[path].CGA) + parseFloat(data[path].SGA));
 			this.asnModel.refresh(true);
+			this.onRowSelect();
+
 		},
 		onPackChange: function (e) {
 			const val = e.getParameter("value") || 0;
@@ -839,7 +957,7 @@ sap.ui.define([
 			data[path].Packing = val;
 			if (data[path].Frieght === undefined) { data[path].Frieght = "0" }
 			if (data[path].OtherCharges === undefined) { data[path].OtherCharges = "0" }
-			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].Frieght) + parseFloat(data[path].OtherCharges);
+			data[path].ASSValue = ((parseFloat(data[path].Balance) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].Frieght) + parseFloat(data[path].OtherCharges));
 			this.asnModel.refresh(true);
 		},
 		onFreightChange: function (e) {
@@ -849,7 +967,7 @@ sap.ui.define([
 			data[path].Frieght = val;
 			if (data[path].Packing === undefined) { data[path].Packing = "0" }
 			if (data[path].OtherCharges === undefined) { data[path].OtherCharges = "0" }
-			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].Frieght) + parseFloat(data[path].OtherCharges);
+			data[path].ASSValue = ((parseFloat(data[path].Balance) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].Frieght) + parseFloat(data[path].OtherCharges));
 			this.asnModel.refresh(true);
 		},
 		onOtherChange: function (e) {
@@ -859,7 +977,7 @@ sap.ui.define([
 			data[path].OtherCharges = val;
 			if (data[path].Frieght === undefined) { data[path].Frieght = "0" }
 			if (data[path].Packing === undefined) { data[path].Packing = "0" }
-			data[path].ASSValue = (parseFloat(data[path].BalanceQty) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].Frieght) + parseFloat(data[path].OtherCharges);
+			data[path].ASSValue = ((parseFloat(data[path].Balance) * parseFloat(data[path].UnitPrice)) + parseFloat(data[path].Packing) + parseFloat(data[path].Frieght) + parseFloat(data[path].OtherCharges));
 			this.asnModel.refresh(true);
 		},
 
@@ -880,24 +998,313 @@ sap.ui.define([
 		},
 
 		onRowSelect: function () {
-			let obj, totalInvNetAmnt = 0, totalGstAmnt = 0;
+			let obj, totalInvNetAmnt = 0, totalCGstAmnt = 0, totalSGstAmnt = 0, totalIGstAmnt = 0, totalAmnt = 0;
 			this.byId("AsnCreateTable").getSelectedItems().forEach(item => {
 				obj = item.getBindingContext("asnModel").getObject();
-				totalInvNetAmnt += parseFloat(obj.BalanceQty) * parseFloat(obj.UnitPrice);
-				totalGstAmnt += parseFloat(obj.IGST) + parseFloat(obj.CGST) + parseFloat(obj.SGST);
+				totalInvNetAmnt += (parseFloat(obj.Balance) * parseFloat(obj.UnitPrice));
+				if (parseFloat(obj.CGST) !== 0) {
+					totalCGstAmnt += ((parseFloat(obj.CGST) * parseFloat(obj.Balance) * parseFloat(obj.UnitPrice)) / 100);
+				} if (parseFloat(obj.SGST) !== 0) {
+					totalSGstAmnt += ((parseFloat(obj.SGST) * parseFloat(obj.Balance) * parseFloat(obj.UnitPrice)) / 100);
+				} if (parseFloat(obj.IGST) !== 0) {
+					totalIGstAmnt += ((parseFloat(obj.IGST) * parseFloat(obj.Balance) * parseFloat(obj.UnitPrice)) / 100);
+				}
+				totalAmnt = totalInvNetAmnt + totalCGstAmnt + totalSGstAmnt + totalIGstAmnt;
 			});
 			const totalInvNetAmntCtr = this.byId("totalInvNetAmnt"),
-				totalGstAmntCtr = this.byId("totalGstAmnt");
+				totalCGstAmntCtr = this.byId("totalCGstAmnt"),
+				totalSGstAmntCtr = this.byId("totalSGstAmnt"),
+				totalIGstAmntCtr = this.byId("totalIGstAmnt"),
+				totalAmntCtr = this.byId("totalAmnt");
+			totalInvNetAmntCtr.setValue(parseFloat(this.formatAmnt(totalInvNetAmnt)));
+			totalCGstAmntCtr.setValue(parseFloat(this.formatAmnt(totalCGstAmnt)));
+			totalSGstAmntCtr.setValue(parseFloat(this.formatAmnt(totalSGstAmnt)));
+			totalIGstAmntCtr.setValue(parseFloat(this.formatAmnt(totalIGstAmnt)));
+			totalAmntCtr.setValue(parseFloat(this.formatAmnt(totalAmnt)));
 			if (totalInvNetAmnt === parseFloat(totalInvNetAmntCtr.getValue())) {
 				totalInvNetAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
 			} else {
 				totalInvNetAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
 			}
 
-			if (totalGstAmnt === parseFloat(totalGstAmntCtr.getValue())) {
-				totalGstAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
+			if (totalCGstAmnt === parseFloat(totalCGstAmntCtr.getValue())) {
+				totalCGstAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
 			} else {
-				totalGstAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+				totalCGstAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+			}
+
+			if (totalSGstAmnt === parseFloat(totalSGstAmntCtr.getValue())) {
+				totalSGstAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
+			} else {
+				totalSGstAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+			}
+
+			if (totalIGstAmnt === parseFloat(totalIGstAmntCtr.getValue())) {
+				totalIGstAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
+			} else {
+				totalIGstAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+			}
+
+			if (totalAmnt === parseFloat(totalAmntCtr.getValue())) {
+				totalAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
+			} else {
+				totalAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+			}
+		},
+		onAmtChange: function () {
+			let obj, totalInvNetAmnt = 0, totalCGstAmnt = 0, totalSGstAmnt = 0, totalIGstAmnt = 0, totalAmnt;
+			this.byId("AsnCreateTable").getSelectedItems().forEach(item => {
+				obj = item.getBindingContext("asnModel").getObject();
+				totalInvNetAmnt += (parseFloat(obj.Balance) * parseFloat(obj.UnitPrice));
+				if (parseFloat(obj.CGST) !== 0) {
+					totalCGstAmnt += ((parseFloat(obj.CGST) * parseFloat(obj.Balance) * parseFloat(obj.UnitPrice)) / 100);
+				} if (parseFloat(obj.SGST) !== 0) {
+					totalSGstAmnt += ((parseFloat(obj.SGST) * parseFloat(obj.Balance) * parseFloat(obj.UnitPrice)) / 100);
+				} if (parseFloat(obj.IGST) !== 0) {
+					totalIGstAmnt += ((parseFloat(obj.IGST) * parseFloat(obj.Balance) * parseFloat(obj.UnitPrice)) / 100);
+				}
+				totalAmnt = totalInvNetAmnt + totalCGstAmnt + totalSGstAmnt + totalIGstAmnt;
+
+			});
+			const totalInvNetAmntCtr = this.byId("totalInvNetAmnt"),
+				totalCGstAmntCtr = this.byId("totalCGstAmnt"),
+				totalSGstAmntCtr = this.byId("totalSGstAmnt"),
+				totalIGstAmntCtr = this.byId("totalIGstAmnt"),
+				totalAmntCtr = this.byId("totalAmnt");
+			if (totalInvNetAmnt === parseFloat(totalInvNetAmntCtr.getValue())) {
+				totalInvNetAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
+			} else {
+				totalInvNetAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+			}
+
+			if (totalCGstAmnt === parseFloat(totalCGstAmntCtr.getValue())) {
+				totalCGstAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
+			} else {
+				totalCGstAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+			}
+
+			if (totalSGstAmnt === parseFloat(totalSGstAmntCtr.getValue())) {
+				totalSGstAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
+			} else {
+				totalSGstAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+			}
+
+			if (totalIGstAmnt === parseFloat(totalIGstAmntCtr.getValue())) {
+				totalIGstAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
+			} else {
+				totalIGstAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+			}
+
+			if (totalAmnt === parseFloat(totalAmntCtr.getValue())) {
+				totalAmntCtr.setValueState("Success").setValueStateText("Amount Matched");
+			} else {
+				totalAmntCtr.setValueState("Warning").setValueStateText("Amount Mismatch");
+			}
+		},
+		validateFields: function () {
+			var bValidationError = true, oInput = this.getView().byId("ewayBillNumberId"), oBinding = oInput.getBinding("value");
+			if (oInput.getValue()) {
+				try {
+					oBinding.getType().validateValue(oInput.getValue());
+					oInput.setValueState("None");
+					bValidationError = true;
+				} catch (oException) {
+					oInput.setValueState("Error");
+					bValidationError = false;
+				}
+			}
+			return bValidationError;
+		},
+		formatAmnt: function (oAmount) {
+			if (oAmount) {
+				var oFormat = sap.ui.core.format.NumberFormat.getFloatInstance({
+					"groupingEnabled": false,
+					"groupingSeparator": '',
+					"groupingSize": 0,
+					"decimalSeparator": ".",
+					"decimals": 2
+				});
+				return oFormat.format(oAmount);
+			}
+			return "0.00";
+		},
+		onDataExport: function () {
+			var oSettings, aColumns,
+				aColumnNames = [];
+			var aExportData = this.asnModel.getData().DocumentRows.results;
+			if (aExportData) {
+				aColumns = this.getView().byId("AsnCreateTable").getColumns();
+				// for (var i = 0; i < aColumns.length; i++) {
+				// 	var sColumn = aColumns[i].getHeader().getText();
+				// 	if (sColumn) {
+				// 		aColumnNames.push({
+				// 			label: aColumns[i].getHeader().getText(),
+				// 			property: sColumn,
+				// 			type: "string"
+				// 		});
+				// 	}
+				// }
+				aColumnNames = [{
+					label: "Bill Line No",
+					property: "LineNum"
+				}, {
+					label: "SCH No",
+					property: "SchNum_ScheduleNum"
+				}, {
+					label: "Schedule Line",
+					property: "SchLineNum"
+				}, {
+					label: "PO No",
+					property: "PoNum"
+				}, {
+					label: "IAI Item Code",
+					property: "ItemCode"
+				}, {
+					label: "UOM",
+					property: "UOM"
+				}, {
+					label: "HSN Code",
+					property: "HSNCode"
+				}, {
+					label: "Rate",
+					property: "UnitPrice"
+				}, {
+					label: "Currency",
+					property: "Currency"
+				}, {
+					label: "Scheduled Qty",
+					property: "PoQty"
+				}, {
+					label: "Delivered Qty",
+					property: "DeliveredQty"
+				}, {
+					label: "ASN/Transit Qty",
+					property: "ASNQty"
+				}, {
+					label: "Balance Qty",
+					property: "Balance"
+				}, {
+					label: "Packing Amt",
+					property: "Packing"
+				}, {
+					label: "Freight",
+					property: "Frieght"
+				}, {
+					label: "Other Charges",
+					property: "OtherCharges"
+				}, {
+					label: "Ass Value",
+					property: "ASSValue"
+				}, {
+					label: "IGST %",
+					property: "IGST"
+				}, {
+					label: "IGST Amt",
+					property: "IGA"
+				}, {
+					label: "CGST %",
+					property: "CGST"
+				}, {
+					label: "CGST Amt",
+					property: "CGA"
+				}, {
+					label: "SGST % / UGST %",
+					property: "SGST"
+				}, {
+					label: "SGST Amt / UGST Amt",
+					property: "SGA"
+				}, {
+					label: "Line Value",
+					property: "LineValue"
+				}, {
+					label: "WGT IN KG",
+					property: "WeightInKG"
+				}, {
+					label: "Pkg.",
+					property: "Pkg"
+				}, {
+					label: "Remarks(yyyyMMdd)",
+					property: "MatExpDate"
+				}];
+				oSettings = {
+					workbook: {
+						columns: aColumnNames
+					},
+					dataSource: aExportData,
+					fileName: "Scheduling Agreement Line Item Data.xlsx"
+				};
+				new Spreadsheet(oSettings).build();
+			}
+		},
+		onUpload: function (e) {
+			this._import(e.getParameter("files") && e.getParameter("files")[0]);
+		},
+
+		_import: function (file) {
+			var that = this;
+			var excelData = {};
+			if (file && window.FileReader) {
+				var reader = new FileReader();
+				reader.onload = function (e) {
+					var data = e.target.result;
+					var workbook = XLSX.read(data, {
+						type: 'binary'
+					});
+					workbook.SheetNames.forEach(function (sheetName) {
+						// Here is your object for every sheet in workbook
+						excelData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+
+					});
+					if (workbook.SheetNames.length > 1) {
+						MessageBox.error("Invalid excel, please try again");
+						return;
+					} else {
+						if (excelData.length !== 0) {
+							// Setting the data to the local model 
+							const fData = []
+							for (let i = 0; i < excelData.length; i++) {
+								var obj = {}
+								obj.LineNum = excelData[i]["Bill Line No"]
+								obj.SchNum_ScheduleNum = excelData[i]["SCH No"]
+								obj.SchLineNum = excelData[i]["Schedule Line"]
+								obj.PoNum = excelData[i]["PO No"]
+								obj.ItemCode = excelData[i]["IAI Item Code"]
+								obj.UOM = excelData[i]["UOM"]
+								obj.HSNCode = excelData[i]["HSN Code"]
+								obj.UnitPrice = excelData[i]["Rate"]
+								obj.Currency = excelData[i]["Currency"]
+								obj.PoQty = excelData[i]["Scheduled Qty"]
+								obj.DeliveredQty = excelData[i]["Delivered Qty"]
+								obj.ASNQty = excelData[i]["ASN/Transit Qty"]
+								obj.Balance = excelData[i]["Balance Qty"]
+								obj.Packing = excelData[i]["Packing Amt"]
+								obj.Frieght = excelData[i]["Freight"]
+								obj.OtherCharges = excelData[i]["Other Charges"]
+								obj.ASSValue = excelData[i]["Ass Value"]
+								obj.IGST = excelData[i]["IGST %"]
+								obj.IGA = excelData[i]["IGST Amt"]
+								obj.CGST = excelData[i]["CGST %"]
+								obj.CGA = excelData[i]["CGST Amt"]
+								obj.SGST = excelData[i]["SGST % / UGST %"]
+								obj.SGA = excelData[i]["SGST Amt / UGST Amt"]
+								obj.LineValue = excelData[i]["Line Value"]
+								obj.WeightInKG = excelData[i]["WGT IN KG"]
+								obj.Pkg = excelData[i]["Pkg."]
+								obj.MatExpDate = excelData[i]["Remarks(yyyyMMdd)"]
+								fData.push(obj)
+							}
+							that.asnModel.getData().DocumentRows.results = fData;
+							that.asnModel.refresh(true);
+						} else {
+							MessageBox.error("Invalid excel, please try again");
+							return;
+						}
+					}
+				};
+				reader.onerror = function (ex) {
+					console.log(ex);
+				};
+				reader.readAsBinaryString(file);
 			}
 		}
 	});

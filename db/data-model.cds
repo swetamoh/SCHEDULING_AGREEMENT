@@ -120,6 +120,8 @@ entity ASNListHeader : managed {
       SchNum             : Association to SchedulingAgreements;
       BillNumber         : String;
       BillDate           : String;
+      DeliveryNumber     : String;
+      DeliveryDate       : String;
       DocketNumber       : String;
       GRDate             : String;
       TransportName      : String;

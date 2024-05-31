@@ -6,15 +6,12 @@
 >
     <Page
         id="_IDGenPage1"
-        title="Schedule Agreement : {detailHeaderModel>/ScheduleNum}"
+        title="Schedule Agreement : {detailHeaderModel>/ScheduleNum} PO Number : {detailHeaderModel>/PoNum}"
         class="sapUiSizeCompact"
         titleAlignment="Center"
     >
         <content>
-            <!-- <ObjectHeader id="ObjectId"
-				title="Upcoming Delivery : {path:'detailModel>/Upcoming_Del_Date', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"
-				number="{detailModel>/Amount}" numberUnit="{detailModel>/Currency}" numberState="Success" backgroundDesign="Translucent"> -->
-            <ObjectHeader id="ObjectId">
+            <!-- <ObjectHeader id="ObjectId">
                 <attributes>
                     <ObjectAttribute
                         id="_IDGenObjectAttribute2"
@@ -31,9 +28,8 @@
                         id="_IDGenObjectStatus1"
                         text="{detailHeaderModel>/SchDate}"
                     />
-                    <!-- text="{path:'detailHeaderModel>/Schedule_Date', formatter:'sap.fiori.schedulingagreement.controller.formatter.formatDate'}"/> -->
-                </statuses>
-            </ObjectHeader>
+                    </statuses>
+            </ObjectHeader> -->
             <IconTabBar id="_IDGenIconTabBar1">
                 <items>
                     <IconTabFilter
@@ -57,10 +53,7 @@
                                         text="Item No."
                                     />
                                 </Column>
-                                <!--<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Begin">-->
-                                <!--	<Text text="Schedule Line"/>-->
-                                <!--</Column>-->
-                                <Column
+                               <Column
                                     id="_IDGenColumn2"
                                     minScreenWidth="Tablet"
                                     demandPopin="true"
@@ -71,14 +64,32 @@
                                         text="Material"
                                     />
                                 </Column>
-                                <!--<Column minScreenWidth="Tablet" demandPopin="true" width="200px">-->
-                                <!--	<Text text="Material Group"/>-->
-                                <!--</Column>-->
+                                <Column
+                                    id="_IDGenColumn200"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                    width="200px"
+                                >
+                                    <Text
+                                        id="_IDGenText200"
+                                        text="Material Desc"
+                                    />
+                                </Column>
+                                <Column
+                                    id="_IDGenColumn41"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                >
+                                    <Text
+                                        id="_IDGenText41"
+                                        text="Rev. No."
+                                    />
+                                </Column>
                                 <Column
                                     id="_IDGenColumn3"
                                     minScreenWidth="Tablet"
                                     demandPopin="true"
-                                    width="150px"
+                                    width="100px"
                                 >
                                     <Text
                                         id="_IDGenText3"
@@ -92,27 +103,7 @@
                                 >
                                     <Text
                                         id="_IDGenText4"
-                                        text="Delivery Schedule"
-                                    />
-                                </Column>
-                                <Column
-                                    id="_IDGenColumn9"
-                                    minScreenWidth="Tablet"
-                                    demandPopin="true"
-                                >
-                                    <Text
-                                        id="_IDGenText12"
-                                        text="ASN Qty"
-                                    />
-                                </Column>
-                                <Column
-                                    id="_IDGenColumn8"
-                                    minScreenWidth="Tablet"
-                                    demandPopin="true"
-                                >
-                                    <Text
-                                        id="_IDGenText8"
-                                        text="Balanced Qty"
+                                        text="Scheduled Qty"
                                     />
                                 </Column>
                                 <Column
@@ -122,9 +113,30 @@
                                 >
                                     <Text
                                         id="_IDGenText5"
-                                        text="Delivered Quantity"
+                                        text="Delivered Qty"
                                     />
                                 </Column>
+                                <Column
+                                    id="_IDGenColumn9"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                >
+                                    <Text
+                                        id="_IDGenText12"
+                                        text="ASN/Transit Qty"
+                                    />
+                                </Column>
+                                <Column
+                                    id="_IDGenColumn8"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                >
+                                    <Text
+                                        id="_IDGenText8"
+                                        text="Balance Qty"
+                                    />
+                                </Column>
+                                
                                 <Column
                                     id="_IDGenColumn6"
                                     minScreenWidth="Tablet"
@@ -145,47 +157,29 @@
                                         text="Status"
                                     />
                                 </Column>
-                                <!-- <Column id="_IDGenColumn8" hAlign="End" width="20px">
-									<Text id="_IDGenText8"/>
-								</Column> -->
-                            </columns>
+                                </columns>
                             <items>
                                 <ColumnListItem id="_IDGenColumnListItem1">
                                     <cells>
-                                        <!--<CheckBox selected="{detailModel>Item_indicator}" select="onChkBoxSelect"-->
-                                        <!--	enabled="{path:'detailModel>Confirm_Status',formatter:'sap.fiori.schedulingagreement.controller.formatter.selectEnabled'}"></CheckBox>-->
-                                        <Text
+                                       <Text
                                             id="_IDGenText9"
-                                            text="{detailModel>LineNum}"
+                                            text="{detailModel>SchLineNum}"
                                         />
-                                        <!--<Text text="{detailModel>Etenr}"/>-->
-                                        <FlexBox
-                                            id="_IDGenFlexBox1"
-                                            direction="Column"
-                                            class="sapUiNoMarginTop"
-                                        >
-                                            <items>
-                                                <Text
-                                                    id="_IDGenText10"
-                                                    text="{detailModel>ItemDesc}"
-                                                />
-                                                <!--<Link text="{detailModel>Material_No}" press="onMaterialPress" emphasized="true" enabled="{path:'detailModel>Matkl',formatter:'sap.fiori.schedulingagreement.controller.formatter.LinkEnabled'}"/>-->
-                                                <Link
-                                                    id="_IDGenLink1"
-                                                    text="{detailModel>ItemCode}"
-                                                    press="onMaterialPress"
-                                                    emphasized="true"
-                                                    enabled="true"
-                                                />
-                                                <!--<ObjectIdentifier title="{detailModel>Material_No}"/>-->
-                                            </items>
-                                        </FlexBox>
-                                        <!--<FlexBox direction="Column" class="sapUiNoMarginTop">-->
-                                        <!--	<items>-->
-                                        <!--		<Text text="{detailModel>Matkl}"/>-->
-                                        <!--		<ObjectIdentifier title="{detailModel>Wgbez}"/>-->
-                                        <!--	</items>-->
-                                        <!--</FlexBox>-->
+                                        <Link
+                                            id="_IDGenLink1"
+                                            text="{detailModel>ItemCode}"
+                                            press="onMaterialPress"
+                                            emphasized="true"
+                                            enabled="true"
+                                        />
+                                        <Text
+                                            id="_IDGenText10"
+                                            text="{detailModel>ItemDesc}"
+                                        />
+                                        <Text
+                                            id="_IDGenText110"
+                                            text="{detailModel>ItemRevNumber}"
+                                        />
                                         <Text
                                             id="_IDGenText11"
                                             text="{detailModel>HSNCode}"
@@ -193,6 +187,11 @@
                                         <ObjectNumber
                                             id="_IDGenObjectNumber1"
                                             number="{detailModel>PoQty}"
+                                            unit="{detailModel>UOM}"
+                                        />
+                                        <ObjectNumber
+                                            id="_IDGenObjectNumber2"
+                                            number="{detailModel>DeliveredQty}"
                                             unit="{detailModel>UOM}"
                                         />
                                         <ObjectNumber
@@ -205,25 +204,16 @@
                                             number="{detailModel>BalanceQty}"
                                             unit="{detailModel>UOM}"
                                         />
-                                        <!-- numberUnit="{detailModel>Uom}"/> -->
-                                        <ObjectNumber
-                                            id="_IDGenObjectNumber2"
-                                            number="{detailModel>DeliveredQty}"
-                                            unit="{detailModel>UOM}"
-                                        />
-                                        <!-- numberUnit="{detailModel>Uom}"/> -->
                                         <ObjectNumber
                                             id="_IDGenObjectNumber3"
-                                            number="{detailModel>UnitPrice}"
+                                            number="{path:'detailModel>UnitPrice',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
                                         <ObjectStatus
                                             id="_IDGenObjectStatus2"
                                             text="{detailModel>ConfirmStatus}"
                                             state="{path:'detailModel>ConfirmStatus',formatter:'sap.fiori.schedulingagreement.controller.formatter.statusCheck'}"
                                         />
-                                        <!-- state="{path:'detailModel>Confirm_Status',formatter:'sap.fiori.schedulingagreement.controller.formatter.statusCheck'}"/> -->
-                                        <!-- <core:Icon id="_IDGenIcon1" src="sap-icon://feeder-arrow" color="Blue"/> -->
-                                    </cells>
+                                       </cells>
                                 </ColumnListItem>
                             </items>
                         </Table>
@@ -233,11 +223,9 @@
         </content>
         <footer>
             <Toolbar id="_IDGenToolbar2">
-                <!--<Button text="Create ASN" press="onCreateAsn" class="sapUiTinyMarginEnd" icon="sap-icon://add" type="Emphasized"-->
-                <!--	visible="{= ${detailModel>Status} === 'New'? false : true}"/>-->
                 <Button
                     id="_IDGenButton1"
-                    text="Submit Invoice"
+                    text="Generate ASN"
                     press="onCreateAsn"
                     class="sapUiTinyMarginEnd"
                     icon="sap-icon://add"
@@ -245,13 +233,8 @@
                     visible="true"
                     enabled="true"
                 />
-                <!-- visible="{parts:[{path:'detailModel>/Status'},{path:'detailModel>/Validity'}],formatter:'sap.fiori.schedulingagreement.controller.formatter.asnCreateVisible'}"
-					enabled="{path:'detailModel>/Asn_Flag',formatter:'sap.fiori.schedulingagreement.controller.formatter.createASNBtn'}"/> -->
-                <ToolbarSpacer id="_IDGenToolbarSpacer1" />
-                <!-- <Button id="_IDGenButton2" text="Confirm" press="onCofirmAsn" class="sapUiTinyMarginEnd" icon="sap-icon://complete" type="Emphasized"
-					visible="{path:'detailModel>/Validity',formatter:'sap.fiori.schedulingagreement.controller.formatter.confirmBtnVisible'}"
-					enabled="{path:'detailModel>/Sa_Flag',formatter:'sap.fiori.schedulingagreement.controller.formatter.createASNBtn'}"/> -->
-            </Toolbar>
+               	<ToolbarSpacer id="_IDGenToolbarSpacer1" />
+                </Toolbar>
         </footer>
     </Page>
 </mvc:View>

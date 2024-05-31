@@ -53,6 +53,7 @@
             text="Please enter manufacturing date under Remarks column for perishable materials."
         />
         <Panel
+            id="_IDGenPanel1"
             headerText="Header Data"
             expandable="true"
             expanded="true"
@@ -77,20 +78,21 @@
                     />
                     <Label
                         id="_IDGenLabel1"
-                        text=" Invoice/Delivery Number"
-                        required="true"
+                        text=" Invoice Number"
+                        required="{= ${asnModel>/DeliveryNumber} === undefined || ${asnModel>/DeliveryNumber} === ''}"
                     />
                     <Input
                         id="invoiceNumId"
                         value="{asnModel>/BillNumber}"
                         maxLength="16"
                         width="20rem"
-                        change="onInvNoChange"
+                        change="onInvNoChange($event, 'DP2')"
+                        enabled="{= ${asnModel>/DeliveryNumber} === undefined ? true : ${asnModel>/DeliveryNumber} === '' ? true : false}"
                     />
                     <Label
                         id="_IDGenLabel2"
-                        text="Invoice/Delivery Date"
-                        required="true"
+                        text="Invoice Date"
+                        required="{= ${asnModel>/DeliveryNumber} === undefined || ${asnModel>/DeliveryNumber} === ''}"
                     />
                     <DatePicker
                         id="DP1"
@@ -98,6 +100,33 @@
                         valueFormat="yyyyMMdd"
                         displayFormat="long"
                         width="20rem"
+                        enabled="{= ${asnModel>/DeliveryNumber} === undefined ? true : ${asnModel>/DeliveryNumber} === '' ? true : false}"
+                    />
+                    <Label
+                        id="_IDGenLabel410"
+                        text="Delivery Number"
+                        required="{= ${asnModel>/BillNumber} === undefined || ${asnModel>/BillNumber} === ''}"
+                    />
+                    <Input
+                        id="_IDGenInput11"
+                        value="{asnModel>/DeliveryNumber}"
+                        maxLength="16"
+                        width="20rem"
+                        change="onInvNoChange($event, 'DP1')"
+                        enabled="{= ${asnModel>/BillNumber} === undefined || ${asnModel>/BillNumber} === ''}"
+                    />
+                    <Label
+                        id="_IDGenLabel420"
+                        text="Delivery Date"
+                        required="{= ${asnModel>/BillNumber} === undefined || ${asnModel>/BillNumber} === ''}"
+                    />
+                    <DatePicker
+                        id="DP2"
+                        value="{asnModel>/DeliveryDate}"
+                        valueFormat="yyyyMMdd"
+                        displayFormat="long"
+                        width="20rem"
+                        enabled="{= ${asnModel>/BillNumber} === undefined || ${asnModel>/BillNumber} === ''}"
                     />
                     <Label
                         id="_IDGenLabel230"
@@ -207,6 +236,7 @@
                         width="20rem"
                     >
                         <core:Item
+                            id="_IDGenItem1"
                             key="{transport>TransCode}"
                             text="{transport>TransCode}"
                         />
@@ -331,10 +361,12 @@
                 <IconTabFilter
                     id="_IDGenIconTabFilter1"
                     icon="sap-icon://hint"
+                    text="Items"
                 >
-                    <OverflowToolbar>
-                        <ToolbarSpacer />
+                    <OverflowToolbar id="_IDGenOverflowToolbar1">
+                        <ToolbarSpacer id="_IDGenToolbarSpacer1" />
                         <Button
+                            id="_IDGenButton2"
                             text="Download"
                             icon="sap-icon://download"
                             press="onDataExport"
@@ -350,6 +382,7 @@
                             iconFirst="true"
                             style="Emphasized"
                             change="onUpload"
+                            buttonText="Upload"
                         />
                     </OverflowToolbar>
                     <ScrollContainer
@@ -772,15 +805,15 @@
                                             value="{asnModel>LineNum}"
                                         />
                                         <Text
-                                            id="_IDGenText22"
+                                            id="_IDGenText220"
                                             text="{asnModel>SchNum_ScheduleNum}"
                                         />
                                         <Text
-                                            id="_IDGenText23"
+                                            id="_IDGenText230"
                                             text="{asnModel>SchLineNum}"
                                         />
                                         <Text
-                                            id="_IDGenText21"
+                                            id="_IDGenText210"
                                             text="{asnModel>PoNum}"
                                         />
                                         <Text
@@ -810,9 +843,18 @@
                                             value="{asnModel>SupplierRate}"
                                             enabled="{= ${asnModel>RateAggreed} === false}"
                                         /> -->
-                                        <Text text="{asnModel>PoQty}" />
-                                        <Text text="{asnModel>DeliveredQty}" />
-                                        <Text text="{asnModel>ASNQty}" />
+                                        <Text
+                                            id="_IDGenText21"
+                                            text="{asnModel>PoQty}"
+                                        />
+                                        <Text
+                                            id="_IDGenText22"
+                                            text="{asnModel>DeliveredQty}"
+                                        />
+                                        <Text
+                                            id="_IDGenText23"
+                                            text="{asnModel>ASNQty}"
+                                        />
                                         <Input
                                             id="quantityId"
                                             value="{asnModel>Balance}"
@@ -869,7 +911,10 @@
                                             id="wgtId"
                                             value="{asnModel>WeightInKG}"
                                         />
-                                        <Input value="{asnModel>Pkg}" />
+                                        <Input
+                                            id="_IDGenInput12"
+                                            value="{asnModel>Pkg}"
+                                        />
                                         <DatePicker
                                             id="_IDGenDatePicker3"
                                             value="{asnModel>MatExpDate}"
@@ -885,6 +930,7 @@
                 <IconTabFilter
                     id="_IDGenIconTabFilter2"
                     icon="sap-icon://attachment"
+                    text="Attachments"
                 >
                     <upload:UploadSet
                         id="uploadSet"

@@ -131,7 +131,7 @@
                                     "targetAggregation": "detailPages"
                                 },
                                 {
-                                    "pattern": "Detail/{Schedule_No}",
+                                    "pattern": "Detail/{Schedule_No}/{UnitCode}",
                                     "name": "SADetail",
                                     "view": "SADetail",
                                     "targetAggregation": "detailPages"
@@ -141,7 +141,7 @@
                     ]
                 },
                 {
-                    "pattern": "AsnCreate/{Schedule_No}",
+                    "pattern": "AsnCreate/{Schedule_No}/{UnitCode}",
                     "name": "SAAsnCreate",
                     "view": "SAAsnCreate",
                     "targetAggregation": "pages",

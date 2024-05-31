@@ -8,6 +8,7 @@
     xmlns:upload="sap.m.upload"
     class="sapUiSizeCompact"
     xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:u="sap.ui.unified"
 >
     <Page
         id="_IDGenPage1"
@@ -45,206 +46,345 @@
                 />
             </attributes>
         </ObjectHeader>
-        <f:SimpleForm
-            id="AsnFormId"
-            editable="true"
-            layout="ColumnLayout"
-            columnsM="2"
-            columnsL="2"
-            columnsXL="4"
+        <MessageStrip
+            id="_IDGenMessageStrip1"
+            type="Information"
+            class="sapUiTinyMargin"
+            text="Please enter manufacturing date under Remarks column for perishable materials."
+        />
+        <Panel
+            id="_IDGenPanel1"
+            headerText="Header Data"
+            expandable="true"
+            expanded="true"
         >
-            <f:content>
-                <Label
-                    id="_IDGenLabel16"
-                    text=" Address Code"
-                />
-                <Text
-                    id="AddressCodeid"
-                    text="{asnModel>/VendorCode}"
-                    width="185px"
-                />
-                <Label
-                    id="_IDGenLabel1"
-                    text=" Invoice Number"
-                    textAlign="Center"
-                    required="true"
-                />
-                <Input
-                    id="invoiceNumId"
-                    value="{asnModel>/BillNumber}"
-                    maxLength="16"
-                    width="185px"
-                    change="onInvNoChange"
-                />
-                <Label
-                    id="_IDGenLabel2"
-                    text="Invoice Date"
-                    required="true"
-                />
-                <DatePicker
-                    id="DP1"
-                    value="{asnModel>/BillDate}"
-                    placeholder="Invoice Date"
-                    valueFormat="yyyyMMdd"
-                    displayFormat="long"
-                    width="185px"
-                    enabled="false"
-                />
-                <Label
-                    id="_IDGenLabel221"
-                    text="Total Invoice Net Amount"
-                    required="true"
-                />
-                <Input
-                    id="totalInvNetAmnt"
-                    value="{asnModel>/TotalInvNetAmnt}"
-                    width="185px"
-                    type="Number"
-                    change="onRowSelect"
-                />
-                <Label
-                    id="_IDGenLabel310"
-                    text="Total GST Amount"
-                    required="true"
-                />
-                <Input
-                    id="totalGstAmnt"
-                    type="Number"
-                    value="{asnModel>/TotalGstAmnt}"
-                    width="185px"
-                    change="onRowSelect"
-                />
-               
-                <Label
-                    id="_IDGenLabel210"
-                    text="Transport Name"
-                />
-                <Input
-                    id="_IDGenInput10"
-                    type="Text"
-                    value="{asnModel>/TransportName}"
-                    width="185px"
-                />
-                <Label
-                    id="_IDGenLabel220"
-                    text="Transport Mode"
-                />
-                <Input
-                    id="_IDGenInput11"
-                    type="Text"
-                    value="{asnModel>/TransportMode}"
-                    width="185px"
-                />
-                <Label
-                    id="_IDGenLabel230"
-                    text="EWAY Bill No"
-                />
-                <Input
-                    id="_IDGenInput12"
-                    type="Text"
-                    value="{asnModel>/EwayBillNumber}"
-                    width="185px"
-                />
-                <Label
-                    id="_IDGenLabel24"
-                    text="EWAY Bill Date"
-                />
-                <DatePicker
-                    id="_IDGenDatePicker1"
-                    value="{asnModel>/EwayBillDate}"
-                    width="185px"
-                    valueFormat="yyyyMMdd"
-                    displayFormat="long"
-                    enabled="true"
-                />
-                <Label
-                    id="_IDGenLabel250"
-                    text="Mill T.C. No"
-                    visible="false"
-                />
-                <Input
-                    id="_IDGenInput13"
-                    type="Text"
-                    value="{asnModel>/MillNumber}"
-                    width="185px"
-                    visible="false"
-                />
-                <Label
-                    id="_IDGenLabel26"
-                    text="Mill Name"
-                    visible="false"
-                />
-                <Input
-                    id="_IDGenInput14"
-                    type="Text"
-                    value="{asnModel>/MillName}"
-                    width="185px"
-                    visible="false"
-                />
-                <Label
-                    id="_IDGenLabel4"
-                    text="PDIR No"
-                    visible="false"
-                />
-                <Input
-                    id="_IDGenInput4"
-                    type="Text"
-                    value="{asnModel>/PDIRNumber}"
-                    width="185px"
-                    visible="false"
-                />
-                <Label
-                    id="_IDGenLabel18"
-                    text="Heat No"
-                    visible="false"
-                />
-                <Input
-                    id="_IDGenInput8"
-                    type="Text"
-                    value="{asnModel>/HeatNumber}"
-                    width="185px"
-                    visible="false"
-                />
-                <Label
-                    id="_IDGenLabel19"
-                    text="Batch Code"
-                    visible="false"
-                />
-                <Input
-                    id="_IDGenInput9"
-                    type="Text"
-                    value="{asnModel>/BatchNumber}"
-                    width="185px"
-                    visible="false"
-                />
-                <Label
-                    id="_IDGenLabel27"
-                    text="Manf. Month"
-                />
-                <DatePicker
-                    id="_IDGenDatePicker2"
-                    value="{asnModel>/ManufacturingMonth}"
-                    width="185px"
-                    valueFormat="yyyyMMdd"
-                    displayFormat="long"
-                    enabled="true"
-                />
-                <Label
+            <f:SimpleForm
+                id="AsnFormId"
+                editable="true"
+                layout="ColumnLayout"
+                columnsM="2"
+                columnsL="3"
+                columnsXL="3"
+            >
+                <f:content>
+                    <Label
+                        id="_IDGenLabel16"
+                        text=" Address Code"
+                    />
+                    <Text
+                        id="AddressCodeid"
+                        text="{asnModel>/VendorCode} {asnModel>/VendorName}"
+                        width="20rem"
+                    />
+                    <Label
+                        id="_IDGenLabel1"
+                        text=" Invoice Number"
+                        required="{= ${asnModel>/DeliveryNumber} === undefined || ${asnModel>/DeliveryNumber} === ''}"
+                    />
+                    <Input
+                        id="invoiceNumId"
+                        value="{asnModel>/BillNumber}"
+                        maxLength="16"
+                        width="20rem"
+                        change="onInvNoChange($event, 'DP2')"
+                        enabled="{= ${asnModel>/DeliveryNumber} === undefined ? true : ${asnModel>/DeliveryNumber} === '' ? true : false}"
+                    />
+                    <Label
+                        id="_IDGenLabel2"
+                        text="Invoice Date"
+                        required="{= ${asnModel>/DeliveryNumber} === undefined || ${asnModel>/DeliveryNumber} === ''}"
+                    />
+                    <DatePicker
+                        id="DP1"
+                        value="{asnModel>/BillDate}"
+                        valueFormat="yyyyMMdd"
+                        displayFormat="long"
+                        width="20rem"
+                        enabled="{= ${asnModel>/DeliveryNumber} === undefined ? true : ${asnModel>/DeliveryNumber} === '' ? true : false}"
+                    />
+                    <Label
+                        id="_IDGenLabel410"
+                        text="Delivery Number"
+                        required="{= ${asnModel>/BillNumber} === undefined || ${asnModel>/BillNumber} === ''}"
+                    />
+                    <Input
+                        id="_IDGenInput11"
+                        value="{asnModel>/DeliveryNumber}"
+                        maxLength="16"
+                        width="20rem"
+                        change="onInvNoChange($event, 'DP1')"
+                        enabled="{= ${asnModel>/BillNumber} === undefined || ${asnModel>/BillNumber} === ''}"
+                    />
+                    <Label
+                        id="_IDGenLabel420"
+                        text="Delivery Date"
+                        required="{= ${asnModel>/BillNumber} === undefined || ${asnModel>/BillNumber} === ''}"
+                    />
+                    <DatePicker
+                        id="DP2"
+                        value="{asnModel>/DeliveryDate}"
+                        valueFormat="yyyyMMdd"
+                        displayFormat="long"
+                        width="20rem"
+                        enabled="{= ${asnModel>/BillNumber} === undefined || ${asnModel>/BillNumber} === ''}"
+                    />
+                    <Label
+                        id="_IDGenLabel230"
+                        text="EWAY Bill No"
+                    />
+                    <Input
+                        type="Number"
+                        id="ewayBillNumberId"
+                        value="{path:'asnModel>/EwayBillNumber',type:'sap.ui.model.type.String',constraints:{minLength:12,maxLength:12}}"
+                        width="20rem"
+                    />
+                    <Label
+                        id="_IDGenLabel24"
+                        text="EWAY Bill Date"
+                    />
+                    <DatePicker
+                        id="_IDGenDatePicker1"
+                        value="{asnModel>/EwayBillDate}"
+                        width="20rem"
+                        valueFormat="yyyyMMdd"
+                        displayFormat="long"
+                        enabled="true"
+                    />
+                    <Label
+                        id="_IDGenLabel221"
+                        text="Ass. value"
+                        required="true"
+                    />
+                    <Input
+                        id="totalInvNetAmnt"
+                        value="{asnModel>/TotalInvNetAmnt}"
+                        width="20rem"
+                        type="Number"
+                        change="onAmtChange"
+                        enabled="false"
+                    />
+                    <Label
+                        id="_IDGenLabel310"
+                        text="Total CGST Amount"
+                        required="true"
+                    />
+                    <Input
+                        id="totalCGstAmnt"
+                        type="Number"
+                        value="{asnModel>/TotalCGstAmnt}"
+                        width="20rem"
+                        change="onAmtChange"
+                        enabled="false"
+                    />
+                    <Label
+                        id="_IDGenLabel38"
+                        text="Total SGST Amount"
+                        required="true"
+                    />
+                    <Input
+                        id="totalSGstAmnt"
+                        type="Number"
+                        value="{asnModel>/TotalSGstAmnt}"
+                        width="20rem"
+                        change="onAmtChange"
+                        enabled="false"
+                    />
+                    <Label
+                        id="_IDGenLabel39"
+                        text="Total IGST Amount"
+                        required="true"
+                    />
+                    <Input
+                        id="totalIGstAmnt"
+                        type="Number"
+                        value="{asnModel>/TotalIGstAmnt}"
+                        width="20rem"
+                        change="onAmtChange"
+                        enabled="false"
+                    />
+                    <Label
+                        id="_IDGenLabel40"
+                        text="Total Amount"
+                        required="true"
+                    />
+                    <Input
+                        id="totalAmnt"
+                        type="Number"
+                        value="{asnModel>/TotalAmnt}"
+                        width="20rem"
+                        change="onAmtChange"
+                        enabled="false"
+                    />
+                    <Label
+                        id="_IDGenLabel210"
+                        text="Transport Name"
+                    />
+                    <Input
+                        id="_IDGenInput10"
+                        type="Text"
+                        value="{asnModel>/TransportName}"
+                        width="20rem"
+                    />
+                    <Label
+                        id="_IDGenLabel220"
+                        text="Transport Mode"
+                    />
+                    <ComboBox
+                        id="transId"
+                        items="{transport>/items}"
+                        selectedKey="{asnModel>/TransportMode}"
+                        width="20rem"
+                    >
+                        <core:Item
+                            id="_IDGenItem1"
+                            key="{transport>TransCode}"
+                            text="{transport>TransCode}"
+                        />
+                    </ComboBox>
+                    <Label
+                        id="_IDGenLabel37"
+                        text="Transporter ID"
+                    />
+                    <Input
+                        id="_IDGenInput15"
+                        type="Text"
+                        value="{asnModel>/TransporterID}"
+                        width="20rem"
+                    />
+                    <Label
+                        id="_IDGenLabel250"
+                        text="Mill T.C. No"
+                        visible="false"
+                    />
+                    <Input
+                        id="_IDGenInput13"
+                        type="Text"
+                        value="{asnModel>/MillNumber}"
+                        width="185px"
+                        visible="false"
+                    />
+                    <Label
+                        id="_IDGenLabel26"
+                        text="Mill Name"
+                        visible="false"
+                    />
+                    <Input
+                        id="_IDGenInput14"
+                        type="Text"
+                        value="{asnModel>/MillName}"
+                        width="185px"
+                        visible="false"
+                    />
+                    <Label
+                        id="_IDGenLabel4"
+                        text="PDIR No"
+                        visible="false"
+                    />
+                    <Input
+                        id="_IDGenInput4"
+                        type="Text"
+                        value="{asnModel>/PDIRNumber}"
+                        width="185px"
+                        visible="false"
+                    />
+                    <Label
+                        id="_IDGenLabel18"
+                        text="Heat No"
+                        visible="false"
+                    />
+                    <Input
+                        id="_IDGenInput8"
+                        type="Text"
+                        value="{asnModel>/HeatNumber}"
+                        width="185px"
+                        visible="false"
+                    />
+                    <Label
+                        id="_IDGenLabel19"
+                        text="Batch Code"
+                        visible="false"
+                    />
+                    <Input
+                        id="_IDGenInput9"
+                        type="Text"
+                        value="{asnModel>/BatchNumber}"
+                        width="185px"
+                        visible="false"
+                    />
+                    <Label
+                        id="_IDGenLabel27"
+                        text="Manf. Month"
+                        visible="false"
+                    />
+                    <DatePicker
+                        id="_IDGenDatePicker2"
+                        value="{asnModel>/ManufacturingMonth}"
+                        width="185px"
+                        valueFormat="yyyyMMdd"
+                        displayFormat="long"
+                        enabled="true"
+                        visible="false"
+                    />
+                    <Label
+                        id="_IDGenLabel43"
+                        text="Total Packing"
+                    />
+                    <Input
+                        id="totalPkg"
+                        type="Text"
+                        value="{asnModel>/TotalPkg}"
+                        width="20rem"
+                    />
+                    <Label
+                        id="_IDGenLabel46"
+                        text="Total Weight"
+                    />
+                    <Input
+                        id="_IDGenInput46"
+                        type="Text"
+                        value="{asnModel>/TotalWeight}"
+                        width="20rem"
+                    />
+                    <!-- <Label
                     id="_IDGenLabel313"
                     text="Rate ok for all items"
                 />
                 <CheckBox
                     id="rateOk"
                     select="onRateOkChange"
-                />
-            </f:content>
-        </f:SimpleForm>
+                /> -->
+                </f:content>
+            </f:SimpleForm>
+        </Panel>
         <IconTabBar id="_IDGenIconTabBar1">
             <items>
                 <IconTabFilter
                     id="_IDGenIconTabFilter1"
                     icon="sap-icon://hint"
+                    text="Items"
                 >
+                    <OverflowToolbar id="_IDGenOverflowToolbar1">
+                        <ToolbarSpacer id="_IDGenToolbarSpacer1" />
+                        <Button
+                            id="_IDGenButton2"
+                            text="Download"
+                            icon="sap-icon://download"
+                            press="onDataExport"
+                            type="Emphasized"
+                        />
+                        <u:FileUploader
+                            id="FileUploaderId"
+                            sameFilenameAllowed="true"
+                            iconOnly="false"
+                            buttonOnly="true"
+                            fileType="XLSX,xlsx"
+                            icon="sap-icon://upload"
+                            iconFirst="true"
+                            style="Emphasized"
+                            change="onUpload"
+                            buttonText="Upload"
+                        />
+                    </OverflowToolbar>
                     <ScrollContainer
                         id="_IDGenScrollContainer1"
                         horizontal="true"
@@ -257,12 +397,11 @@
                             selectionChange="onRowSelect"
                             rememberSelections="true"
                         >
-                            
                             <columns>
-                                <Column
+                                <!-- <Column
                                     id="_IDGenColumn289"
                                     width="5rem"
-                                />
+                                /> -->
                                 <Column
                                     id="_IDGenColumn1"
                                     minScreenWidth="Tablet"
@@ -369,7 +508,7 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                                <Column
+                                <!-- <Column
                                     id="_IDGenColumn212"
                                     minScreenWidth="Tablet"
                                     demandPopin="true"
@@ -396,6 +535,48 @@
                                         text="Rate as per Supplier"
                                         wrapping="true"
                                     />
+                                </Column> -->
+                                <Column
+                                    id="_IDGenColumn38"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                    width="6rem"
+                                    hAlign="Center"
+                                >
+                                    <Label
+                                        id="_IDGenLabel41"
+                                        design="Bold"
+                                        text="Scheduled Qty"
+                                        wrapping="true"
+                                    />
+                                </Column>
+                                <Column
+                                    id="_IDGenColumn47"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                    width="6rem"
+                                    hAlign="Center"
+                                >
+                                    <Label
+                                        id="_IDGenLabel47"
+                                        design="Bold"
+                                        wrapping="true"
+                                        text="Delivered Qty"
+                                    />
+                                </Column>
+                                <Column
+                                    id="_IDGenColumn39"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                    width="6rem"
+                                    hAlign="Center"
+                                >
+                                    <Label
+                                        id="_IDGenLabel42"
+                                        design="Bold"
+                                        text="ASN/Transit Qty"
+                                        wrapping="true"
+                                    />
                                 </Column>
                                 <Column
                                     id="_IDGenColumn27"
@@ -407,7 +588,7 @@
                                     <Label
                                         id="_IDGenLabel34"
                                         design="Bold"
-                                        text="QTY"
+                                        text="Balance Qty"
                                         wrapping="true"
                                     />
                                 </Column>
@@ -551,7 +732,7 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                                
+
                                 <Column
                                     id="_IDGenColumn25"
                                     minScreenWidth="Tablet"
@@ -566,7 +747,7 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                               
+
                                 <Column
                                     id="_IDGenColumn28"
                                     minScreenWidth="Tablet"
@@ -581,31 +762,58 @@
                                         wrapping="true"
                                     />
                                 </Column>
-                                
+                                <Column
+                                    id="_IDGenColumn44"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                    width="6rem"
+                                    hAlign="Center"
+                                >
+                                    <Label
+                                        id="_IDGenLabel44"
+                                        design="Bold"
+                                        text="Pkg."
+                                        wrapping="true"
+                                    />
+                                </Column>
+                                <Column
+                                    id="_IDGenColumn222"
+                                    minScreenWidth="Tablet"
+                                    demandPopin="true"
+                                    width="10rem"
+                                    hAlign="Center"
+                                >
+                                    <Label
+                                        id="_IDGenLabel322"
+                                        design="Bold"
+                                        text="Remarks"
+                                        wrapping="true"
+                                    />
+                                </Column>
                             </columns>
                             <items>
                                 <ColumnListItem id="_IDGenColumnListItem1">
                                     <cells>
-                                        <ObjectStatus
+                                        <!-- <ObjectStatus
                                             id="_IDGenObjectStatus1"
                                             text="{= ${asnModel>SupplierRate} > 0 ? 'Rate Mismatch' : 'Rate Matched'}"
                                             icon="{= ${asnModel>SupplierRate} > 0 ? 'sap-icon://alert' : 'sap-icon://sys-enter-2'}"
                                             state="{= ${asnModel>SupplierRate} > 0 ? 'Warning' : 'Success'}"
-                                        />
+                                        /> -->
                                         <Input
                                             id="_IDGenText11"
                                             value="{asnModel>LineNum}"
                                         />
                                         <Text
-                                            id="_IDGenText22"
+                                            id="_IDGenText220"
                                             text="{asnModel>SchNum_ScheduleNum}"
                                         />
                                         <Text
-                                            id="_IDGenText23"
+                                            id="_IDGenText230"
                                             text="{asnModel>SchLineNum}"
                                         />
                                         <Text
-                                            id="_IDGenText21"
+                                            id="_IDGenText210"
                                             text="{asnModel>PoNum}"
                                         />
                                         <Text
@@ -624,7 +832,7 @@
                                             id="_IDGenText14"
                                             text="{path:'asnModel>UnitPrice',formatter:'sap.fiori.schedulingagreement.controller.formatter.formatAmount'}"
                                         />
-                                        <CheckBox
+                                        <!-- <CheckBox
                                             id="_IDGenCheckBox1"
                                             selected="{asnModel>RateAggreed}"
                                             select="onRateAgreedChange"
@@ -634,10 +842,22 @@
                                             type="Number"
                                             value="{asnModel>SupplierRate}"
                                             enabled="{= ${asnModel>RateAggreed} === false}"
+                                        /> -->
+                                        <Text
+                                            id="_IDGenText21"
+                                            text="{asnModel>PoQty}"
+                                        />
+                                        <Text
+                                            id="_IDGenText22"
+                                            text="{asnModel>DeliveredQty}"
+                                        />
+                                        <Text
+                                            id="_IDGenText23"
+                                            text="{asnModel>ASNQty}"
                                         />
                                         <Input
                                             id="quantityId"
-                                            value="{asnModel>BalanceQty}"
+                                            value="{asnModel>Balance}"
                                             change="onQuantityChange"
                                         />
                                         <Input
@@ -691,7 +911,15 @@
                                             id="wgtId"
                                             value="{asnModel>WeightInKG}"
                                         />
-                                        
+                                        <Input
+                                            id="_IDGenInput12"
+                                            value="{asnModel>Pkg}"
+                                        />
+                                        <DatePicker
+                                            id="_IDGenDatePicker3"
+                                            value="{asnModel>MatExpDate}"
+                                            valueFormat="yyyyMMdd"
+                                        />
                                     </cells>
                                 </ColumnListItem>
                             </items>
@@ -702,9 +930,11 @@
                 <IconTabFilter
                     id="_IDGenIconTabFilter2"
                     icon="sap-icon://attachment"
+                    text="Attachments"
                 >
                     <upload:UploadSet
                         id="uploadSet"
+                        fileTypes="pdf"
                         instantUpload="false"
                         uploadEnabled="false"
                         afterItemAdded="onAfterItemAdded"

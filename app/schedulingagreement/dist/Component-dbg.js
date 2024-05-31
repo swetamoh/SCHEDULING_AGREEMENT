@@ -1,7 +1,6 @@
 /**
  * eslint-disable @sap/ui5-jsdocs/no-jsdoc
  */
-
 sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/m/MessageBox",
@@ -52,6 +51,26 @@ sap.ui.define([
 
                     // set the device model
                     this.setModel(models.createDeviceModel(), "device");
+                    var site = window.location.href.includes("site");
+                    if (site) {
+                        $.ajax({
+                            url: modulePath + slash + "user-api/attributes",
+                            type: "GET",
+                            success: res => {
+                                if (!sessionStorage.getItem('AddressCodeSA')) {
+                                    if (res.email === 'manishgupta8@kpmg.com' || res.email === 'swetamohanty1@kpmg.com' || res.email === 'mohsinahmad@kpmg.com' || res.email === 'rishabhyadav3@kpmg.com' || res.email === 'vikrantnanda@kpmg.com') {
+                                        sessionStorage.setItem('AddressCodeSA', 'JSE-01-01');
+                                    } else {
+                                        sessionStorage.setItem('AddressCodeSA', res.login_name[0]);
+                                    }
+                                }
+                                this.setHeaders(res.login_name[0], res.type[0].substring(0, 1).toUpperCase());
+                            }
+                        });
+                    }
+                    else {
+                        this.setHeaders("RA046 ", "E");
+                    }
                 });
 
                 // odata request failed
@@ -62,11 +81,20 @@ sap.ui.define([
                     } else {
                         MessageBox.error(JSON.parse(responseText).error.message.value);
                     }
+                });  
+            },
+            setHeaders: function (loginId, loginType) {
+                this.getModel().setHeaders({
+                  "loginId": loginId,
+                  "loginType": loginType
                 });
+        
                 // enable routing
                 HashChanger.getInstance().replaceHash("");
                 this.getRouter().initialize();
-            }
+                jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.10.0/jszip.js");
+                jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.10.0/xlsx.js");
+              },
         });
     }
 );

@@ -59,13 +59,13 @@ sap.ui.define([
 
 				var that = this;
 				this.getView().byId("AsnCreateTable").removeSelections(true);
-				var datePicker = this.getView().byId("DP1");
+				// var datePicker = this.getView().byId("DP1");
 
-				datePicker.addDelegate({
-					onAfterRendering: function () {
-						datePicker.$().find('INPUT').attr('disabled', true).css('color', '#000000');
-					}
-				}, datePicker);
+				// datePicker.addDelegate({
+				// 	onAfterRendering: function () {
+				// 		datePicker.$().find('INPUT').attr('disabled', true).css('color', '#000000');
+				// 	}
+				// }, datePicker);
 
 
 				var Today = new Date();
@@ -197,15 +197,29 @@ sap.ui.define([
 				};
 				var oTable = this.getView().byId("AsnCreateTable");
 				var contexts = oTable.getSelectedContexts();
-				if (this.data.BillNumber) {
-					if (!this.data.BillDate) {
-						MessageBox.error("Please fill the Invoice Date");
-						return;
-					}
-				} else {
-					MessageBox.error("Please fill the Invoice Number");
+				// if (this.data.BillNumber) {
+				// 	if (!this.data.BillDate) {
+				// 		MessageBox.error("Please fill the Invoice Date");
+				// 		return;
+				// 	}
+				// } else {
+				// 	MessageBox.error("Please fill the Invoice Number");
+				// 	return;
+				// }
+
+				if (!this.data.BillNumber && !this.data.DeliveryNumber) {
+					MessageBox.error("Please fill Invoice Number or Delivery Number");
 					return;
 				}
+				if (this.data.BillNumber && !this.data.BillDate) {
+					MessageBox.error("Please fill Invoice Date");
+					return;
+				}
+				if (this.data.DeliveryNumber && !this.data.DeliveryDate) {
+					MessageBox.error("Please fill Delivery Date");
+					return;
+				}
+
 				if (this.data.EwayBillNumber === undefined) {
 					this.data.EwayBillNumber = "";
 				}
@@ -230,11 +244,11 @@ sap.ui.define([
 				}
 				//if (this.getView().byId("uploadSet").getItems().length <= 0) {
 				if (!this.item) {
-					MessageBox.error("Atleast One attachment is required.");
+					MessageBox.error("Atleast one attachment is required");
 					return;
 				}
 				if (!contexts.length) {
-					MessageBox.error("No Item Selected");
+					MessageBox.error("No item selected");
 					return;
 				} else {
 					var items = contexts.map(function (c) {
@@ -318,7 +332,7 @@ sap.ui.define([
 							if (items[i].TCS === undefined) {
 								items[i].TCS = "";
 							}
-							if(items[i].TCA === undefined){
+							if (items[i].TCA === undefined) {
 								items[i].TCA = "";
 							}
 							// if(items[i].LineValue === undefined){
@@ -391,8 +405,8 @@ sap.ui.define([
 
 							var row = {
 								"BillLineNumber": items[i].LineNum,
-								"BillNumber": this.data.BillNumber,
-								"BillDate": this.BillDate,
+								"BillDate": this.BillDate || this.data.DeliveryDate,
+								"BillNumber": this.data.BillNumber || this.data.DeliveryNumber,
 								"ScheduleNumber": items[i].SchNum_ScheduleNum,
 								"ScheduleLineNumber": items[i].SchLineNum,
 								"PONumber": items[i].PoNum,
@@ -506,6 +520,8 @@ sap.ui.define([
 				"AsnNum": ASNNUM,
 				"BillDate": this.data.BillDate,
 				"BillNumber": this.data.BillNumber,
+				"DeliveryNumber": this.data.DeliveryNumber,
+				"DeliveryDate": this.data.DeliveryDate,
 				"DocketNumber": this.data.DocketNumber,
 				"GRDate": this.data.GRDate,
 				"TransportName": this.data.TransportName,
@@ -534,13 +550,16 @@ sap.ui.define([
 			var oTable = this.getView().byId("AsnCreateTable");
 			var contexts = oTable.getSelectedContexts();
 
-			if (ASNHeaderData.BillNumber) {
-				if (!ASNHeaderData.BillDate) {
-					MessageBox.error("Please fill the Invoice Date");
-					return;
-				}
-			} else {
-				MessageBox.error("Please fill the Invoice Number");
+			if (!ASNHeaderData.BillNumber && !ASNHeaderData.DeliveryNumber) {
+				MessageBox.error("Please fill Invoice Number or Delivery Number");
+				return;
+			}
+			if (ASNHeaderData.BillNumber && !ASNHeaderData.BillDate) {
+				MessageBox.error("Please fill Invoice Date");
+				return;
+			}
+			if (ASNHeaderData.DeliveryNumber && !ASNHeaderData.DeliveryDate) {
+				MessageBox.error("Please fill Delivery Date");
 				return;
 			}
 			if (!ASNHeaderData.TotalInvNetAmnt) {
@@ -614,9 +633,9 @@ sap.ui.define([
 					});
 				}
 				var AsnNum = ASNNUM.replace(/\//g, '-');
-				var oData = {
-					AsnNum: AsnNum
-				};
+				// var oData = {
+				// 	AsnNum: AsnNum
+				// };
 				// oModel.update(`/Files(InvoiceNo='${this.invoiceNo}')`, oData, {
 				// 	merge: true,
 				// 	success: function () {
@@ -858,8 +877,8 @@ sap.ui.define([
 		onTypeMissmatch: function (oEvent) {
 			MessageBox.error("Only PDF files are allowed.");
 		},
-		onInvNoChange: function (oEvent) {
-
+		onInvNoChange: function (oEvent, dateControl) {
+			this.byId(dateControl).setValue("");
 			if (oEvent.getParameter("value") == "") {
 				// this.getView().byId("DP1").setEnabled(true);
 				// this.getView().byId("DP1").setValue("");

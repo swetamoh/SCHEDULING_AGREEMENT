@@ -20,7 +20,8 @@ sap.fiori.schedulingagreement.controller.formatter = {
 				"groupingEnabled": true,
 				"groupingSeparator": ',',
 				"groupingSize": 3,
-				"decimalSeparator": "." 
+				"decimalSeparator": ".",
+				"decimals": 2
 			});
 			return oFormat.format(oAmount);
 		}

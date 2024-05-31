@@ -36,10 +36,10 @@ sap.ui.define([
 
 			this.getView().addStyleClass("sapUiSizeCompact");
 
-			this.getView().byId("ObjectId").onAfterRendering = function () {
-				sap.m.ObjectHeader.prototype.onAfterRendering.apply(this, arguments);
-				this.$().find('.sapMOHTitleDiv').find('.sapMText').css('color', "#af2323");
-			};
+			// this.getView().byId("ObjectId").onAfterRendering = function () {
+			// 	sap.m.ObjectHeader.prototype.onAfterRendering.apply(this, arguments);
+			// 	this.$().find('.sapMOHTitleDiv').find('.sapMText').css('color', "#af2323");
+			// };
 
 		},
 
@@ -54,7 +54,7 @@ sap.ui.define([
 				// 	"loginId": that.loginData.loginName,
 				// 	"LoginType": that.loginData.userType
 				// });
-				var unitCode = sessionStorage.getItem("unitCode") || 'P01';
+				this.unitCode = event.getParameter("arguments").UnitCode || 'P01';
 				this.AddressCodeSA = sessionStorage.getItem("AddressCodeSA") || 'JSE-01-01';
 				var Schedule_No = event.getParameter("arguments").Schedule_No;
 				this.Schedule_No = Schedule_No.replace(/-/g, '/');
@@ -62,14 +62,16 @@ sap.ui.define([
 
 				// var request = "/PO_HEADERSet(Po_No='" + this.Po_Num + "',Vendor_No='" + this.Vendor_No + "')?$expand=headertoitemNav";
 
+				sap.ui.core.BusyIndicator.show();
 				var request = "/SchedulingAgreements";
 				oModel.read(request, {
 					urlParameters: {
 						"$expand": "DocumentRows",
                         AddressCode: this.AddressCodeSA,
-                        UnitCode: unitCode
+                        UnitCode: this.unitCode
                     },
 					success: function (oData) {
+						sap.ui.core.BusyIndicator.hide();
 						var filteredPurchaseOrder = oData.results.find(po => po.ScheduleNum === that.Schedule_No);
 						if (filteredPurchaseOrder) {
 							that.detailHeaderModel.setData(filteredPurchaseOrder);
@@ -93,6 +95,7 @@ sap.ui.define([
 						}
 					},
 					error: function (oError) {
+						sap.ui.core.BusyIndicator.hide();
 						var value = JSON.parse(oError.responseText);
 						MessageBox.error(value.error.message.value);
 					}
@@ -125,7 +128,8 @@ sap.ui.define([
 			var that = this;
 			var Schedule_No = that.Schedule_No.replace(/\//g, '-');
 			that.router.navTo("SAAsnCreate", {
-				"Schedule_No": Schedule_No
+				"Schedule_No": Schedule_No,
+				"UnitCode": this.unitCode
 			});
 			// ,App='SA'
 			// this.oDataModel.read("/ASN_HEADERSet(Schedule_No='" + this.Schedule_No + "')?$expand=ASNItemnav",
